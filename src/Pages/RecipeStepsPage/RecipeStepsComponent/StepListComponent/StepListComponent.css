@@ -1,0 +1,55 @@
+
+#StepListComponentMainDiv{
+    position: absolute;
+    width: 1460px;
+    margin-left: 10px;
+    box-shadow: 0 5px 5px rgb(0 0 0 / 0.2);
+    border-radius: 10px;
+    max-height: 70%;
+    overflow: auto;
+}
+
+#RecipeTableTitleDiv{
+    background-color: antiquewhite;
+    width: 100%;
+}
+
+#RecipeTableTitleDiv label{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+
+#StepListComponentMainDiv table{
+    position: relative;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#StepListTableTitleRow{
+    height: 30px;
+}
+
+#StepListComponentMainDiv table thead tr th{
+    background-color: #5A79BA;
+    color: white;
+    width: 243px;
+}
+
+.IsOddStepRow{
+    background-color: #f0f8ff;
+}
+
+.IsEvenStepRow{
+    background-color: #fffafa;
+}
+
+#CreateStepSaveTableButtonsRow{
+    height: 30px;
+}
+
+#CreateStepSaveTableButtonsRow button{
+    margin-left: 10px;
+    margin-right: 10px;
+}

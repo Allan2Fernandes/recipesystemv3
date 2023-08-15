@@ -2,13 +2,19 @@ import React, {useEffect, useState} from "react";
 import "./TopBar.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRightFromBracket, faRightToBracket} from "@fortawesome/free-solid-svg-icons";
+import {useNavigate} from "react-router-dom";
 
 function TopBar(props){
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         setIsLoggedIn(props.IsLoggedIn)
     }, [])
+
+    function clickHandlerLogOutButton(){
+        navigate("/")
+    }
 
 
     return (
@@ -16,9 +22,13 @@ function TopBar(props){
 
             <label id={"TopBarTitleLabel"}>Recipe</label>
 
-            <button id={"TopBarLoginButton"}>
-                <FontAwesomeIcon icon={isLoggedIn?faRightFromBracket:faRightToBracket}/>
-            </button>
+            {
+                props.IsLoggedIn &&
+                <button id={"TopBarLoginButton"} onClick={clickHandlerLogOutButton}>
+                    <FontAwesomeIcon icon={isLoggedIn?faRightFromBracket:faRightToBracket}/>
+                </button>
+            }
+
 
         </div>
     )

@@ -1,0 +1,16 @@
+
+#SingleStepRowComponentMainRow{
+    height: 30px;
+}
+
+#SingleStepRowComponentMainRow td{
+    text-align: center;
+}
+
+.IsOddStepRow{
+    background-color: #f0f8ff;
+}
+
+.IsEvenStepRow{
+    background-color: #fffafa;
+}

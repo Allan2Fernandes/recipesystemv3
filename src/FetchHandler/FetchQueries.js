@@ -36,13 +36,18 @@ class FetchQueries{
     }
 
 
-    static GetListOfRecipes(){
+    static getListOfRecipes(){
         var query = 'EXEC [dbo].[sp_GetListOfRecipes]'
         return this.executeQueryInDatabase(query)
     }
 
     static loginGetUserID(userName, password){
         var query = `EXEC [dbo].[sp_UserLogin] '${userName}', '${password}'`
+        return this.executeQueryInDatabase(query)
+    }
+
+    static getStepsAndSubStepsOfRecipe(selectedRecipeID){
+        var query = `EXEC [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID] @selectedRecipeSetID = ${selectedRecipeID}`
         return this.executeQueryInDatabase(query)
     }
 }

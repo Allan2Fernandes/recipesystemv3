@@ -1,0 +1,9 @@
+
+
+#RecipeStepsComponentMainDiv{
+    position: relative;
+    width: 1460px;
+    height: 800px;
+    left: calc(50% - 730px);
+    top: Max(0px, calc(50% - 400px - 37.5px));
+}

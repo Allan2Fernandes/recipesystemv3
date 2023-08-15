@@ -1,0 +1,8 @@
+#CreateRecipeComponentMainDiv{
+    position: relative;
+    margin: 10px;
+}
+
+#NewRecipeNameInputField{
+    margin-left: 10px;
+}

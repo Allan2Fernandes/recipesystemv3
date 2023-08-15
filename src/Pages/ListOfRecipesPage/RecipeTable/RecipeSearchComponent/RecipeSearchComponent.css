@@ -1,0 +1,9 @@
+
+#RecipeSearchComponentMainDiv{
+    margin: 10px;
+    width: calc(100% - 10px);
+}
+
+#RecipeSearchInput{
+    margin-left: 10px;
+}

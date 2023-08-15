@@ -6,7 +6,7 @@ function LoginPage(){
 
     return (
         <div id={"LoginPageMainDiv"}>
-            <TopBar IsLoggedIn={true}/>
+            <TopBar IsLoggedIn={false}/>
             <LoginCredentialsComponent/>
         </div>
     )
