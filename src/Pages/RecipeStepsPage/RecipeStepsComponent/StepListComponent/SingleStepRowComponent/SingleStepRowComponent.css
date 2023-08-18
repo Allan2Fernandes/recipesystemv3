@@ -7,10 +7,45 @@
     text-align: center;
 }
 
-.IsOddStepRow{
+.IsSelectedStep{
+    background-color: #929EAD;
+}
+
+.IsOddStepRow:not(.IsSelectedStep){
     background-color: #f0f8ff;
 }
 
-.IsEvenStepRow{
+.IsEvenStepRow:not(.IsSelectedStep){
     background-color: #fffafa;
+}
+
+#ToggleRevealSubStepsDiv{
+    width: 100%;
+    display: flex; /* Make it a flex container */
+    align-items: center; /* Center items vertically */
+
+}
+
+#SubStepRevealDeleteStepButtonTable{
+    width: 100%;
+}
+
+#SubStepRevealDeleteStepButtonTable tbody tr td{
+    text-align: center;
+    width: 243px;
+}
+
+#AppendSubStepDiv{
+    display: flex;
+    height: 30px;
+    align-items: center;
+    width: 100%;
+}
+
+.IsEvenAddSubStepButton{
+    background-color: #F5F5F5;
+}
+
+.IsOddAddSubStepButton{
+    background-color: #DCDCDC;
 }

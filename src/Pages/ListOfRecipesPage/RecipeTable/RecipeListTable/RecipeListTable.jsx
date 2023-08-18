@@ -4,13 +4,8 @@ import {useNavigate} from "react-router-dom";
 function RecipeListTable(props){
     const navigate = useNavigate()
 
-    function navigateToRecipeStepsPage(event, recipeSetID, recipeName){
-        navigate("/RecipeStepsPage", {
-            state: {
-                recipeSetID: recipeSetID,
-                recipeName: recipeName
-            }
-        })
+    function navigateToRecipeStepsPage(event, recipeSetID, recipeName, readOnly){
+        navigate(`/RecipeStepsPage/RecipeSetID/${recipeSetID}/RecipeName/${recipeName}/UrlSelectedStepIndex/-1/ReadOnly/${readOnly}`)
     }
 
 
@@ -33,7 +28,7 @@ function RecipeListTable(props){
                             </td>
                             {/* Move this out and into helper functions */}
                             <td id={"RecipeNameDataCell"}>
-                                <label onClick={(event) => navigateToRecipeStepsPage(event, recipe['SetID'], recipe['RecipeName'])}>{recipe['RecipeName']}</label>
+                                <label onClick={(event) => navigateToRecipeStepsPage(event, recipe['SetID'], recipe['RecipeName'], false)}>{recipe['RecipeName']}</label>
                             </td>
                             <td>{recipe['CreationTime']}</td>
                         </tr>

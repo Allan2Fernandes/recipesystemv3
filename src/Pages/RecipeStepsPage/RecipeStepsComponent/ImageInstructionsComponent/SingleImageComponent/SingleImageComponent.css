@@ -1,0 +1,27 @@
+#SingleImageMainDiv {
+    display: flex;
+    align-items: center; /* Vertical centering */
+    justify-content: center; /* Horizontal centering (optional) */
+    flex-direction: column; /* Arrange elements in a column */
+    position: relative;
+    height: 100%;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+#ImageElement {
+    height: 80%;
+    border: 1px solid black;
+}
+
+#UploadNewImageDiv {
+    margin-top: 10px; /* Add some spacing between the image and the button */
+}
+
+.StepNotSelectedDisabled{
+    color: grey;
+}
+
+.StepSelectedEnabled{
+
+}

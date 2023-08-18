@@ -1,0 +1,18 @@
+#SubStepDivComponentMainDiv{
+    width: 100%;
+}
+
+#SubStepTableRow td{
+    text-align: center;
+    width: 243px;
+    height: 30px;
+}
+
+.IsEvenSubStepRow{
+    background-color: #F5F5F5;
+}
+
+.IsOddSubStepRow{
+    background-color: #DCDCDC;
+}
+

@@ -10,7 +10,8 @@
 }
 
 #RecipeTableTitleDiv{
-    background-color: antiquewhite;
+    background-color: #e7ceb5;
+    color: #7e3c2d;
     width: 100%;
 }
 
@@ -48,6 +49,7 @@
 #CreateStepSaveTableButtonsRow{
     height: 30px;
 }
+
 
 #CreateStepSaveTableButtonsRow button{
     margin-left: 10px;

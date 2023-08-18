@@ -9,7 +9,6 @@ class FetchQueries{
             }
             return await response.json();
         } catch (error) {
-            console.log('Error:', error);
             // You can handle error states or throw an error as per your project's requirements
             throw error
         }
@@ -50,6 +49,33 @@ class FetchQueries{
         var query = `EXEC [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID] @selectedRecipeSetID = ${selectedRecipeID}`
         return this.executeQueryInDatabase(query)
     }
+
+    static executeGetActionOptions(){
+        var query = "EXEC [dbo].[sp_GetDropDownList]"
+        return this.executeQueryInDatabase(query)
+    }
+
+    static async executeGetItemsForEachAction(actions){
+        var itemsAndActions = []
+        var actionsClone = structuredClone(actions)
+        // Base stored procedure name. Add paramters to the stored procedure later
+        var baseStoredProcedureString =  "EXECUTE [dbo].[sp_GetDropDownList]"
+
+        for (let i = 0; i < actionsClone.length; i++) {
+            var action = actionsClone[i]
+            var storedProcedure = `${baseStoredProcedureString} ${action['Action']}`
+            var items = await this.executeQueryInDatabase(storedProcedure)
+            var set = {
+                Action: action['Action'],
+                Items: items[0]
+            }
+            itemsAndActions.push(set)
+        }
+
+        return itemsAndActions
+    }
+
+
 }
 
 export default FetchQueries
