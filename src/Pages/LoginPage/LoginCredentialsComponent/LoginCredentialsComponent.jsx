@@ -6,7 +6,7 @@ import FetchQueries from "../../../FetchHandler/FetchQueries";
 import {useNavigate} from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 
-function LoginCredentialsComponent(){
+function LoginCredentialsComponent(props){
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
     const [loggedInUserDetails, setLoggedInUserDetails] = useState({
@@ -31,7 +31,8 @@ function LoginCredentialsComponent(){
     }
 
     async function logIn(){
-        var newUserDetails = await FetchQueries.loginGetUserID(userName, password)
+        var newUserDetails = await FetchQueries.loginGetUserID(userName, password).catch(error => props.setDisplayErrorPage(true))
+
         if(newUserDetails[0][0]['Found'] === 'Account Found'){
             // Account found
             if(newUserDetails[1][0] === undefined){
