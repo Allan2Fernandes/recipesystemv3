@@ -132,7 +132,10 @@ function RecipeStepsPage(){
     }else{
         pageToReturn =
             <div id={"RecipeStepsPageMainDiv"}>
-                <TopBar IsLoggedIn={true}/>
+                {
+                    !pageIsReadOnly &&
+                    <TopBar IsLoggedIn={true}/>
+                }
                 <RecipeStepsComponent
                     selectedRecipeSetID={selectedRecipeSetID}
                     selectedRecipeName={selectedRecipeName}

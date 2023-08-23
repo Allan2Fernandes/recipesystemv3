@@ -26,6 +26,7 @@ function ImagesInstructionsComponent(props){
                 handleChangeSelectedStepImage={props.handleChangeSelectedStepImage}
                 pageIsReadOnly={props.pageIsReadOnly}
                 toggleDisplayImageSelectionPopUp={props.toggleDisplayImageSelectionPopUp}
+                setSelectedImageIdentifier={props.setSelectedImageIdentifier}
             />
 
         </div>

@@ -16,10 +16,10 @@ function RecipeStepsComponent(props){
     const [allPossibleActions, setAllPossibleActions] = useState([])
     const [itemsAndTheirActions, setItemsAndTheirActions] = useState([])
     const [selectedStepIndex, setSelectedStepIndex] = useState(-1)
+    const [selectedImageIdentifier, setSelectedImageIdentifier] = useState("")
     const [displayImageSelectionPopUp, setDisplayImageSelectionPopUp] = useState(false)
 
     useEffect(() => {
-
         // Fetch the recipes
         fetchRecipeData().catch(e => props.setDisplayErrorPage(true))
         fetchActionsAndTheirItems().catch(e => props.setDisplayErrorPage(true))
@@ -138,6 +138,14 @@ function RecipeStepsComponent(props){
         setDisplayImageSelectionPopUp(!displayImageSelectionPopUp)
     }
 
+    function handleChangeSelectedStepImageFromDatabase(imageName){
+        var newRecipeData = structuredClone(recipeData)
+        newRecipeData[selectedStepIndex][selectedImageIdentifier]['ParamValue'] = imageName
+        setRecipeData(newRecipeData)
+        setDisplayImageSelectionPopUp(false)
+
+    }
+
 
     return (
         <div id={"RecipeStepsComponentMainDiv"}>
@@ -145,6 +153,8 @@ function RecipeStepsComponent(props){
                 displayImageSelectionPopUp &&
                 <ImageSelectionPopUp
                     toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
+                    setDisplayErrorPage={props.setDisplayErrorPage}
+                    handleChangeSelectedStepImageFromDatabase={handleChangeSelectedStepImageFromDatabase}
                 />
             }
             <SingleImageComponent
@@ -154,6 +164,7 @@ function RecipeStepsComponent(props){
                 handleChangeSelectedStepImage={handleChangeSelectedStepImage}
                 pageIsReadOnly={props.pageIsReadOnly}
                 toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
+                setSelectedImageIdentifier={setSelectedImageIdentifier}
             />
             <StepListComponent
                 selectedRecipeName={props.selectedRecipeName}
@@ -180,6 +191,7 @@ function RecipeStepsComponent(props){
                 handleChangeSelectedStepImage={handleChangeSelectedStepImage}
                 pageIsReadOnly={props.pageIsReadOnly}
                 toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
+                setSelectedImageIdentifier={setSelectedImageIdentifier}
             />
         </div>
     )

@@ -238,6 +238,7 @@ function ShelfSetupPage(){
                                         itemProperties.map((property, propertyIndex) => (
                                             <td key={propertyIndex}>
                                                 <input
+                                                    className={"SetupInputField"}
                                                     type={"number"}
                                                     onChange={(event) => changeHandlerNewItemPropertyValues(event, 1+ propertyIndex)}
                                                     value={newItemPropertyValues['property' + (1+propertyIndex)]}
