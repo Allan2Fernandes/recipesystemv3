@@ -1,4 +1,14 @@
-#SingleImageMainDiv {
+#SingleImage1MainDiv{
+    position: absolute;
+    display: flex;
+    align-items: center; /* Horizontal centering */
+    flex-direction: column; /* Arrange elements in a column */
+    width: 500px;
+    height: 500px;
+    left: calc(280px - 250px);
+}
+
+#SingleImageMainDiv{
     display: flex;
     align-items: center; /* Vertical centering */
     justify-content: center; /* Horizontal centering (optional) */
@@ -7,6 +17,11 @@
     height: 100%;
     margin-left: 40px;
     margin-right: 40px;
+}
+
+#Image1Element {
+    width: 100%;
+    border: 1px solid black;
 }
 
 #ImageElement {
@@ -24,4 +39,16 @@
 
 .StepSelectedEnabled{
 
+}
+
+#UploadIcon{
+    margin-right: 5px;
+}
+
+#SelectImageFromDBButton{
+    margin-left: 10px;
+}
+
+#FromDBIcon{
+    margin-right: 5px;
 }

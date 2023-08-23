@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import StandardErrorBoundary from "./ErrorHandling/StandardErrorBoundary";
+import {ErrorBoundary} from "react-error-boundary";
+import ErrorPage from "./ErrorHandling/ErrorPage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <StandardErrorBoundary>
+    <ErrorBoundary fallback={<ErrorPage/>}>
         <App />
-    </StandardErrorBoundary>
+    </ErrorBoundary>
 );

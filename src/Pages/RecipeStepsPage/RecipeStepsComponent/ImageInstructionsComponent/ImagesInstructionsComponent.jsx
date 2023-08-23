@@ -12,19 +12,20 @@ function ImagesInstructionsComponent(props){
                           onChange={(event) => props.handleChangeSelectedStepInstructions(event)}
                 ></textarea>
             </div>
-            <SingleImageComponent
-                image={props.image1}
-                selectedStepIndex={props.selectedStepIndex}
-                stepImageIdentifier={"Image1"}
-                handleChangeSelectedStepImage={props.handleChangeSelectedStepImage}
-                pageIsReadOnly={props.pageIsReadOnly}
-            />
+            {/*<SingleImageComponent*/}
+            {/*    image={props.image1}*/}
+            {/*    selectedStepIndex={props.selectedStepIndex}*/}
+            {/*    stepImageIdentifier={"Image1"}*/}
+            {/*    handleChangeSelectedStepImage={props.handleChangeSelectedStepImage}*/}
+            {/*    pageIsReadOnly={props.pageIsReadOnly}*/}
+            {/*/>*/}
             <SingleImageComponent
                 image={props.image2}
                 selectedStepIndex={props.selectedStepIndex}
                 stepImageIdentifier={"Image2"}
                 handleChangeSelectedStepImage={props.handleChangeSelectedStepImage}
                 pageIsReadOnly={props.pageIsReadOnly}
+                toggleDisplayImageSelectionPopUp={props.toggleDisplayImageSelectionPopUp}
             />
 
         </div>

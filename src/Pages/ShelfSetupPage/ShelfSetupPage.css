@@ -1,0 +1,95 @@
+
+#ShelfSetupPageMainDiv{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+#ActionsItemsSetUpDiv{
+    position: relative;
+    /*height: 800px;*/
+    width: 800px;
+    top: max(0px, calc(37.5px));
+    left: calc(50% - 400px);
+    box-shadow: 0 5px 5px rgb(0 0 0 / 0.2);
+    border-radius: 10px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#ShelfSetUpTitleDiv{
+    background-color: #e7ceb5;
+    color: #7e3c2d;
+    width: 100%;
+}
+
+#ShelfSetUpTitleDiv label{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#ActionSelectionDiv{
+    margin: 15px;
+}
+
+#ActionsItemsDisplayDiv{
+    width: 100%;
+    flex: 1;
+}
+
+#ActionsItemsDisplayTable{
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+#ActionsItemsDisplayTableHeadersRow{
+    background-color: #5A79BA;
+    color: white;
+}
+
+#CreateItemRow{
+    width: 100%;
+    text-align: center;
+    height: 30px;
+}
+
+#CreateItemRow input{
+    width: 100px;
+}
+
+#CreateItemButton{
+    margin-right: 10px;
+}
+
+.ActionShelfSetupRow{
+    text-align: center;
+    height: 30px;
+}
+
+.EvenActionShelfSetupRow{
+    background-color: #F5F5F5
+}
+
+.OddActionShelfSetupRow{
+    background-color: #DCDCDC;
+}
+
+#ItemSearchDiv{
+    margin-top: 10px;
+    border-bottom: 1px solid black;
+    width: 200px;
+}
+
+#ItemSearchDiv input{
+    outline: none;
+    border: 0;
+    margin: 2px;
+}
+
+#SearchIcon{
+    margin: 2px;
+}

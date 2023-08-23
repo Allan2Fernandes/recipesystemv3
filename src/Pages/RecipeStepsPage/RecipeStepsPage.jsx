@@ -17,12 +17,14 @@ function RecipeStepsPage(){
     const [pageIsReadOnly, setPageIsReadOnly] = useState(false)
 
     useEffect(() => {
+        if(secureLocalStorage.getItem("UserDetails") === null || secureLocalStorage.getItem("UserDetails") === undefined){
+            setDisplayErrorPage(true)
+        }
         try{
             setSelectedRecipeSetID(recipeSetID)
             setSelectedRecipeName(recipeName)
             setPreDefinedSelectedStepIndex(parseInt(urlSelectedStepIndex))
             setPageIsReadOnly(readOnly === "true")
-            console.log(readOnly === "true")
         }catch(error){
             setDisplayErrorPage(true)
         }
@@ -49,13 +51,13 @@ function RecipeStepsPage(){
         }).then(r => {
             // Get the new SetID for the recipe
                 // For every step in the recipeData,
-                recipeData.forEach(step => {
+                recipeData.forEach((step, newStepIndex) => {
                     // Save the steps with the new Recipe SetID
                     var stepTypeParamID = step['Name']['HeirarchyTypeParamID'] // Doesn't have to be the Name property here. Any would work since they all share this property
                     var stepTypeParamValue = step['Name']['HeirarchyType']
 
                     var stepNumberParamID = step['Name']['StepNumberParamID']
-                    var stepNumberParamValue = step['Name']['StepNumber']
+                    var stepNumberParamValue = newStepIndex + 1 //step['Name']['StepNumber']
 
                     var stepNameParamID = step['Name']['ParamID']
                     var stepNameParamValue = step['Name']['ParamValue']
@@ -76,13 +78,13 @@ function RecipeStepsPage(){
                         var newStepID = result[0][0]['ParamValue']
                         //For every sub step in the step, save the
                         var listOfSubStepSaveQueries = ""
-                        step['SubSteps'].forEach(subStep => {
+                        step['SubSteps'].forEach((subStep, newSubStepIndex) => {
 
                             var subStepTypeParamID = subStep['Name']['HeirarchyTypeParamID']
                             var subStepTypeParamValue = subStep['Name']['HeirarchyType'];
 
                             var subStepNumberParamID = subStep['Name']['SubStepNumberParamID'];
-                            var subStepNumberParamValue = subStep['Name']['SubStepNumber'];
+                            var subStepNumberParamValue = newSubStepIndex + 1 //subStep['Name']['SubStepNumber'];
 
                             var subStepNameParamID = subStep['Name']['ParamID'];
                             var subStepNameParamValue = subStep['Name']['ParamValue'];

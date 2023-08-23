@@ -77,7 +77,6 @@ function StepListComponent(props){
         }
         newRecipeData.push(newStep)
         props.setRecipeData(newRecipeData)
-
     }
 
 
@@ -96,8 +95,15 @@ function StepListComponent(props){
                         <th>Sub Step Name</th>
                         <th>Action</th>
                         <th>Item</th>
-                        <th>Order</th>
-                        <th>Create / Delete</th>
+                        {
+                            !props.pageIsReadOnly &&
+                            <th>Order</th>
+                        }
+                        {
+                            !props.pageIsReadOnly &&
+                            <th>Create / Delete</th>
+                        }
+
                     </tr>
                     </thead>
                     <tbody id={"StepListTableBody"}>
@@ -128,6 +134,7 @@ function StepListComponent(props){
                         A row with buttons to save the recipe
                     */}
                         {
+                            !props.pageIsReadOnly &&
                             <td id={"CreateStepSaveTableButtonsRow"} colSpan={6} style={{textAlign: "center"}} className={props.recipeData.length%2===0?"IsEvenStepRow":"IsOddStepRow"}>
                                 <button onClick={clickHandlerCreateStep} disabled={props.pageIsReadOnly}>
                                     Create step

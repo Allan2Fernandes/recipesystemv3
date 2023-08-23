@@ -8,57 +8,64 @@ import {useEffect} from "react";
 function SingleStepRowComponent(props){
 
 
+
     function clickHandlerRevealSubStepsButton(){
         props.revealSubStepsOnStepIndex(props.stepIndex)
     }
 
     function appendSubStep(){
-        var maxExistingSubStepNumber = 0
-        var newSubStepNumber = 1
-        props.step['SubSteps'].forEach(subStep => {
-            if(subStep['Name']['SubStepNumber'] > maxExistingSubStepNumber){
-                maxExistingSubStepNumber = subStep['Name']['SubStepNumber']
-            }
-        })
-        newSubStepNumber += maxExistingSubStepNumber
+        try{
+            var maxExistingSubStepNumber = 0
+            var newSubStepNumber = 1
+            props.step['SubSteps'].forEach(subStep => {
+                if(subStep['Name']['SubStepNumber'] > maxExistingSubStepNumber){
+                    maxExistingSubStepNumber = subStep['Name']['SubStepNumber']
+                }
+            })
+            newSubStepNumber += maxExistingSubStepNumber
 
 
-        var placeHolderDetails = {
-            Name:{
-                HeirarchyType: 3,
-                HeirarchyTypeParamID: 10002,
-                ParamID: 35007,
-                ParamValue: "",
-                RecipeSetID: props.selectedRecipeSetID,
-                StepSetID: props.step['Name']['StepSetID'],
-                SubStepNumber: newSubStepNumber,
-                SubStepNumberParamID: 10004,
-                SubStepSetID: -1
-            },
-            Action:{
-                HeirarchyType: 3,
-                HeirarchyTypeParamID: 10002,
-                ParamID: 35004,
-                ParamValue: "Expander",
-                RecipeSetID: props.selectedRecipeSetID,
-                StepSetID: props.step['Name']['StepSetID'],
-                SubStepNumber: newSubStepNumber,
-                SubStepNumberParamID: 10004,
-                SubStepSetID: -1
-            },
-            Item:{
-                HeirarchyType: 3,
-                HeirarchyTypeParamID: 10002,
-                ParamID: 35005,
-                ParamValue: "EXP_33",
-                RecipeSetID: props.selectedRecipeSetID,
-                StepSetID: props.step['Name']['StepSetID'],
-                SubStepNumber: newSubStepNumber,
-                SubStepNumberParamID: 10004,
-                SubStepSetID: -1
+            var placeHolderDetails = {
+                Name:{
+                    HeirarchyType: 3,
+                    HeirarchyTypeParamID: 10002,
+                    ParamID: 35007,
+                    ParamValue: "",
+                    RecipeSetID: props.selectedRecipeSetID,
+                    StepSetID: props.step['Name']['StepSetID'],
+                    SubStepNumber: newSubStepNumber,
+                    SubStepNumberParamID: 10004,
+                    SubStepSetID: -1
+                },
+                Action:{
+                    HeirarchyType: 3,
+                    HeirarchyTypeParamID: 10002,
+                    ParamID: 35004,
+                    ParamValue: props.itemsAndTheirActions[0]['Action'],
+                    RecipeSetID: props.selectedRecipeSetID,
+                    StepSetID: props.step['Name']['StepSetID'],
+                    SubStepNumber: newSubStepNumber,
+                    SubStepNumberParamID: 10004,
+                    SubStepSetID: -1
+                },
+                Item:{
+                    HeirarchyType: 3,
+                    HeirarchyTypeParamID: 10002,
+                    ParamID: 35005,
+                    ParamValue: props.itemsAndTheirActions[0]['Items'][0]['ParamValue'],
+                    RecipeSetID: props.selectedRecipeSetID,
+                    StepSetID: props.step['Name']['StepSetID'],
+                    SubStepNumber: newSubStepNumber,
+                    SubStepNumberParamID: 10004,
+                    SubStepSetID: -1
+                }
             }
+            props.addSubStepToStep(props.stepIndex, placeHolderDetails)
+        }catch(error){
+            console.log(error)
+            props.setDisplayErrorPage(true)
         }
-        props.addSubStepToStep(props.stepIndex, placeHolderDetails)
+
     }
 
     function deleteStep(){
@@ -79,6 +86,10 @@ function SingleStepRowComponent(props){
         <tr id={"SingleStepRowComponentMainRow"}
             className={`${props.isEvenStepRow?"IsEvenStepRow":"IsOddStepRow"} ${props.IsSelectedStepIndex?"IsSelectedStep":"IsNotSelectedStep"}`}
             onClick={(event) => {
+                if(props.pageIsReadOnly){
+                    console.log("Selection change not allowed in ReadOnly")
+                    return;
+                }
                 // Do not select this row if the click originates from the delete button
                 if(!event.target.closest('button')){
                     props.selectStep(props.stepIndex)
@@ -90,9 +101,10 @@ function SingleStepRowComponent(props){
                     value={props.step['Name']['ParamValue']}
                     onChange={(event)=> changeHandlerStepName(props.stepIndex, event)}
                     disabled={props.pageIsReadOnly}
+                    style={{width:"100px"}}
                 />
             </td>
-            <td colSpan={5}>
+            <td colSpan={props.pageIsReadOnly?3:5}>
                 <div id={"ToggleRevealSubStepsDiv"}>
                     <table id={"SubStepRevealDeleteStepButtonTable"}>
                         <tbody>
@@ -104,18 +116,26 @@ function SingleStepRowComponent(props){
                             </td>
                             <td></td>
                             <td></td>
-                            <td></td>
-                            <td>
-                                <button onClick={deleteStep} disabled={props.pageIsReadOnly}>
-                                    <FontAwesomeIcon icon={faX}/>
-                                </button>
-                            </td>
+
+                            {
+                                !props.pageIsReadOnly &&
+                                <td></td>
+                            }
+                            {
+                                !props.pageIsReadOnly &&
+                                <td>
+                                    <button onClick={deleteStep} disabled={props.pageIsReadOnly}>
+                                        <FontAwesomeIcon icon={faX}/>
+                                    </button>
+                                </td>
+                            }
+
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 {
-                    props.step['RevealSubSteps'] && props.step['SubSteps'].map((subStep, subStepIndex) => (
+                    (props.step['RevealSubSteps']) && props.step['SubSteps'].map((subStep, subStepIndex) => (
                         <SubStepDivComponent
                             key={subStepIndex}
                             subStep={subStep}
@@ -132,7 +152,7 @@ function SingleStepRowComponent(props){
                     ))
                 }
                 {
-                    props.step['RevealSubSteps'] &&
+                    ((props.step['RevealSubSteps']) && !props.pageIsReadOnly) &&
                     <div id={"AppendSubStepDiv"} className={props.step['SubSteps'].length%2===0?"IsEvenAddSubStepButton":"IsOddAddSubStepButton"}>
                         <table>
                             <tbody>

@@ -24,6 +24,7 @@ function SubStepDivComponent(props){
                             value={props.subStep['Name']['ParamValue']}
                             onChange={(event) => props.changeHandlerSubStepName(event, "Name", props.stepIndex, props.subStepIndex)}
                             disabled={props.pageIsReadOnly}
+                            style={{width: "100px"}}
                         />
                     </td>
                     <td>
@@ -51,24 +52,30 @@ function SubStepDivComponent(props){
                                     <option key={itemIndex}>{item['ParamValue']}</option>
                                 ))
                             }
-
                         </select>
                     </td>
-                    <td>
-                        <div>
-                            <OrderChangeButtonsComponent
-                                reorderSubSteps={props.reorderSubSteps}
-                                stepIndex={props.stepIndex}
-                                subStepIndex={props.subStepIndex}
-                                pageIsReadOnly={props.pageIsReadOnly}
-                            />
-                        </div>
-                    </td>
-                    <td>
-                        <button onClick={deleteSubStep} disabled={props.pageIsReadOnly}>
-                            <FontAwesomeIcon icon={faTrash}/>
-                        </button>
-                    </td>
+                    {
+                        !props.pageIsReadOnly &&
+                        <td>
+                            <div>
+                                <OrderChangeButtonsComponent
+                                    reorderSubSteps={props.reorderSubSteps}
+                                    stepIndex={props.stepIndex}
+                                    subStepIndex={props.subStepIndex}
+                                    pageIsReadOnly={props.pageIsReadOnly}
+                                />
+                            </div>
+                        </td>
+                    }
+                    {
+                        !props.pageIsReadOnly &&
+                        <td>
+                            <button onClick={deleteSubStep} disabled={props.pageIsReadOnly}>
+                                <FontAwesomeIcon icon={faTrash}/>
+                            </button>
+                        </td>
+                    }
+
                 </tr>
                 </tbody>
             </table>

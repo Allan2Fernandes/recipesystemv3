@@ -16,19 +16,33 @@ function TopBar(props){
         navigate("/")
     }
 
+    function clickHandlerNavigateToShelfSetUp(){
+        navigate("/ShelfSetupPage")
+    }
+
+    function clickHandlerNavigateToRecipeSteps(){
+        navigate("/ListOfRecipesPage")
+    }
+
 
     return (
         <div id={"TopBarMainDiv"}>
-
             <label id={"TopBarTitleLabel"}>Recipe</label>
-
             {
                 props.IsLoggedIn &&
-                <button id={"TopBarLoginButton"} onClick={clickHandlerLogOutButton}>
-                    <FontAwesomeIcon icon={isLoggedIn?faRightFromBracket:faRightToBracket}/>
+                <button id={"ShelfSetUpButton"} onClick={clickHandlerNavigateToShelfSetUp} className={"TopBarButton"}>Shelf Setup</button>
+            }
+            {
+                props.IsLoggedIn &&
+                <button id={"RecipeStepsButton"} onClick={clickHandlerNavigateToRecipeSteps} className={"TopBarButton"}>Recipe Steps</button>
+            }
+            {
+                props.IsLoggedIn &&
+                <button id={"TopBarLoginButton"} onClick={clickHandlerLogOutButton} className={"TopBarButton"}>
+                    <label>{"Logout"}</label>
+                    <FontAwesomeIcon id={"LogoutIcon"} icon={isLoggedIn?faRightFromBracket:faRightToBracket}/>
                 </button>
             }
-
 
         </div>
     )

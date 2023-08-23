@@ -30,7 +30,7 @@ function LoginCredentialsComponent(){
         }
     }
 
-    async function clickHandlerLoginButton(){
+    async function logIn(){
         var newUserDetails = await FetchQueries.loginGetUserID(userName, password)
         if(newUserDetails[0][0]['Found'] === 'Account Found'){
             // Account found
@@ -48,8 +48,19 @@ function LoginCredentialsComponent(){
             // Account not found
             setInvalidLoginDetailsEntered(true)
         }
-
     }
+
+    async function clickHandlerLoginButton(){
+        await logIn()
+    }
+
+    async function onEnterKeyUpHandler(event){
+        if(event.key.toString() === "Enter"){
+            // Attempt to log in when the button is pressed
+            await logIn()
+        }
+    }
+
 
     return (
         <div id={"MainLoginCredsComponentDiv"}>
@@ -63,6 +74,7 @@ function LoginCredentialsComponent(){
                         placeholder={"Username"}
                         value={userName}
                         onChange={(event) => changeHandler(event, "userName")}
+                        onKeyUp={(event) => onEnterKeyUpHandler(event)}
                     />
                 </div>
                 <div id={"PasswordDiv"}>
@@ -73,6 +85,7 @@ function LoginCredentialsComponent(){
                         placeholder={"Password"}
                         value={password}
                         onChange={(event) => changeHandler(event, "password")}
+                        onKeyUp={(event) => onEnterKeyUpHandler(event)}
                     />
                 </div>
 

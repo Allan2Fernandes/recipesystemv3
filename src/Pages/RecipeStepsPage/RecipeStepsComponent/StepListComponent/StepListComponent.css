@@ -1,12 +1,13 @@
 
 #StepListComponentMainDiv{
     position: absolute;
-    width: 1460px;
+    width: 900px;
     margin-left: 10px;
     box-shadow: 0 5px 5px rgb(0 0 0 / 0.2);
     border-radius: 10px;
-    max-height: 70%;
+    max-height: 560px;
     overflow: auto;
+    right: 0;
 }
 
 #RecipeTableTitleDiv{
@@ -35,7 +36,7 @@
 #StepListComponentMainDiv table thead tr th{
     background-color: #5A79BA;
     color: white;
-    width: 243px;
+    width: 150px;
 }
 
 .IsOddStepRow{
@@ -55,3 +56,4 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+

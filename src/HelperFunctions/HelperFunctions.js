@@ -1,5 +1,5 @@
 class HelperFunctions{
-    static ProcessFetchedData(fetchedData){
+    static ProcessFetchedRecipeData(fetchedData){
         var listOfStepsData = []
         var stepsData = fetchedData[0]
         var subStepsData = fetchedData[1]
@@ -65,11 +65,49 @@ class HelperFunctions{
                 RevealSubSteps: false
             }
             listOfStepsData.push(setOfStepData)
-
-
-
         })
         return listOfStepsData
+    }
+
+    static processFetchedShelfValuesData(fetchedData, action){
+        fetchedData = fetchedData[0]
+        var processedData = []
+        // First get the unique SetIDs
+        var listOfUniqueSetIDs = new Set()
+        // Group them up by SetIDs
+        fetchedData.forEach(row => listOfUniqueSetIDs.add(row['SetID']))
+        if(action === 'Expander'){
+            listOfUniqueSetIDs.forEach(SetID => {
+                var eachItemData = fetchedData.filter(data => data['SetID'] === SetID)
+                const xCoord = eachItemData.filter(row => row['ParamID'] ===1)[0]
+                const yCoord = eachItemData.filter(row => row['ParamID'] ===2)[0]
+                const zCoord = eachItemData.filter(row => row['ParamID']===3)[0]
+                const modificationDate = eachItemData.filter(row => row['ParamID'] === 30000)[0]
+                const itemName = eachItemData.filter(row => row['ParamID'] === 30001)[0]
+                const setOfData = {
+                    Name: itemName,
+                    XCoord: xCoord,
+                    YCoord: yCoord,
+                    ZCoord: zCoord,
+                    modificationDate: modificationDate
+                }
+                processedData.push(setOfData)
+            })
+        }else{
+            listOfUniqueSetIDs.forEach(SetID => {
+                var eachItemData = fetchedData.filter(data => data['SetID'] === SetID)
+                const ShelfValue = eachItemData.filter(row => row['ParamID'] ===10005)[0]
+                const modificationDate = eachItemData.filter(row => row['ParamID'] === 30000)[0]
+                const itemName = eachItemData.filter(row => row['ParamID'] === 30001)[0]
+                const setOfData = {
+                    Name: itemName,
+                    ShelfValue: ShelfValue,
+                    ModificationDate: modificationDate
+                }
+                processedData.push(setOfData)
+            })
+        }
+        return processedData
     }
 
 

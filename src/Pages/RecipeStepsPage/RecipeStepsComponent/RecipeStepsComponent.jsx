@@ -7,6 +7,8 @@ import {Directions} from "../../../Constants";
 import stockImage from "../../../Images/StockCadDrawing.png"
 import ImagesInstructionsComponent from "./ImageInstructionsComponent/ImagesInstructionsComponent";
 import secureLocalStorage from "react-secure-storage";
+import SingleImageComponent from "./ImageInstructionsComponent/SingleImageComponent/SingleImageComponent";
+import ImageSelectionPopUp from "./ImageSelectionPopUp/ImageSelectionPopUp";
 
 
 function RecipeStepsComponent(props){
@@ -14,21 +16,25 @@ function RecipeStepsComponent(props){
     const [allPossibleActions, setAllPossibleActions] = useState([])
     const [itemsAndTheirActions, setItemsAndTheirActions] = useState([])
     const [selectedStepIndex, setSelectedStepIndex] = useState(-1)
+    const [displayImageSelectionPopUp, setDisplayImageSelectionPopUp] = useState(false)
 
     useEffect(() => {
-        console.log(recipeData)
+
         // Fetch the recipes
         fetchRecipeData().catch(e => props.setDisplayErrorPage(true))
         fetchActionsAndTheirItems().catch(e => props.setDisplayErrorPage(true))
-        if(props.preDefinedSelectedStepIndex !== -1){
-            setSelectedStepIndex(props.preDefinedSelectedStepIndex)
-        }
     }, [props.selectedRecipeSetID, props.preDefinedSelectedStepIndex])
 
     async function fetchRecipeData(){
         await FetchQueries.getStepsAndSubStepsOfRecipe(props.selectedRecipeSetID).then(result => {
             // Process the data into a usable format
-            var processedData = HelperFunctions.ProcessFetchedData(result)
+            var processedData = HelperFunctions.ProcessFetchedRecipeData(result)
+
+            processedData.forEach((step, stepIndex) => {
+                if(step['Name']['StepNumber']===props.preDefinedSelectedStepIndex){
+                    setSelectedStepIndex(stepIndex)
+                }
+            })
             setRecipeData(processedData)
         }).catch(e => props.setDisplayErrorPage(true))
     }
@@ -40,10 +46,23 @@ function RecipeStepsComponent(props){
         setItemsAndTheirActions(itemsData)
     }
 
-    function changeHandlerSubStepName(event, fieldName, stepIndex, subStepIndex){
-        var newRecipeData = structuredClone(recipeData)
-        newRecipeData[stepIndex]['SubSteps'][subStepIndex][fieldName]['ParamValue'] = event.target.value
-        setRecipeData(newRecipeData)
+    function changeHandlerSubStepProperty(event, fieldName, stepIndex, subStepIndex){
+        try{
+            var newRecipeData = structuredClone(recipeData)
+            newRecipeData[stepIndex]['SubSteps'][subStepIndex][fieldName]['ParamValue'] = event.target.value
+
+            if(fieldName==="Action"){
+                // Change the action for this sub step too. It has to be the default value for this action
+                var selectedAction = itemsAndTheirActions.filter(row => row['Action'] === event.target.value)[0]
+                var defaultItem = selectedAction['Items'][0]['ParamValue']
+                newRecipeData[stepIndex]['SubSteps'][subStepIndex]['Item']['ParamValue'] = defaultItem
+            }
+            setRecipeData(newRecipeData)
+        }catch(error){
+            console.log(error)
+            props.setDisplayErrorPage(true)
+        }
+
     }
 
     function reorderSubSteps(event, stepIndex, subStepIndex, direction){
@@ -97,15 +116,14 @@ function RecipeStepsComponent(props){
         setRecipeData(newRecipeData)
     }
 
-    function handleChangeSelectedStepImage(b64Image, image_name, stepIndex, imageIdentifier){
-
+    function handleChangeSelectedStepImage(b64Image, image_name, stepIndex, imageIdentifier, reducedImageData){
         var b64Prefix = "data:image/jpeg;base64,"
         b64Image = b64Image.replace(b64Prefix, "")
+        reducedImageData = reducedImageData.replace(b64Prefix, "")
         // Construct a query to save the image b64 and the name. Save them together for a common setID
         var userDetails = secureLocalStorage.getItem("UserDetails")
         var userID = userDetails['SetID']
-        var query = `EXEC sp_SaveParams ${userID}, 'File', '35008;${image_name};35009;${b64Image}'`
-        console.log(query)
+        var query = `EXEC sp_SaveParams ${userID}, 'File', '35008;${image_name};35009;${b64Image};35010;${reducedImageData}'`
         // Update the recipe data with the file name in the ParamValue for the step image
         FetchQueries.executeQueryInDatabase(query).then(result => {
             var newRecipeData = structuredClone(recipeData)
@@ -116,17 +134,34 @@ function RecipeStepsComponent(props){
         })
     }
 
+    function toggleDisplayImageSelectionPopUp(){
+        setDisplayImageSelectionPopUp(!displayImageSelectionPopUp)
+    }
 
 
     return (
         <div id={"RecipeStepsComponentMainDiv"}>
+            {
+                displayImageSelectionPopUp &&
+                <ImageSelectionPopUp
+                    toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
+                />
+            }
+            <SingleImageComponent
+                image={selectedStepIndex>=0?recipeData[selectedStepIndex]['Image1']['ParamValue']:stockImage}
+                selectedStepIndex={selectedStepIndex}
+                stepImageIdentifier={"Image1"}
+                handleChangeSelectedStepImage={handleChangeSelectedStepImage}
+                pageIsReadOnly={props.pageIsReadOnly}
+                toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
+            />
             <StepListComponent
                 selectedRecipeName={props.selectedRecipeName}
                 selectedRecipeSetID={props.selectedRecipeSetID}
                 recipeData={recipeData}
                 setRecipeData={setRecipeData}
                 itemsAndTheirActions={itemsAndTheirActions}
-                changeHandlerSubStepName={changeHandlerSubStepName}
+                changeHandlerSubStepName={changeHandlerSubStepProperty}
                 reorderSubSteps={reorderSubSteps}
                 setDisplayErrorPage={props.setDisplayErrorPage}
                 saveRecipe={props.saveRecipe}
@@ -144,6 +179,7 @@ function RecipeStepsComponent(props){
                 handleChangeSelectedStepInstructions={handleChangeSelectedStepInstructions}
                 handleChangeSelectedStepImage={handleChangeSelectedStepImage}
                 pageIsReadOnly={props.pageIsReadOnly}
+                toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
             />
         </div>
     )
