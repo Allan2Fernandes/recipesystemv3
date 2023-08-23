@@ -38,7 +38,7 @@ function SubStepDivComponent(props){
                             value={props.subStep['Name']['ParamValue']}
                             onChange={(event) => props.changeHandlerSubStepName(event, "Name", props.stepIndex, props.subStepIndex)}
                             disabled={props.pageIsReadOnly}
-                            style={{width: "150px"}}
+                            style={{width:"100px"}}
                         />
                     </td>
                     <td>

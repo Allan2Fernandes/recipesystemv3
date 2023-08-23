@@ -1,7 +1,11 @@
-#MoveUpButton{
+#StepMoveUpButton{
     margin-right: 5px;
+    background-color: black;
+    color: white;
 }
 
-#MoveDownButton{
+#StepMoveDownButton{
     margin-left: 5px;
+    background-color: black;
+    color: white;
 }

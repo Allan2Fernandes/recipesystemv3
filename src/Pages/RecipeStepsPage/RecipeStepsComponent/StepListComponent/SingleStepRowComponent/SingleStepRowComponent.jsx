@@ -100,7 +100,7 @@ function SingleStepRowComponent(props){
                     value={props.step['Name']['ParamValue']}
                     onChange={(event)=> changeHandlerStepName(props.stepIndex, event)}
                     disabled={props.pageIsReadOnly}
-                    style={{width:"150px"}}
+                    style={{width:"100px"}}
                 />
             </td>
             <td colSpan={props.pageIsReadOnly?3:5}>
@@ -109,8 +109,8 @@ function SingleStepRowComponent(props){
                         <tbody>
                         <tr>
                             <td>
-                                <button onClick={clickHandlerRevealSubStepsButton}>
-                                    <FontAwesomeIcon icon={props.step['RevealSubSteps']?faChevronUp:faChevronDown} />
+                                <button onClick={clickHandlerRevealSubStepsButton} id={"RevealSubStepsButton"}>
+                                    <FontAwesomeIcon icon={props.step['RevealSubSteps']?faChevronUp:faChevronDown}/>
                                 </button>
                             </td>
                             <td></td>
@@ -127,7 +127,7 @@ function SingleStepRowComponent(props){
                             {
                                 !props.pageIsReadOnly &&
                                 <td>
-                                    <button onClick={deleteStep} disabled={props.pageIsReadOnly}>
+                                    <button onClick={deleteStep} disabled={props.pageIsReadOnly} id={"DeleteStepButton"}>
                                         <FontAwesomeIcon icon={faX}/>
                                     </button>
                                 </td>

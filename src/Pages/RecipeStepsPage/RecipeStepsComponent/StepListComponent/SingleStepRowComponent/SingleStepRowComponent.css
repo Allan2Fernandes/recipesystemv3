@@ -49,3 +49,13 @@
 .IsOddAddSubStepButton{
     background-color: #DCDCDC;
 }
+
+#DeleteStepButton{
+    background-color: black;
+    color: white;
+}
+
+#RevealSubStepsButton{
+    background-color: black;
+    color: white;
+}

@@ -46,12 +46,12 @@ function ReOrderStepsComponent(props){
     return (
         <td>
             <div>
-                <button id={"MoveUpButton"}
+                <button id={"StepMoveUpButton"}
                         onClick={(event) => handleClickStepOrderChangeButtons(Directions.Up)}
                 >
                     <FontAwesomeIcon icon={faArrowUp} />
                 </button>
-                <button id={"MoveDownButton"}
+                <button id={"StepMoveDownButton"}
                         onClick={(event) => handleClickStepOrderChangeButtons(Directions.Down)}
                 >
                     <FontAwesomeIcon icon={faArrowDown} />
