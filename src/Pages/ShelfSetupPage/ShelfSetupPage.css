@@ -21,8 +21,8 @@
 }
 
 #ShelfSetUpTitleDiv{
-    background-color: #e7ceb5;
-    color: #7e3c2d;
+    background-color: #000000;
+    color: white;
     width: 100%;
 }
 
@@ -47,7 +47,7 @@
 }
 
 #ActionsItemsDisplayTableHeadersRow{
-    background-color: #5A79BA;
+    background-color: #005687;
     color: white;
 }
 

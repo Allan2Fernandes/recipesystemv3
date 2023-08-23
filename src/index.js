@@ -7,7 +7,7 @@ import ErrorPage from "./ErrorHandling/ErrorPage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <ErrorBoundary fallback={<ErrorPage/>}>
-        <App />
-    </ErrorBoundary>
+        <ErrorBoundary fallback={<ErrorPage/>}>
+            <App />
+        </ErrorBoundary>
 );

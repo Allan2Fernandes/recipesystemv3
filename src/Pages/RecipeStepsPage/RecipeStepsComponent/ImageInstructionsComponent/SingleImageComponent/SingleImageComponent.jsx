@@ -51,7 +51,7 @@ function SingleImageComponent(props){
                        htmlFor={`UploadNew${props.stepImageIdentifier}Button`}
                        className={props.selectedStepIndex < 0?"StepNotSelectedDisabled":"StepSelectedEnabled"}>
                     <FontAwesomeIcon id={"UploadIcon"} icon={faUpload}/>
-                    {`${props.stepImageIdentifier}: Device`}
+                    {`Local Device`}
                 </label>
                 <button
                     id={"SelectImageFromDBButton"}
@@ -62,6 +62,7 @@ function SingleImageComponent(props){
                     Database
                 </button>
             </div>
+            <div>{props.image===stockImage?"":props.image}</div>
         </div>
     )
 }

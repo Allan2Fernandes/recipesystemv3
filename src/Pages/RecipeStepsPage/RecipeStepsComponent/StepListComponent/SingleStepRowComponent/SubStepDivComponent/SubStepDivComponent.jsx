@@ -1,16 +1,30 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./SubStepDivComponent.css"
 import OrderChangeButtonsComponent from "./OrderChangeButtonsComponent/OrderChangeButtonsComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTrash, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {faTrash} from "@fortawesome/free-solid-svg-icons";
 
 function SubStepDivComponent(props){
+
+    useEffect(()=> {
+        //console.log(props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue']))
+    }, [])
 
     function deleteSubStep(){
         var newRecipeData = structuredClone(props.recipeData)
         // Use the step and sub step indices to remove the data from recipeData
         newRecipeData[props.stepIndex]['SubSteps'].splice(props.subStepIndex, 1)
         props.setRecipeData(newRecipeData)
+    }
+
+    function filterItemsForAction(){
+        // This is a poor solution. Fix it
+        try{
+            return props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items']
+        }catch(error){
+            return []
+        }
+
     }
 
     return (
@@ -24,7 +38,7 @@ function SubStepDivComponent(props){
                             value={props.subStep['Name']['ParamValue']}
                             onChange={(event) => props.changeHandlerSubStepName(event, "Name", props.stepIndex, props.subStepIndex)}
                             disabled={props.pageIsReadOnly}
-                            style={{width: "100px"}}
+                            style={{width: "150px"}}
                         />
                     </td>
                     <td>
@@ -48,7 +62,7 @@ function SubStepDivComponent(props){
                             Have to show the items which correspond to that action. Get the index which corresponds to the Action and then display those items
                              */}
                             {
-                                props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items'].map((item, itemIndex) => (
+                                filterItemsForAction().map((item, itemIndex) => (
                                     <option key={itemIndex}>{item['ParamValue']}</option>
                                 ))
                             }

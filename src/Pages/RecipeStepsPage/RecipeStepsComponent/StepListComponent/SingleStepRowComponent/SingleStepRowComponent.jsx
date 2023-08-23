@@ -3,11 +3,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faChevronUp, faX} from "@fortawesome/free-solid-svg-icons";
 import SubStepDivComponent from "./SubStepDivComponent/SubStepDivComponent";
 import {useEffect} from "react";
+import ReOrderStepsComponent from "./ReOrderStepsComponent/ReOrderStepsComponent";
 
 
 function SingleStepRowComponent(props){
-
-
 
     function clickHandlerRevealSubStepsButton(){
         props.revealSubStepsOnStepIndex(props.stepIndex)
@@ -101,7 +100,7 @@ function SingleStepRowComponent(props){
                     value={props.step['Name']['ParamValue']}
                     onChange={(event)=> changeHandlerStepName(props.stepIndex, event)}
                     disabled={props.pageIsReadOnly}
-                    style={{width:"100px"}}
+                    style={{width:"150px"}}
                 />
             </td>
             <td colSpan={props.pageIsReadOnly?3:5}>
@@ -119,7 +118,11 @@ function SingleStepRowComponent(props){
 
                             {
                                 !props.pageIsReadOnly &&
-                                <td></td>
+                                <ReOrderStepsComponent
+                                    stepIndex={props.stepIndex}
+                                    recipeData={props.recipeData}
+                                    setRecipeData={props.setRecipeData}
+                                />
                             }
                             {
                                 !props.pageIsReadOnly &&
@@ -135,7 +138,8 @@ function SingleStepRowComponent(props){
                     </table>
                 </div>
                 {
-                    (props.step['RevealSubSteps']) && props.step['SubSteps'].map((subStep, subStepIndex) => (
+                    //TODO this is the reveal sub steps that has to be changed
+                    (props.step['RevealSubSteps'] || props.pageIsReadOnly) && props.step['SubSteps'].map((subStep, subStepIndex) => (
                         <SubStepDivComponent
                             key={subStepIndex}
                             subStep={subStep}

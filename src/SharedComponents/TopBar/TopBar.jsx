@@ -27,14 +27,14 @@ function TopBar(props){
 
     return (
         <div id={"TopBarMainDiv"}>
-            <label id={"TopBarTitleLabel"}>Recipe</label>
+            <label id={"TopBarTitleLabel"}>Recipe System</label>
             {
                 props.IsLoggedIn &&
                 <button id={"ShelfSetUpButton"} onClick={clickHandlerNavigateToShelfSetUp} className={"TopBarButton"}>Shelf Setup</button>
             }
             {
                 props.IsLoggedIn &&
-                <button id={"RecipeStepsButton"} onClick={clickHandlerNavigateToRecipeSteps} className={"TopBarButton"}>Recipe Steps</button>
+                <button id={"RecipeStepsButton"} onClick={clickHandlerNavigateToRecipeSteps} className={"TopBarButton"}>Recipes</button>
             }
             {
                 props.IsLoggedIn &&
