@@ -14,7 +14,7 @@ function LoginCredentialsComponent(props){
         ParamID: 0,
         ParamValue: ""
     })
-    const [invalidLogindetailsEntered, setInvalidLoginDetailsEntered] = useState(false)
+    const [invalidLoginDetailsEntered, setInvalidLoginDetailsEntered] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -31,24 +31,28 @@ function LoginCredentialsComponent(props){
     }
 
     async function logIn(){
-        var newUserDetails = await FetchQueries.loginGetUserID(userName, password).catch(error => props.setDisplayErrorPage(true))
-
-        if(newUserDetails[0][0]['Found'] === 'Account Found'){
-            // Account found
-            if(newUserDetails[1][0] === undefined){
-                setInvalidLoginDetailsEntered(true)
+        try{
+            var newUserDetails = await FetchQueries.loginGetUserID(userName, password)
+            if(newUserDetails[0][0]['Found'] === 'Account Found'){
+                // Account found
+                if(newUserDetails[1][0] === undefined){
+                    setInvalidLoginDetailsEntered(true)
+                }else{
+                    //Handle log in. Account found and password/Username match
+                    setLoggedInUserDetails(newUserDetails[1][0])
+                    setInvalidLoginDetailsEntered(false)
+                    secureLocalStorage.setItem("UserDetails", newUserDetails[1][0])
+                    // Navigate to the page with list of recipes
+                    navigate("/ListOfRecipesPage")
+                }
             }else{
-                //Handle log in. Account found and password/Username match
-                setLoggedInUserDetails(newUserDetails[1][0])
-                setInvalidLoginDetailsEntered(false)
-                secureLocalStorage.setItem("UserDetails", newUserDetails[1][0])
-                // Navigate to the page with list of recipes
-                navigate("/ListOfRecipesPage")
+                // Account not found
+                setInvalidLoginDetailsEntered(true)
             }
-        }else{
-            // Account not found
-            setInvalidLoginDetailsEntered(true)
+        }catch(error){
+            props.setDisplayErrorPage(true)
         }
+
     }
 
     async function clickHandlerLoginButton(){
@@ -94,7 +98,7 @@ function LoginCredentialsComponent(props){
                     <FontAwesomeIcon id={"LoginKeyIcon"} icon={faKey}/>
                 </button>
                 {
-                    invalidLogindetailsEntered &&
+                    invalidLoginDetailsEntered &&
                     <div>
                         <label id={"InvalidDetailsLabel"}>Invalid Details Entered</label>
                     </div>

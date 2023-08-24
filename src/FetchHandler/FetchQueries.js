@@ -2,16 +2,15 @@ import {baseURL} from "../Constants";
 
 class FetchQueries{
     static async queryData(url, options = {}) {
-        try {
-            const response = await fetch(url, options);
+        await fetch(url, options).then(response => {
             if (!response.ok) {
-                throw new Error('Fetch request failed');
+                throw new Error(response.statusText);
             }
-            return await response.json();
-        } catch (error) {
-            // You can handle error states or throw an error as per your project's requirements
+            return response.json();
+        }).catch(error => {
+            console.log("Log in fetch failed")
             throw error
-        }
+        })
     }
 
     static executeQueryInDatabase(query){

@@ -1,14 +1,21 @@
 import "./LoginPage.css"
 import TopBar from "../../SharedComponents/TopBar/TopBar";
 import LoginCredentialsComponent from "./LoginCredentialsComponent/LoginCredentialsComponent";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ErrorPage from "../../ErrorHandling/ErrorPage";
 
 function LoginPage(){
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
+    useEffect(() => {
+        console.log("Redirected")
+    }, [])
 
     if(displayErrorPage){
-        return (<ErrorPage/>)
+        return (
+            <ErrorPage
+                setDisplayErrorPage={setDisplayErrorPage}
+            />
+        )
     }else{
         return (
             <div id={"LoginPageMainDiv"}>
