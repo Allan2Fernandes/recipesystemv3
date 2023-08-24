@@ -32,7 +32,7 @@ class HelperFunctions{
             // Sort the set of unique sub step IDs
             // Have to convert to an array first
             uniqueSubStepNumbers = Array.from(uniqueSubStepNumbers)
-            uniqueSubStepNumbers = uniqueSubStepNumbers.sort()
+            uniqueSubStepNumbers = uniqueSubStepNumbers.sort((a,b) => a-b)
 
             var listOfSubSteps = []
             //Loop through the sub step IDs for this particular step
