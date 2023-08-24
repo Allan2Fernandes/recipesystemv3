@@ -35,6 +35,7 @@ function RecipeStepsComponent(props){
                     setSelectedStepIndex(stepIndex)
                 }
             })
+            console.log(processedData)
             setRecipeData(processedData)
         }).catch(e => props.setDisplayErrorPage(true))
     }

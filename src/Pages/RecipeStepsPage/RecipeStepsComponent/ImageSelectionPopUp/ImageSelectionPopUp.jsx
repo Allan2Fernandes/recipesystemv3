@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import "./ImageSelectionPopUp.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faClose,
+    faClose, faSearch,
     faUpload
 } from "@fortawesome/free-solid-svg-icons";
 import secureLocalStorage from "react-secure-storage";
@@ -11,14 +11,23 @@ import ImagesGridComponent from "./ImagesGridComponent/ImagesGridComponent";
 
 function ImageSelectionPopUp(props){
     const [listOfImageNames, setListOfImageNames] = useState([])
+    const [searchKeyWord, setSearchKeyWord] = useState("")
+    const [filteredListOfImages, setFilteredListOfImages] = useState([])
 
     useEffect(() => {
         fetchAllImageNames()
     }, [])
 
-    function fetchAllImageNames(){
+    useEffect(() => {
+        filterListOfImagesByKeyWord()
+    }, [searchKeyWord])
+
+    async function fetchAllImageNames(){
         var query = "SELECT DISTINCT(ParamValue) FROM File_STRING WHERE ParamID = 35008"
-        FetchQueries.executeQueryInDatabase(query).then(result => setListOfImageNames(result[0])).catch(error => props.setDisplayErrorPage(true))
+        await FetchQueries.executeQueryInDatabase(query).then(result => {
+            setListOfImageNames(result[0])
+            setFilteredListOfImages(result[0])
+        }).catch(error => props.setDisplayErrorPage(true))
     }
 
     function handleClickOverlay(event){
@@ -49,6 +58,7 @@ function ImageSelectionPopUp(props){
             var userID = userDetails['SetID']
             var b64Prefix = "data:image/jpeg;base64,"
             var reducedImageData = ""
+            console.log(b64Image)
             b64Image = b64Image.replace(b64Prefix, "")
             // Construct a query to save the image in the database
             var query = `EXECUTE sp_SaveParams ${userID}, 'File', '35008;${image_file['name']};35009;${b64Image};35010;${reducedImageData}'`
@@ -57,21 +67,40 @@ function ImageSelectionPopUp(props){
         reader.readAsDataURL(image_file);
     }
 
+    function changeHandlerSearchKeyWord(event){
+        setSearchKeyWord(event.target.value)
+    }
+
+    function filterListOfImagesByKeyWord(){
+        var filteredList = listOfImageNames.filter(image => image['ParamValue'].includes(searchKeyWord))
+        setFilteredListOfImages(filteredList)
+    }
+
     return (
         <div id={"ImageSelectionOverLay"} onClick={(event => handleClickOverlay(event))}>
             <div id={"ImageSelectionPopUpMainDiv"}>
                 <div id={"ImageSelectorTopBar"}>
+                    <label id={"ImageSelectorTopBarLabel"}>Image Selection</label>
                     <button id={"PopUpCloseButton"} onClick={clickHandlerClosePopUp}>
                         <FontAwesomeIcon icon={faClose}/>
                     </button>
                 </div>
 
                 <ImagesGridComponent
-                    listOfImageNames={listOfImageNames}
+                    listOfImageNames={filteredListOfImages}
                     handleChangeSelectedStepImageFromDatabase={props.handleChangeSelectedStepImageFromDatabase}
                 />
 
                 <div>
+                    <div id={"ImageSearchDiv"}>
+                        <FontAwesomeIcon icon={faSearch}/>
+                        <input
+                            id={"ImageSearchInput"}
+                            type={"text"}
+                            value={searchKeyWord}
+                            onChange={(event) => changeHandlerSearchKeyWord(event)}
+                        />
+                    </div>
                     <input id={"UploadImageToDBFileInput"}
                            type={"file"}
                            onChange={(event) => handleChangeFileInput(event)}

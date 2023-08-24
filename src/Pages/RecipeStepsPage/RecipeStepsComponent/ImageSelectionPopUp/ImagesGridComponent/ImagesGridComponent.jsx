@@ -1,5 +1,5 @@
 import "./ImagesGridComponent.css"
-import React from "react";
+import React, {useState} from "react";
 import {baseURL} from "../../../../../Constants";
 
 function ImagesGridComponent(props){
@@ -13,13 +13,17 @@ function ImagesGridComponent(props){
         <div id={"ImagesGridComponentMainDiv"} className={"image-grid"}>
             {
                 props.listOfImageNames.map((image, index) => (
-                    <img
-                        key={index}
-                        src={`${baseURL}api/Image/getImageOnFileName/${image['ParamValue']}`}
-                        alt={`Image ${index}`}
-                        className={"image-item"}
-                        onClick={(event) => clickHandlerSelectImage(image)}
-                    />
+                    <div key={index}>
+                        <img
+                            src={`${baseURL}api/Image/getImageOnFileName/${image['ParamValue']}`}
+                            alt={`Image ${index}`}
+                            className={"image-item"}
+                            onClick={(event) => clickHandlerSelectImage(image)}
+                        />
+                        <center>
+                            <label id={"ImageNameLabel"}>{image['ParamValue']}</label>
+                        </center>
+                    </div>
                 ))
             }
         </div>

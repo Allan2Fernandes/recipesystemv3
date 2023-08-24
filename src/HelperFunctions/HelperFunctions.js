@@ -6,10 +6,10 @@ class HelperFunctions{
         // First construct the steps
         // Get the unique stepNumbers
         var uniqueStepNumbers = new Set()
-        stepsData.forEach(row => uniqueStepNumbers.add(row['StepNumber']))
+        stepsData.forEach(row => uniqueStepNumbers.add(parseInt(row['StepNumber'])))
         uniqueStepNumbers = Array.from(uniqueStepNumbers)
-        uniqueStepNumbers = uniqueStepNumbers.sort()
-
+        uniqueStepNumbers = uniqueStepNumbers.sort((a,b) => a-b)
+        console.log(uniqueStepNumbers)
         // For every stepNumber, filter the list and locate each attribute like image1, image2, name, instructions, etc
         uniqueStepNumbers.forEach(uniqueStepNumber => {
             // First find the step data for just the relevant step number

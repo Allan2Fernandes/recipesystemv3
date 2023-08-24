@@ -27,6 +27,8 @@
     background-color: black;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
+    display: flex;
+    align-items: center;
 }
 
 #PopUpCloseButton{
@@ -43,5 +45,26 @@
     bottom: 15px;
     right: 15px;
     color: white;
+}
+
+#ImageSelectorTopBarLabel{
+    margin-left: 15px;
+    color: white;
+}
+
+#ImageSearchDiv{
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    color: white;
+    border-bottom: 1px solid white;
+}
+
+#ImageSearchInput{
+    outline: none;
+    background: transparent;
+    border: 0;
+    color: white;
+    margin: 5px;
 }
 
