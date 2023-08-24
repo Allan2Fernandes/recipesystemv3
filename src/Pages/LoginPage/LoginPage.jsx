@@ -6,9 +6,6 @@ import ErrorPage from "../../ErrorHandling/ErrorPage";
 
 function LoginPage(){
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
-    useEffect(() => {
-        console.log("Redirected")
-    }, [])
 
     if(displayErrorPage){
         return (
