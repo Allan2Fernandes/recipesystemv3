@@ -35,7 +35,6 @@ function RecipeStepsComponent(props){
                     setSelectedStepIndex(stepIndex)
                 }
             })
-            console.log(processedData)
             setRecipeData(processedData)
         }).catch(e => props.setDisplayErrorPage(true))
     }
@@ -118,12 +117,26 @@ function RecipeStepsComponent(props){
     }
 
     function handleChangeSelectedStepImage(b64Image, image_name, stepIndex, imageIdentifier, reducedImageData){
-        var b64Prefix = "data:image/jpeg;base64,"
+        var userDetails = secureLocalStorage.getItem("UserDetails")
+        var userID = userDetails['SetID']
+
+        // Figure out the format of the base64 file
+        var b64DeterminationCharacter = b64Image.split(',')[1][0]
+
+        var b64Prefix = ""
+
+        if(b64DeterminationCharacter === '/'){
+            b64Prefix = "data:image/jpeg;base64,"
+        }else if(b64DeterminationCharacter === 'i'){
+            b64Prefix = "data:image/png;base64,"
+        }else{
+            console.log("Invalid extension")
+            return;
+        }
         b64Image = b64Image.replace(b64Prefix, "")
         reducedImageData = reducedImageData.replace(b64Prefix, "")
         // Construct a query to save the image b64 and the name. Save them together for a common setID
-        var userDetails = secureLocalStorage.getItem("UserDetails")
-        var userID = userDetails['SetID']
+
         var query = `EXEC sp_SaveParams ${userID}, 'File', '35008;${image_name};35009;${b64Image};35010;${reducedImageData}'`
         // Update the recipe data with the file name in the ParamValue for the step image
         FetchQueries.executeQueryInDatabase(query).then(result => {

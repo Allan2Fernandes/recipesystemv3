@@ -52,13 +52,25 @@ function ImageSelectionPopUp(props){
         const reader = new FileReader();
         reader.onloadend = () => {
             var b64Image = reader.result
+
             // Get the saved user details from storage
             var userDetails = secureLocalStorage.getItem("UserDetails")
             // Extract just the setID which is the UserID in the query
             var userID = userDetails['SetID']
-            var b64Prefix = "data:image/jpeg;base64,"
+            // Figure out the format of the base64 file
+            var b64DeterminationCharacter = b64Image.split(',')[1][0]
+
+            var b64Prefix = ""
             var reducedImageData = ""
-            console.log(b64Image)
+
+            if(b64DeterminationCharacter === '/'){
+                b64Prefix = "data:image/jpeg;base64,"
+            }else if(b64DeterminationCharacter === 'i'){
+                b64Prefix = "data:image/png;base64,"
+            }else{
+                console.log("Invalid extension")
+                return;
+            }
             b64Image = b64Image.replace(b64Prefix, "")
             // Construct a query to save the image in the database
             var query = `EXECUTE sp_SaveParams ${userID}, 'File', '35008;${image_file['name']};35009;${b64Image};35010;${reducedImageData}'`
