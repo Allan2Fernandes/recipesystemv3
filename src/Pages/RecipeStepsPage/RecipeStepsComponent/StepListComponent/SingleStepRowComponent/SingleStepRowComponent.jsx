@@ -4,6 +4,7 @@ import {faChevronDown, faChevronUp, faX} from "@fortawesome/free-solid-svg-icons
 import SubStepDivComponent from "./SubStepDivComponent/SubStepDivComponent";
 import {useEffect} from "react";
 import ReOrderStepsComponent from "./ReOrderStepsComponent/ReOrderStepsComponent";
+import {ParamIDs} from "../../../../../Constants";
 
 
 function SingleStepRowComponent(props){
@@ -26,36 +27,36 @@ function SingleStepRowComponent(props){
 
             var placeHolderDetails = {
                 Name:{
-                    HeirarchyType: 3,
-                    HeirarchyTypeParamID: 10002,
-                    ParamID: 35007,
+                    HeirarchyType: ParamIDs.CommonHierarchyTypeSubStepValue,
+                    HeirarchyTypeParamID: ParamIDs.CommonHierarchyType,
+                    ParamID: ParamIDs.StepSubStepName,
                     ParamValue: "",
                     RecipeSetID: props.selectedRecipeSetID,
                     StepSetID: props.step['Name']['StepSetID'],
                     SubStepNumber: newSubStepNumber,
-                    SubStepNumberParamID: 10004,
+                    SubStepNumberParamID: ParamIDs.SubStepNumber,
                     SubStepSetID: -1
                 },
                 Action:{
                     HeirarchyType: 3,
-                    HeirarchyTypeParamID: 10002,
-                    ParamID: 35004,
+                    HeirarchyTypeParamID: ParamIDs.CommonHierarchyType,
+                    ParamID: ParamIDs.SubStepAction,
                     ParamValue: props.itemsAndTheirActions[0]['Action'],
                     RecipeSetID: props.selectedRecipeSetID,
                     StepSetID: props.step['Name']['StepSetID'],
                     SubStepNumber: newSubStepNumber,
-                    SubStepNumberParamID: 10004,
+                    SubStepNumberParamID: ParamIDs.SubStepNumber,
                     SubStepSetID: -1
                 },
                 Item:{
                     HeirarchyType: 3,
-                    HeirarchyTypeParamID: 10002,
-                    ParamID: 35005,
+                    HeirarchyTypeParamID: ParamIDs.CommonHierarchyType,
+                    ParamID: ParamIDs.SubStepItem,
                     ParamValue: props.itemsAndTheirActions[0]['Items'][0]['ParamValue'],
                     RecipeSetID: props.selectedRecipeSetID,
                     StepSetID: props.step['Name']['StepSetID'],
                     SubStepNumber: newSubStepNumber,
-                    SubStepNumberParamID: 10004,
+                    SubStepNumberParamID: ParamIDs.SubStepNumber,
                     SubStepSetID: -1
                 }
             }

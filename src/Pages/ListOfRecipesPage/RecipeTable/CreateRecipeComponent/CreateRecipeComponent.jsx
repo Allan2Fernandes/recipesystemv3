@@ -4,6 +4,7 @@ import {faAdd} from "@fortawesome/free-solid-svg-icons";
 import {useState} from "react";
 import secureLocalStorage from "react-secure-storage";
 import FetchQueries from "../../../../FetchHandler/FetchQueries";
+import {ParamIDs} from "../../../../Constants";
 
 function CreateRecipeComponent(props){
     const [newRecipeName, setNewRecipeName] = useState("")
@@ -14,8 +15,8 @@ function CreateRecipeComponent(props){
 
     async function clickHandlerCreateRecipe(){
         // Get the data needed for the query
-        var paramIDs = [35006, 10002]
-        var paramValues = [newRecipeName, 1]
+        var paramIDs = [ParamIDs.RecipeName, ParamIDs.CommonHierarchyType]
+        var paramValues = [newRecipeName, ParamIDs.CommonHierarchyTypeRecipeValue] // 1 is the ParamValue for Recipes
         // Get the saved user details from storage
         var userDetails = secureLocalStorage.getItem("UserDetails")
         // Extract just the setID which is the UserID in the query

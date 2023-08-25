@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSave} from "@fortawesome/free-solid-svg-icons";
 import stockImage from "../../../../Images/StockCadDrawing.png"
 import {useEffect, useState} from "react";
+import {ParamIDs} from "../../../../Constants";
 
 function StepListComponent(props){
 
@@ -25,17 +26,17 @@ function StepListComponent(props){
         })
         newStepNumber += maxExistingStepNumber
 
-        const commonHeirarchyType = 2
-        const commonHeirarchyTypeParamID = 10002
+        const commonHeirarchyType = ParamIDs.CommonHierarchyTypeStepValue
+        const commonHeirarchyTypeParamID = ParamIDs.CommonHierarchyType
         const commonRecipeSetID = props.selectedRecipeSetID
-        const commonStepNumberParamID = 10003
+        const commonStepNumberParamID = ParamIDs.StepNumber
         const commonPlaceHolderStepSetID = -1
 
         var newStep = {
             Name:{
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
-                ParamID: 35007,
+                ParamID: ParamIDs.StepSubStepName,
                 ParamValue: "Insert Step Name",
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,
@@ -45,7 +46,7 @@ function StepListComponent(props){
             Image1:{
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
-                ParamID: 35001,
+                ParamID: ParamIDs.StepImage1,
                 ParamValue: stockImage,
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,
@@ -55,7 +56,7 @@ function StepListComponent(props){
             Image2:{
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
-                ParamID: 35002,
+                ParamID: ParamIDs.StepImage2,
                 ParamValue: stockImage,
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,
@@ -65,7 +66,7 @@ function StepListComponent(props){
             Instructions:{
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
-                ParamID: 35003,
+                ParamID: ParamIDs.StepInstructions,
                 ParamValue: "Insert Instructions",
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,

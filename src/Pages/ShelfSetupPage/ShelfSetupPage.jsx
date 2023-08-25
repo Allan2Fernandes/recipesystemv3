@@ -7,6 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAdd, faSearch} from "@fortawesome/free-solid-svg-icons";
 import secureLocalStorage from "react-secure-storage";
 import HelperFunctions from "../../HelperFunctions/HelperFunctions";
+import {ParamIDs} from "../../Constants";
 
 function ShelfSetupPage(){
     const [allPossibleActions, setAllPossibleActions] = useState([])
@@ -107,27 +108,27 @@ function ShelfSetupPage(){
         // Extract just the setID which is the UserID in the query
         var userID = userDetails['SetID']
         // Define values for the saveparams SP
-        const actionParamID = 30004
-        const itemParamID = 30001
-        const shelfNumberParamID = 10005
+        const actionParamID = ParamIDs.ActionType
+        const itemParamID = ParamIDs.ItemName
+        const shelfNumberParamID = ParamIDs.ShelfNumber
         // Set up the creation query
         var createItemQuery = ""
         if(selectedAction === "Expander"){
             // Add on the item property values
-            const xParamID = 1
-            const yParamID = 2
-            const zParamID = 3
+            const xParamID = ParamIDs.ExpanderXCoord
+            const yParamID = ParamIDs.ExpanderYCoord
+            const zParamID = ParamIDs.ExpanderZCoord
             var xString = `${xParamID};${newItemPropertyValues.property1};`
             var yString = `${yParamID};${newItemPropertyValues.property2};`
             var zString = `${zParamID};${newItemPropertyValues.property3};`
 
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};5;${itemParamID};${newItemPropertyValues.itemName};${xString}${yString}${zString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${xString}${yString}${zString}'`
         }else if(selectedAction === "Pick"){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};4;${itemParamID};${newItemPropertyValues.itemName};${shelfString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PickActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}'`
         }else if(selectedAction === "Tool"){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};6;${itemParamID};${newItemPropertyValues.itemName};${shelfString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ToolActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}'`
         }
         FetchQueries.executeQueryInDatabase(createItemQuery).then(result => {
             fetchItemsForAction(selectedAction)

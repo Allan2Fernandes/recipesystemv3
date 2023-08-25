@@ -28,10 +28,14 @@ function SingleImageComponent(props){
 
     async function selectImageFromDatabase(){
         props.setSelectedImageIdentifier(props.stepImageIdentifier)
+
+        //TODO Can this code be remove
+
         // Construct a query to get all the distinct file names from the Database
-        var query = "SELECT DISTINCT(ParamValue) FROM File_STRING WHERE ParamID = 35008"
+        //var query = `SELECT DISTINCT(ParamValue) FROM File_STRING WHERE ParamID = 35008`
         // Execute the query to get the names
-        var result = await FetchQueries.executeQueryInDatabase(query)
+        //var result = await FetchQueries.executeQueryInDatabase(query)
+
         props.toggleDisplayImageSelectionPopUp()
     }
 

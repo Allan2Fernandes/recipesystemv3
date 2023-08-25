@@ -8,6 +8,7 @@ import {
 import secureLocalStorage from "react-secure-storage";
 import FetchQueries from "../../../../FetchHandler/FetchQueries";
 import ImagesGridComponent from "./ImagesGridComponent/ImagesGridComponent";
+import {ParamIDs} from "../../../../Constants";
 
 function ImageSelectionPopUp(props){
     const [listOfImageNames, setListOfImageNames] = useState([])
@@ -23,7 +24,7 @@ function ImageSelectionPopUp(props){
     }, [searchKeyWord])
 
     async function fetchAllImageNames(){
-        var query = "SELECT DISTINCT(ParamValue) FROM File_STRING WHERE ParamID = 35008"
+        var query = `SELECT DISTINCT(ParamValue) FROM File_STRING WHERE ParamID = ${ParamIDs.FileName}`
         await FetchQueries.executeQueryInDatabase(query).then(result => {
             setListOfImageNames(result[0])
             setFilteredListOfImages(result[0])
@@ -73,7 +74,7 @@ function ImageSelectionPopUp(props){
             }
             b64Image = b64Image.replace(b64Prefix, "")
             // Construct a query to save the image in the database
-            var query = `EXECUTE sp_SaveParams ${userID}, 'File', '35008;${image_file['name']};35009;${b64Image};35010;${reducedImageData}'`
+            var query = `EXECUTE sp_SaveParams ${userID}, 'File', '${ParamIDs.FileName};${image_file['name']};${ParamIDs.HighResImageEncoding};${b64Image};${ParamIDs.LowResImageEncoding};${reducedImageData}'`
             FetchQueries.executeQueryInDatabase(query).then(result => fetchAllImageNames()).catch(error => props.setDisplayErrorPage(true))
         };
         reader.readAsDataURL(image_file);

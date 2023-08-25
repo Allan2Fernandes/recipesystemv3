@@ -1,11 +1,12 @@
 import "./RecipeStepsPage.css"
 import React, {useEffect, useState} from "react";
-import {useLocation, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import ErrorPage from "../../ErrorHandling/ErrorPage";
 import TopBar from "../../SharedComponents/TopBar/TopBar";
 import RecipeStepsComponent from "./RecipeStepsComponent/RecipeStepsComponent";
 import secureLocalStorage from "react-secure-storage";
 import FetchQueries from "../../FetchHandler/FetchQueries";
+import {ParamIDs} from "../../Constants";
 
 function RecipeStepsPage(){
     const location = useLocation();
@@ -15,6 +16,7 @@ function RecipeStepsPage(){
     const [selectedRecipeName, setSelectedRecipeName] = useState("")
     const [preDefinedSelectedStepIndex, setPreDefinedSelectedStepIndex] = useState(-1)
     const [pageIsReadOnly, setPageIsReadOnly] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         if(secureLocalStorage.getItem("UserDetails") === null || secureLocalStorage.getItem("UserDetails") === undefined){
@@ -36,9 +38,9 @@ function RecipeStepsPage(){
 
         // Save the recipe
         // Queries to save SAME recipe name (important because of the aggregate function in sql query) and dataset type (recipe, step or substep)
-        var recipeNameParamID = 35006
-        var recipeTypeParamID = 10002
-        var recipeTypeParamValue = 1
+        var recipeNameParamID = ParamIDs.RecipeName
+        var recipeTypeParamID = ParamIDs.CommonHierarchyType
+        var recipeTypeParamValue = ParamIDs.CommonHierarchyTypeRecipeValue
         var saveRecipeNameParams = `${recipeNameParamID};${selectedRecipeName};`
         var saveRecipeTypeParams = `${recipeTypeParamID};${recipeTypeParamValue};`
         var saveRecipeQuery = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${saveRecipeNameParams}${saveRecipeTypeParams}'`
@@ -72,7 +74,7 @@ function RecipeStepsPage(){
                     var stepInstructionsParamID = step['Instructions']['ParamID']
                     var stepInstructionsParamValue = step['Instructions']['ParamValue']
 
-                    var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '15001;${newRecipeSetID};${stepTypeParamID};${stepTypeParamValue};${stepNumberParamID};${stepNumberParamValue};${stepNameParamID};${stepNameParamValue};${stepImage1ParamID};${stepImage1ParamValue};${stepImage2ParamID};${stepImage2ParamValue};${stepInstructionsParamID};${stepInstructionsParamValue};'`
+                    var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${ParamIDs.KeyToParentRecipeStep};${newRecipeSetID};${stepTypeParamID};${stepTypeParamValue};${stepNumberParamID};${stepNumberParamValue};${stepNameParamID};${stepNameParamValue};${stepImage1ParamID};${stepImage1ParamValue};${stepImage2ParamID};${stepImage2ParamValue};${stepInstructionsParamID};${stepInstructionsParamValue};'`
                     FetchQueries.executeQueryInDatabase(queryString).then(result => {
                         // Get the new SetID for the step
                         var newStepID = result[0][0]['ParamValue']
@@ -96,7 +98,7 @@ function RecipeStepsPage(){
                             var subStepItemParamValue = subStep['Item']['ParamValue'];
 
 
-                            var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '15001;${newStepID};${subStepTypeParamID};${subStepTypeParamValue};${subStepNumberParamID};${subStepNumberParamValue};${subStepNameParamID};${subStepNameParamValue};${subStepActionParamID};${subStepActionParamValue};${subStepItemParamID};${subStepItemParamValue};';`
+                            var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${ParamIDs.KeyToParentRecipeStep};${newStepID};${subStepTypeParamID};${subStepTypeParamValue};${subStepNumberParamID};${subStepNumberParamValue};${subStepNameParamID};${subStepNameParamValue};${subStepActionParamID};${subStepActionParamValue};${subStepItemParamID};${subStepItemParamValue};';`
                             listOfSubStepSaveQueries += queryString
                         })
                         // Execute all the sub step queries together since there is no reason to do them separately. Data doesn't need to be returned from them
@@ -104,15 +106,18 @@ function RecipeStepsPage(){
                             FetchQueries.executeQueryInDatabase(listOfSubStepSaveQueries)
                                 .then(r => {
                                     // The recipe set ID can only be updated here. otherwise the page will not refresh with the correct information
-                                    setSelectedRecipeSetID(newRecipeSetID)
+                                    //setSelectedRecipeSetID(newRecipeSetID)
+
+                                    // Instead of selecting a new RecipeSetID, why not navigate to that new recipe setIDs page
+                                    navigate(`/RecipeStepsPage/RecipeSetID/${newRecipeSetID}/RecipeName/${selectedRecipeName}/UrlSelectedStepIndex/-1/ReadOnly/${false}`)
                                 })
                                 .catch(e => {
                                     console.log(e)
                                     setDisplayErrorPage(true)
                                 })
                         }
-
-                    }).catch(e => {
+                    })
+                        .catch(e => {
                         console.log(e)
                         setDisplayErrorPage(true)
                     })

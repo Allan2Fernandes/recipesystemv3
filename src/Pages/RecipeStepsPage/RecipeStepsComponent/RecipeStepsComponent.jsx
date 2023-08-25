@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import FetchQueries from "../../../FetchHandler/FetchQueries";
 import HelperFunctions from "../../../HelperFunctions/HelperFunctions"
 import StepListComponent from "./StepListComponent/StepListComponent";
-import {Directions} from "../../../Constants";
+import {Directions, ParamIDs} from "../../../Constants";
 import stockImage from "../../../Images/StockCadDrawing.png"
 import ImagesInstructionsComponent from "./ImageInstructionsComponent/ImagesInstructionsComponent";
 import secureLocalStorage from "react-secure-storage";
@@ -137,7 +137,7 @@ function RecipeStepsComponent(props){
         reducedImageData = reducedImageData.replace(b64Prefix, "")
         // Construct a query to save the image b64 and the name. Save them together for a common setID
 
-        var query = `EXEC sp_SaveParams ${userID}, 'File', '35008;${image_name};35009;${b64Image};35010;${reducedImageData}'`
+        var query = `EXEC sp_SaveParams ${userID}, 'File', '${ParamIDs.FileName};${image_name};${ParamIDs.HighResImageEncoding};${b64Image};${ParamIDs.LowResImageEncoding};${reducedImageData}'`
         // Update the recipe data with the file name in the ParamValue for the step image
         FetchQueries.executeQueryInDatabase(query).then(result => {
             var newRecipeData = structuredClone(recipeData)
