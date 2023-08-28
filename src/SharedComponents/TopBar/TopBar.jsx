@@ -25,6 +25,9 @@ function TopBar(props){
     }
 
     function logoClickHandler(){
+        if(props.ParentPage==="LoginPage"){
+            return;
+        }
         navigate("/ListOfRecipesPage")
     }
 

@@ -12,6 +12,7 @@ function LoginPage(){
         setDisplayErrorPage(false)
     }, [])
 
+    // Display the error page in case of error
     if(displayErrorPage){
         return (
             <ErrorPage

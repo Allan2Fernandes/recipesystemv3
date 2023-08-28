@@ -1,5 +1,44 @@
 
-#RedirectionDiv{
-    cursor: pointer;
-    text-decoration: underline;
+#ErrorPageMainDiv{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background-color: #4d4d4d;
+
+}
+
+#ImageDiv{
+    position: relative;
+    height: 300px;
+    width: 300px;
+    left: calc(50% - 150px);
+    top: calc(50% - 300px);
+}
+
+#ExclamationIcon{
+    font-size: 300px;
+    color: white;
+}
+
+#ErrorTextDiv{
+    position: relative;
+    left: calc(50% - 100px);
+    top: calc(50% - 300px);
+    margin-top: 15px;
+    width: 200px;
+}
+
+#ErrorMessageLabel{
+    color: white;
+}
+
+#RedirectButtonDiv{
+    margin-top: 10px;
+    width: 100%;
+}
+
+#RedirectButtonIcon{
+    margin-right: 5px;
 }
