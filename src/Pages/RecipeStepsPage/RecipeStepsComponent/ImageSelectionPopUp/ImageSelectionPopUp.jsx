@@ -98,12 +98,10 @@ function ImageSelectionPopUp(props){
                         <FontAwesomeIcon icon={faClose}/>
                     </button>
                 </div>
-
                 <ImagesGridComponent
                     listOfImageNames={filteredListOfImages}
                     handleChangeSelectedStepImageFromDatabase={props.handleChangeSelectedStepImageFromDatabase}
                 />
-
                 <div>
                     <div id={"ImageSearchDiv"}>
                         <FontAwesomeIcon icon={faSearch}/>

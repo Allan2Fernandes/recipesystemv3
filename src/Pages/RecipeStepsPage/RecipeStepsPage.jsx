@@ -64,7 +64,6 @@ function RecipeStepsPage(){
                     var stepNameParamID = step['Name']['ParamID']
                     var stepNameParamValue = step['Name']['ParamValue']
 
-                    // TODO BOTH IMAGES WILL NEED TO BE MODIFIED TO HANDLE SAVING THE ACTUAL IMAGE INSTEAD OF THE PLACEHOLDER
                     var stepImage1ParamID = step['Image1']['ParamID']
                     var stepImage1ParamValue = step['Image1']['ParamValue']
 
@@ -139,7 +138,7 @@ function RecipeStepsPage(){
             <div id={"RecipeStepsPageMainDiv"}>
                 {
                     !pageIsReadOnly &&
-                    <TopBar IsLoggedIn={true}/>
+                    <TopBar IsLoggedIn={true} ParentPage={"RecipeStepsPage"}/>
                 }
                 <RecipeStepsComponent
                     selectedRecipeSetID={selectedRecipeSetID}

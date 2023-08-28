@@ -24,21 +24,28 @@ function TopBar(props){
         navigate("/ListOfRecipesPage")
     }
 
+    function logoClickHandler(){
+        navigate("/ListOfRecipesPage")
+    }
+
 
     return (
         <div id={"TopBarMainDiv"}>
-            <label id={"TopBarTitleLabel"}>Recipe System</label>
+            <div id={"TopBarTitleDiv"} onClick={logoClickHandler}>
+                <label id={"TopBarTitleLabel"}>Recipe System</label>
+            </div>
+
             {
                 props.IsLoggedIn &&
-                <button id={"ShelfSetUpButton"} onClick={clickHandlerNavigateToShelfSetUp} className={"TopBarButton"}>Shelf Setup</button>
+                <button id={"ShelfSetUpButton"} onClick={clickHandlerNavigateToShelfSetUp} className={`TopBarButton ${props.ParentPage==="ShelfSetupPage"?"IsAlreadySelected":"IsNotSelected"}`}>Shelf Setup</button>
             }
             {
                 props.IsLoggedIn &&
-                <button id={"RecipeStepsButton"} onClick={clickHandlerNavigateToRecipeSteps} className={"TopBarButton"}>Recipes</button>
+                <button id={"RecipeStepsButton"} onClick={clickHandlerNavigateToRecipeSteps} className={`TopBarButton ${props.ParentPage==="ListOfRecipesPage"?"IsAlreadySelected":"IsNotSelected"}`}>Recipes</button>
             }
             {
                 props.IsLoggedIn &&
-                <button id={"TopBarLoginButton"} onClick={clickHandlerLogOutButton} className={"TopBarButton"}>
+                <button id={"TopBarLoginButton"} onClick={clickHandlerLogOutButton} className={`TopBarButton`}>
                     <label>{"Logout"}</label>
                     <FontAwesomeIcon id={"LogoutIcon"} icon={isLoggedIn?faRightFromBracket:faRightToBracket}/>
                 </button>

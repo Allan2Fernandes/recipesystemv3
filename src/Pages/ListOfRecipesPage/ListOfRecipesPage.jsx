@@ -41,7 +41,7 @@ function ListOfRecipesPage(){
     }else{
         pageToReturn =
             <div id={"ListOfRecipesPageMainDiv"}>
-                <TopBar IsLoggedIn={true}/>
+                <TopBar IsLoggedIn={true} ParentPage={"ListOfRecipesPage"}/>
                 <RecipeTable listOfRecipes={listOfRecipes} refreshListOfRecipes={refreshListOfRecipes}/>
             </div>
     }

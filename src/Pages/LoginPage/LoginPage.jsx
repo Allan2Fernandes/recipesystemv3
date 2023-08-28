@@ -16,7 +16,7 @@ function LoginPage(){
     }else{
         return (
             <div id={"LoginPageMainDiv"}>
-                <TopBar IsLoggedIn={false}/>
+                <TopBar IsLoggedIn={false} ParentPage={"LoginPage"}/>
                 <LoginCredentialsComponent
                     setDisplayErrorPage={setDisplayErrorPage}
                 />

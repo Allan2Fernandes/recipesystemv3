@@ -69,6 +69,7 @@ function ShelfSetupPage(){
         var selectedDefaultAction = actionsData[0][0]['Action']
         setSelectedAction(selectedDefaultAction)
         setItemPropertiesOnAction(selectedDefaultAction)
+        await fetchItemsForAction(selectedDefaultAction)
     }
 
     function changeHandlerActionSelection(event){
@@ -195,7 +196,7 @@ function ShelfSetupPage(){
     }else{
         return (
             <div id={"ShelfSetupPageMainDiv"}>
-                <TopBar IsLoggedIn={true}/>
+                <TopBar IsLoggedIn={true} ParentPage={"ShelfSetupPage"}/>
                 <div id={"ActionsItemsSetUpDiv"}>
                     <div id={"ShelfSetUpTitleDiv"}>
                         <center>
