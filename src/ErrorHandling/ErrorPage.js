@@ -1,10 +1,17 @@
 import "./ErrorPage.css"
+import {useNavigate} from "react-router-dom";
 
 
 export default function ErrorPage(props) {
+    const navigate = useNavigate()
 
     function redirectToLoginPage(){
-        props.setDisplayErrorPage(false)
+        if(props.parentPageIsLogin){
+            props.setDisplayErrorPage(false)
+        }else{
+            navigate("/")
+        }
+
     }
 
     return (

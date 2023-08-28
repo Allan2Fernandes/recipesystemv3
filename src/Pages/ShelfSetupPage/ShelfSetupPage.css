@@ -11,8 +11,8 @@
     position: relative;
     /*height: 800px;*/
     width: 800px;
-    top: max(0px, calc(37.5px));
-    left: calc(50% - 400px);
+    top: Max(0px, calc(37.5px));
+    left: Max(0px, calc(50% - 400px));
     box-shadow: 0 5px 5px rgb(0 0 0 / 0.2);
     border-radius: 10px;
     overflow: auto;

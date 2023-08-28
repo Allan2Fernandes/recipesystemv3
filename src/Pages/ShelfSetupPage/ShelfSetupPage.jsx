@@ -188,7 +188,7 @@ function ShelfSetupPage(){
     }
 
     if(displayErrorPage){
-        return <ErrorPage/>
+        return <ErrorPage parentPageIsLogin={false} setDisplayErrorPage={setDisplayErrorPage}/>
     }else if(dataIsLoading){
         return (
             <div>data is loading</div>

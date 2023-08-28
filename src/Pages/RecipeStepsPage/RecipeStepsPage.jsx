@@ -132,7 +132,7 @@ function RecipeStepsPage(){
     // Return the error page in case of an error
     var pageToReturn;
     if(displayErrorPage){
-        pageToReturn = <ErrorPage/>
+        pageToReturn = <ErrorPage parentPageIsLogin={false} setDisplayErrorPage={setDisplayErrorPage}/>
     }else{
         pageToReturn =
             <div id={"RecipeStepsPageMainDiv"}>
