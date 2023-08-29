@@ -2,9 +2,10 @@ import "./StepListComponent.css"
 import SingleStepRowComponent from "./SingleStepRowComponent/SingleStepRowComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSave} from "@fortawesome/free-solid-svg-icons";
-import stockImage from "../../../../Images/blankImage.png"
+//import stockImage from "../../../../Images/StockCadDrawing.png"
 import {useEffect, useState} from "react";
 import {ParamIDs} from "../../../../Constants";
+import {blank_image} from "../../../../Constants";
 
 function StepListComponent(props){
 
@@ -26,12 +27,12 @@ function StepListComponent(props){
         })
         newStepNumber += maxExistingStepNumber
 
+
         const commonHeirarchyType = ParamIDs.CommonHierarchyTypeStepValue
         const commonHeirarchyTypeParamID = ParamIDs.CommonHierarchyType
         const commonRecipeSetID = props.selectedRecipeSetID
         const commonStepNumberParamID = ParamIDs.StepNumber
         const commonPlaceHolderStepSetID = -1
-
         var newStep = {
             Name:{
                 HeirarchyType: commonHeirarchyType,
@@ -47,7 +48,7 @@ function StepListComponent(props){
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
                 ParamID: ParamIDs.StepImage1,
-                ParamValue: stockImage,
+                ParamValue: blank_image,
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,
                 StepNumberParamID:commonStepNumberParamID,
@@ -57,7 +58,7 @@ function StepListComponent(props){
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
                 ParamID: ParamIDs.StepImage2,
-                ParamValue: stockImage,
+                ParamValue: blank_image,
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,
                 StepNumberParamID:commonStepNumberParamID,

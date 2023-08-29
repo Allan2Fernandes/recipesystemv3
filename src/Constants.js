@@ -1,7 +1,9 @@
+import stockImage from "./Images/blank_white_image.png"
+
 export const baseURL = "http://10.0.109.150:5052/"
 //export const baseURL = "https://localhost:7000/"
 
-
+export const blank_image = stockImage
 
 export const Directions = {
     Up: "Up",

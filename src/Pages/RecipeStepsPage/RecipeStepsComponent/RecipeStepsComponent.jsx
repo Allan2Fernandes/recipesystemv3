@@ -4,11 +4,12 @@ import FetchQueries from "../../../FetchHandler/FetchQueries";
 import HelperFunctions from "../../../HelperFunctions/HelperFunctions"
 import StepListComponent from "./StepListComponent/StepListComponent";
 import {Directions, ParamIDs} from "../../../Constants";
-import stockImage from "../../../Images/blankImage.png"
+//import stockImage from "../../../Images/StockCadDrawing.png"
 import ImagesInstructionsComponent from "./ImageInstructionsComponent/ImagesInstructionsComponent";
 import secureLocalStorage from "react-secure-storage";
 import SingleImageComponent from "./ImageInstructionsComponent/SingleImageComponent/SingleImageComponent";
 import ImageSelectionPopUp from "./ImageSelectionPopUp/ImageSelectionPopUp";
+import {blank_image} from "../../../Constants";
 
 
 function RecipeStepsComponent(props){
@@ -172,7 +173,7 @@ function RecipeStepsComponent(props){
                 />
             }
             <SingleImageComponent
-                image={selectedStepIndex>=0?recipeData[selectedStepIndex]['Image1']['ParamValue']:stockImage}
+                image={selectedStepIndex>=0?recipeData[selectedStepIndex]['Image1']['ParamValue']:blank_image}
                 selectedStepIndex={selectedStepIndex}
                 stepImageIdentifier={"Image1"}
                 handleChangeSelectedStepImage={handleChangeSelectedStepImage}
@@ -198,8 +199,8 @@ function RecipeStepsComponent(props){
 
             <ImagesInstructionsComponent
                 selectedStepIndex={selectedStepIndex}
-                image1={selectedStepIndex>=0?recipeData[selectedStepIndex]['Image1']['ParamValue']:stockImage}
-                image2={selectedStepIndex>=0?recipeData[selectedStepIndex]['Image2']['ParamValue']:stockImage}
+                image1={selectedStepIndex>=0?recipeData[selectedStepIndex]['Image1']['ParamValue']:blank_image}
+                image2={selectedStepIndex>=0?recipeData[selectedStepIndex]['Image2']['ParamValue']:blank_image}
                 instructions={selectedStepIndex>=0?recipeData[selectedStepIndex]['Instructions']['ParamValue']:"Step not selected"}
                 handleChangeSelectedStepInstructions={handleChangeSelectedStepInstructions}
                 handleChangeSelectedStepImage={handleChangeSelectedStepImage}
