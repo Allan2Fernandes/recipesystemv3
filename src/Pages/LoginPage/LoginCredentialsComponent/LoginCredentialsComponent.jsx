@@ -36,6 +36,7 @@ function LoginCredentialsComponent(props){
             if(newUserDetails[0][0]['Found'] === 'Account Found'){
                 // Account found
                 if(newUserDetails[1][0] === undefined){
+                    // Account found, but the password/Username doesn't match
                     setInvalidLoginDetailsEntered(true)
                 }else{
                     //Handle log in. Account found and password/Username match
@@ -60,6 +61,7 @@ function LoginCredentialsComponent(props){
     }
 
     async function onEnterKeyUpHandler(event){
+        // Both enter keys should trigger the log in
         if(event.key.toString() === "Enter"){
             // Attempt to log in when the button is pressed
             await logIn()

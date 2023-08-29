@@ -5,6 +5,7 @@ function RecipeListTable(props){
     const navigate = useNavigate()
 
     function navigateToRecipeStepsPage(event, recipeSetID, recipeName, readOnly){
+        // Navigate to the page in not-readonly.
         navigate(`/RecipeStepsPage/RecipeSetID/${recipeSetID}/RecipeName/${recipeName}/UrlSelectedStepIndex/-1/ReadOnly/${readOnly}`)
     }
 

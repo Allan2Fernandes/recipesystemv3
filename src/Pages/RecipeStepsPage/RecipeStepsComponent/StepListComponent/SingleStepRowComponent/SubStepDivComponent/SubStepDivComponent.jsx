@@ -22,6 +22,7 @@ function SubStepDivComponent(props){
         try{
             return props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items']
         }catch(error){
+            console.log("Error in filter items for actions")
             return []
         }
 

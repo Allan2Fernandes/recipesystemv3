@@ -14,9 +14,11 @@ function ListOfRecipesPage(){
     const [listOfRecipes, setListOfRecipes] = useState([])
 
     useEffect(() => {
+        // The page needs to be entered using the log in page. If navigated to by bypassing the log in page, show error page.
         if(secureLocalStorage.getItem("UserDetails") === null || secureLocalStorage.getItem("UserDetails") === undefined){
             setDisplayErrorPage(true)
         }
+        //Fetch all recipes from the database.
         fetchListOfRecipes()
     }, []) // Execute this block of code when the component is first rendered
 
@@ -31,6 +33,7 @@ function ListOfRecipesPage(){
     }
 
     async function refreshListOfRecipes(){
+        // When changes are saved in the database, this function will be called to refresh the list of recipes being displayed
         await fetchListOfRecipes()
     }
 

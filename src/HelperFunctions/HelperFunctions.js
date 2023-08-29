@@ -84,6 +84,7 @@ class HelperFunctions{
                 const xCoord = eachItemData.filter(row => row['ParamID'] ===ParamIDs.ExpanderXCoord)[0]
                 const yCoord = eachItemData.filter(row => row['ParamID'] ===ParamIDs.ExpanderYCoord)[0]
                 const zCoord = eachItemData.filter(row => row['ParamID'] === ParamIDs.ExpanderZCoord)[0]
+                const orientation = eachItemData.filter(row => row['ParamID'] === ParamIDs.ExpanderOrientation)[0]
                 const modificationDate = eachItemData.filter(row => row['ParamID'] === ParamIDs.ModificationDate)[0]
                 const itemName = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemName)[0]
                 const setOfData = {
@@ -91,6 +92,7 @@ class HelperFunctions{
                     XCoord: xCoord,
                     YCoord: yCoord,
                     ZCoord: zCoord,
+                    orientation: orientation,
                     modificationDate: modificationDate
                 }
                 processedData.push(setOfData)

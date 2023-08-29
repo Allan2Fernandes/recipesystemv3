@@ -34,8 +34,10 @@ export const ParamIDs = {
     PickActionTypeParamValue: 4,
     ExpanderActionTypeParamValue: 5,
     ToolActionTypeParamValue: 6,
+    OrientationActionTypeParamValue: 7,
     ItemName: 30001,
     ExpanderXCoord: 1,
     ExpanderYCoord: 2,
     ExpanderZCoord: 3,
+    ExpanderOrientation: 4
 }

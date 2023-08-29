@@ -7,14 +7,28 @@ import FetchQueries from "../../../../FetchHandler/FetchQueries";
 import {ParamIDs} from "../../../../Constants";
 
 function CreateRecipeComponent(props){
-    const [newRecipeName, setNewRecipeName] = useState("")
+    const [newRecipeName, setNewRecipeName] = useState("") // The value shown in the input field
 
-    function changeHandlerNewRecipeName(event){
+    function changeHandlerNewRecipeName(event){ // Change event handler for the input field
         setNewRecipeName(event.target.value)
     }
 
     async function clickHandlerCreateRecipe(){
-        // Get the data needed for the query
+        // Check if the recipe name is blank
+        if(newRecipeName ===""){
+            console.log("Invalid recipe name")
+            return
+        }
+
+        // Check if a recipe with that name already exists. If it does, do not save the new recipe
+        if(props.listOfRecipes.filter(recipe => recipe['RecipeName'] === newRecipeName).length > 0){
+            console.log("Recipe name already exists")
+            return;
+        }
+
+
+
+        // Get the constants needed for the query
         var paramIDs = [ParamIDs.RecipeName, ParamIDs.CommonHierarchyType]
         var paramValues = [newRecipeName, ParamIDs.CommonHierarchyTypeRecipeValue] // 1 is the ParamValue for Recipes
         // Get the saved user details from storage

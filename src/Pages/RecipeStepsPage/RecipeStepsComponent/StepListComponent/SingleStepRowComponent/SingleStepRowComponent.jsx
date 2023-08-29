@@ -24,7 +24,6 @@ function SingleStepRowComponent(props){
             })
             newSubStepNumber += maxExistingSubStepNumber
 
-
             var placeHolderDetails = {
                 Name:{
                     HeirarchyType: ParamIDs.CommonHierarchyTypeSubStepValue,
@@ -52,7 +51,7 @@ function SingleStepRowComponent(props){
                     HeirarchyType: 3,
                     HeirarchyTypeParamID: ParamIDs.CommonHierarchyType,
                     ParamID: ParamIDs.SubStepItem,
-                    ParamValue: props.itemsAndTheirActions[0]['Items'][0]['ParamValue'],
+                    ParamValue: props.itemsAndTheirActions[0]['Items'].length!==0?props.itemsAndTheirActions[0]['Items'][0]['ParamValue']:"",
                     RecipeSetID: props.selectedRecipeSetID,
                     StepSetID: props.step['Name']['StepSetID'],
                     SubStepNumber: newSubStepNumber,
@@ -62,7 +61,6 @@ function SingleStepRowComponent(props){
             }
             props.addSubStepToStep(props.stepIndex, placeHolderDetails)
         }catch(error){
-            console.log(error)
             props.setDisplayErrorPage(true)
         }
 
