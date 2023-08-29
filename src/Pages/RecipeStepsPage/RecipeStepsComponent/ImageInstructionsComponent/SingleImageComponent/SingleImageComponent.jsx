@@ -2,7 +2,7 @@ import "./SingleImageComponent.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDatabase, faDownload, faFile, faUpload} from "@fortawesome/free-solid-svg-icons";
 import {baseURL} from "../../../../../Constants";
-import stockImage from "../../../../../Images/StockCadDrawing.png"
+import stockImage from "../../../../../Images/blankImage.png"
 import {useEffect} from "react";
 import FetchQueries from "../../../../../FetchHandler/FetchQueries";
 

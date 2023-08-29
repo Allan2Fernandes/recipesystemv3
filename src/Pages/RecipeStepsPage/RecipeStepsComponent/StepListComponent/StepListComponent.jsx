@@ -2,7 +2,7 @@ import "./StepListComponent.css"
 import SingleStepRowComponent from "./SingleStepRowComponent/SingleStepRowComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSave} from "@fortawesome/free-solid-svg-icons";
-import stockImage from "../../../../Images/StockCadDrawing.png"
+import stockImage from "../../../../Images/blankImage.png"
 import {useEffect, useState} from "react";
 import {ParamIDs} from "../../../../Constants";
 

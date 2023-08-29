@@ -4,7 +4,7 @@ import FetchQueries from "../../../FetchHandler/FetchQueries";
 import HelperFunctions from "../../../HelperFunctions/HelperFunctions"
 import StepListComponent from "./StepListComponent/StepListComponent";
 import {Directions, ParamIDs} from "../../../Constants";
-import stockImage from "../../../Images/StockCadDrawing.png"
+import stockImage from "../../../Images/blankImage.png"
 import ImagesInstructionsComponent from "./ImageInstructionsComponent/ImagesInstructionsComponent";
 import secureLocalStorage from "react-secure-storage";
 import SingleImageComponent from "./ImageInstructionsComponent/SingleImageComponent/SingleImageComponent";
