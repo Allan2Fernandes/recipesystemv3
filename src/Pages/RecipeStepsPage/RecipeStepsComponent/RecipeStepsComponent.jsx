@@ -63,7 +63,6 @@ function RecipeStepsComponent(props){
             console.log(error)
             props.setDisplayErrorPage(true)
         }
-
     }
 
     function reorderSubSteps(event, stepIndex, subStepIndex, direction){

@@ -137,7 +137,6 @@ function SingleStepRowComponent(props){
                     </table>
                 </div>
                 {
-                    //TODO this is the reveal sub steps that has to be changed
                     (props.step['RevealSubSteps'] || props.pageIsReadOnly) && props.step['SubSteps'].map((subStep, subStepIndex) => (
                         <SubStepDivComponent
                             key={subStepIndex}

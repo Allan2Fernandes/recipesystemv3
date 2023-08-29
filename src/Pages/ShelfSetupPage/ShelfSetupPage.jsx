@@ -64,7 +64,6 @@ function ShelfSetupPage(){
             // Pre-process the result
             var processedData = HelperFunctions.processFetchedShelfValuesData(result, action)
             setOrientationOptions(processedData)
-            console.log(processedData)
         })
             .catch(error => setDisplayErrorPage(true))
     }
