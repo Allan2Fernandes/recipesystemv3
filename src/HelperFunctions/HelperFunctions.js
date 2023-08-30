@@ -114,6 +114,10 @@ class HelperFunctions{
         return processedData
     }
 
+    static formatDateTimeFromDataBase(dateTimeFromDB){
+        return new Date(dateTimeFromDB).toLocaleString('en-US',{hour12:false})
+    }
+
 
 }
 

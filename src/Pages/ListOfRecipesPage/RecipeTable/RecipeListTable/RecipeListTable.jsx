@@ -1,5 +1,6 @@
 import "./RecipeListTable.css"
 import {useNavigate} from "react-router-dom";
+import HelperFunctions from "../../../../HelperFunctions/HelperFunctions";
 
 function RecipeListTable(props){
     const navigate = useNavigate()
@@ -17,7 +18,7 @@ function RecipeListTable(props){
                 <tr id={"RecipeListMainTableHeadersRow"}>
                     <th>Recipe SetID</th>
                     <th>Recipe Name</th>
-                    <th>Creation Time</th>
+                    <th>Last Modified</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -31,7 +32,7 @@ function RecipeListTable(props){
                             <td id={"RecipeNameDataCell"}>
                                 <label onClick={(event) => navigateToRecipeStepsPage(event, recipe['SetID'], recipe['RecipeName'], false)}>{recipe['RecipeName']}</label>
                             </td>
-                            <td>{recipe['CreationTime']}</td>
+                            <td>{HelperFunctions.formatDateTimeFromDataBase(recipe['CreationTime'])}</td>
                         </tr>
                     ))
                 }
