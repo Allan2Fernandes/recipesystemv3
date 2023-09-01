@@ -108,7 +108,7 @@ function SingleStepRowComponent(props){
                         <tbody>
                         <tr>
                             <td>
-                                <button onClick={clickHandlerRevealSubStepsButton} id={"RevealSubStepsButton"}>
+                                <button onClick={clickHandlerRevealSubStepsButton} id={"RevealSubStepsButton"} disabled={props.pageIsReadOnly}>
                                     <FontAwesomeIcon icon={props.step['RevealSubSteps']?faChevronUp:faChevronDown}/>
                                 </button>
                             </td>

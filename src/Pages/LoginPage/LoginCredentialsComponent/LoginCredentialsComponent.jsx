@@ -33,6 +33,7 @@ function LoginCredentialsComponent(props){
     async function logIn(){
         try{
             var newUserDetails = await FetchQueries.loginGetUserID(userName, password)
+            console.log(newUserDetails)
             if(newUserDetails[0][0]['Found'] === 'Account Found'){
                 // Account found
                 if(newUserDetails[1][0] === undefined){

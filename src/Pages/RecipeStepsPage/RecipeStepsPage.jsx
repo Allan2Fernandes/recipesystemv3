@@ -19,14 +19,16 @@ function RecipeStepsPage(){
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(secureLocalStorage.getItem("UserDetails") === null || secureLocalStorage.getItem("UserDetails") === undefined){
-            setDisplayErrorPage(true)
-        }
+
         try{
             setSelectedRecipeSetID(recipeSetID)
             setSelectedRecipeName(recipeName)
             setPreDefinedSelectedStepIndex(parseInt(urlSelectedStepIndex))
             setPageIsReadOnly(readOnly === "true")
+            if((secureLocalStorage.getItem("UserDetails") === null || secureLocalStorage.getItem("UserDetails") === undefined) && readOnly !=="true"){
+                // DISABLED THIS FUNCTIONALITY BECAUSE THE MACHINE WILL NOT BE LOGGED IN
+                setDisplayErrorPage(true)
+            }
         }catch(error){
             setDisplayErrorPage(true)
         }
