@@ -27,7 +27,6 @@ function CreateAccountComponent(props){
         // Set up the query to execute the stored procedure to create the user
         var query = `EXECUTE sp_CreateAccount @Username = '${userName}', @Password = '${password}';`
         FetchQueries.executeQueryInDatabase(query).then(result => {
-            console.log(result)
             if(parseInt(result[0][0]['Created User']) ===0){
                 setDisplayErrorMessage(true)
             }else if(parseInt(result[0][0]['Created User']) ===1){
