@@ -1,0 +1,127 @@
+
+
+#CreateAccountMainDiv{
+    position: relative;
+    height: 350px;
+    width: 300px;
+    background: #005687;
+    left: calc(50% - 150px);
+    top: max(0px, calc(50% - 175px - 37.5px));
+    border-radius: 25px;
+}
+
+#CreateAccountTitleLabel{
+    position: relative;
+    font-size: 30px;
+    top:20px;
+    color: white;
+}
+
+#CreateUsernameDiv{
+    position: relative;
+    top: calc(20px);
+    margin-top: 30px;
+}
+
+#CreateUsernameIcon{
+    margin-right: 10px;
+    font-size: 20px;
+    color: white;
+}
+
+#CreateUsernameInput{
+    background: transparent;
+    border: 0px;
+    border-bottom: 1px solid white;
+    padding-left: 5px;
+    color: white;
+    padding-bottom: 5px;
+}
+
+#CreateUsernameInput:focus{
+    outline: none;
+}
+
+#CreateUsernameInput::placeholder{
+    color: white;
+}
+
+#CreatePasswordDiv{
+    position: relative;
+    top: calc(20px);
+    margin-top: 40px;
+}
+
+.CreateLockIcon{
+    margin-right: 10px;
+    font-size: 20px;
+    color: white;
+}
+
+#CreatePasswordInput{
+    background: transparent;
+    border: 0px;
+    border-bottom: 1px solid white;
+    color: white;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+#CreatePasswordInput:focus{
+    outline: none;
+}
+
+#CreatePasswordInput::placeholder{
+    color: white;
+}
+
+#RepeatPasswordDiv{
+    position: relative;
+    top: calc(20px);
+    margin-top: 40px;
+}
+
+#RepeatPasswordInput{
+    background: transparent;
+    border: 0px;
+    border-bottom: 1px solid white;
+    color: white;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+#RepeatPasswordInput:focus{
+    outline: none;
+}
+
+#RepeatPasswordInput::placeholder{
+    color: white;
+}
+
+#CreateAccountButtonDiv{
+    position: relative;
+    top: calc(10px);
+    margin-top: 40px;
+}
+
+.CreateAccountButton{
+    background-color: white;
+    border: 0;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.CreateAccountButton:disabled{
+    background-color: gray;
+}
+
+#ErrorMessageDiv{
+    position: relative;
+    top: calc(0px);
+    margin-top: 30px;
+}
+
+#ErrorMessageLabel{
+    color: white;
+}

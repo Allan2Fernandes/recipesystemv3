@@ -69,6 +69,10 @@ function LoginCredentialsComponent(props){
         }
     }
 
+    async function redirectToCreateAccount(){
+        props.setDisplayLogin(false)
+    }
+
 
     return (
         <div id={"MainLoginCredsComponentDiv"}>
@@ -102,10 +106,13 @@ function LoginCredentialsComponent(props){
                 </button>
                 {
                     invalidLoginDetailsEntered &&
-                    <div>
+                    <div id={"InvalidDetailsDiv"}>
                         <label id={"InvalidDetailsLabel"}>Invalid Details Entered</label>
                     </div>
                 }
+                <div id={"CreateNewAccountDiv"}>
+                    <button id={"CreateNewAccountButton"} onClick={redirectToCreateAccount}>Create Account</button>
+                </div>
 
             </center>
 
