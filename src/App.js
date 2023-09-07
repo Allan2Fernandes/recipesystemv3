@@ -9,6 +9,7 @@ import LoginPage from "./Pages/LoginPage/LoginPage";
 import ListOfRecipesPage from "./Pages/ListOfRecipesPage/ListOfRecipesPage";
 import RecipeStepsPage from "./Pages/RecipeStepsPage/RecipeStepsPage";
 import ShelfSetupPage from "./Pages/ShelfSetupPage/ShelfSetupPage";
+import ManageUsersPage from "./Pages/ManageUsersPage/ManageUsersPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path={"/ListOfRecipesPage"} element={<ListOfRecipesPage/>}/>
             <Route path={"/RecipeStepsPage/RecipeSetID/:recipeSetID/RecipeName/:recipeName/UrlSelectedStepIndex/:urlSelectedStepIndex/ReadOnly/:readOnly"} element={<RecipeStepsPage/>}/>
             <Route path={"/ShelfSetupPage"} element={<ShelfSetupPage/>}/>
+            <Route path={"/ManageUsersPage"} element={<ManageUsersPage/>}/>
           </Routes>
         </div>
       </Router>

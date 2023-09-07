@@ -31,20 +31,27 @@ function TopBar(props){
         navigate("/ListOfRecipesPage")
     }
 
+    function clickHandlerNavigateToManageUsers(){
+        navigate("/ManageUsersPage")
+    }
+
 
     return (
         <div id={"TopBarMainDiv"}>
             <div id={"TopBarTitleDiv"} onClick={logoClickHandler}>
                 <label id={"TopBarTitleLabel"}>Recipe System</label>
             </div>
-
             {
                 props.IsLoggedIn &&
-                <button id={"ShelfSetUpButton"} onClick={clickHandlerNavigateToShelfSetUp} className={`TopBarButton ${props.ParentPage==="ShelfSetupPage"?"IsAlreadySelected":"IsNotSelected"}`}>Shelf Setup</button>
+                <button id={"UserManagementButton"} onClick={clickHandlerNavigateToManageUsers} className={`TopBarButton ${props.ParentPage==="UserManagementPage"?"IsAlreadySelected":"IsNotSelected"}`}>User Management</button>
             }
             {
                 props.IsLoggedIn &&
                 <button id={"RecipeStepsButton"} onClick={clickHandlerNavigateToRecipeSteps} className={`TopBarButton ${props.ParentPage==="ListOfRecipesPage"?"IsAlreadySelected":"IsNotSelected"}`}>Recipes</button>
+            }
+            {
+                props.IsLoggedIn &&
+                <button id={"ShelfSetUpButton"} onClick={clickHandlerNavigateToShelfSetUp} className={`TopBarButton ${props.ParentPage==="ShelfSetupPage"?"IsAlreadySelected":"IsNotSelected"}`}>Shelf Setup</button>
             }
             {
                 props.IsLoggedIn &&

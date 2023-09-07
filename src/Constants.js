@@ -1,9 +1,9 @@
 import stockImage from "./Images/blank_white_image.png"
 
-export const baseURL = "http://10.0.109.150:5052/"
-//export const baseURL = "https://localhost:7000/"
+//export const baseURL = "http://10.0.109.150:5052/"
+export const baseURL = "https://localhost:7000/"
 
-// If the size of the image is under 10k, it will get imported as a base64 which will cause probelms
+// If the size of the image is under 10k, it will get imported as a base64 which will cause problems
 export const blank_image = stockImage
 
 export const Directions = {
@@ -36,11 +36,16 @@ export const ParamIDs = {
     ActionType: 30004,
     PickActionTypeParamValue: 4,
     ExpanderActionTypeParamValue: 5,
-    ToolActionTypeParamValue: 6,
-    OrientationActionTypeParamValue: 7,
+    KolverActionTypeParamValue: 6,
+    AtlasActionTypeParamValue: 7,
+    PressActionTypeParamValue: 8,
+    OrientationActionTypeParamValue: 9,
     ItemName: 30001,
     ExpanderXCoord: 1,
     ExpanderYCoord: 2,
     ExpanderZCoord: 3,
-    ExpanderOrientation: 4
+    ExpanderOrientation: 4,
+    AdminAccessLevel: 0,
+    UserAccessLevel: 1,
+    DisabledAccessLevel: -1
 }

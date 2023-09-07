@@ -1,0 +1,40 @@
+
+#UserCreationElementMainDiv{
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+#CreateUserButton{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+#UserNameInput{
+    margin-left: 15px;
+    margin-right: 15px;
+    border: 0;
+    border-bottom: 1px solid black;
+    outline: none;
+    background-color: transparent;
+}
+
+#UserNameInput::placeholder{
+    color: black;
+}
+
+#AccessLevelInput{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+#NewUserPasswordInput{
+    border: 0;
+    border-bottom: 1px solid black;
+    outline: none;
+    background-color: transparent;
+}
+
+#NewUserPasswordInput::placeholder{
+    color: black;
+}

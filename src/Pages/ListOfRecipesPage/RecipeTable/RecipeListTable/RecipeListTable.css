@@ -35,3 +35,7 @@
     text-decoration: underline;
     cursor: pointer;
 }
+
+#RecipeNameDataCell button{
+    margin-right: 10px;
+}

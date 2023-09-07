@@ -42,6 +42,7 @@ class FetchQueries{
 
     static loginGetUserID(userName, password){
         var query = `EXEC [dbo].[sp_UserLogin] '${userName}', '${password}'`
+        console.log(query)
         return this.executeQueryInDatabase(query)
     }
 

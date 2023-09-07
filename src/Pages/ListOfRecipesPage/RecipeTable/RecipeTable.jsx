@@ -21,7 +21,7 @@ function RecipeTable(props){
             </div>
             <CreateRecipeComponent refreshListOfRecipes={props.refreshListOfRecipes} listOfRecipes={props.listOfRecipes}/>
             <RecipeSearchComponent searchKeyWord={searchKeyWord} setSearchkeyWord={setSearchKeyWord}/>
-            <RecipeListTable listOfRecipes={props.listOfRecipes} searchKeyWord={searchKeyWord}/>
+            <RecipeListTable listOfRecipes={props.listOfRecipes} searchKeyWord={searchKeyWord} refreshListOfRecipes={props.refreshListOfRecipes}/>
         </div>
     )
 }

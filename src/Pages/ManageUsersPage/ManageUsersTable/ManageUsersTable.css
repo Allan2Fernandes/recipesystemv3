@@ -1,0 +1,23 @@
+
+#ManageUsersTableContainer{
+    position: relative;
+    width: 1460px;
+    height: 800px;
+    left: Max(0px, calc(50% - 730px));
+    top: Max(0px, calc(50% - 400px - 37.5px));
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#ManageUsersTableTitleDiv{
+    background-color: #000000;
+    width: 100%;
+}
+
+#ManageUsersTableTitleDiv label{
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+}

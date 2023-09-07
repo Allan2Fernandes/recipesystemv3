@@ -3,6 +3,7 @@ import "./CreateAccountComponent.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUnlock, faUser} from "@fortawesome/free-solid-svg-icons";
 import FetchQueries from "../../../FetchHandler/FetchQueries";
+import {ParamIDs} from "../../../Constants";
 
 
 function CreateAccountComponent(props){

@@ -84,6 +84,11 @@
     width: 200px;
 }
 
+#SaveChangesDiv{
+    margin-top: 10px;
+
+}
+
 #ItemSearchDiv input{
     outline: none;
     border: 0;
@@ -104,4 +109,12 @@ input::-webkit-inner-spin-button {
 /* Works for Firefox */
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+.ItemRow{
+    cursor: pointer;
+}
+
+.EditInputField{
+    width: 100px;
 }
