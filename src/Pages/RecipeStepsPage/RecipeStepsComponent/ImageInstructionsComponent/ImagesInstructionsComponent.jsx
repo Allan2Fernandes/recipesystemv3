@@ -1,5 +1,7 @@
 import "./ImagesInstructionsComponent.css"
 import SingleImageComponent from "./SingleImageComponent/SingleImageComponent";
+import {Permissions} from "../../../../Constants";
+import HelperFunctions from "../../../../HelperFunctions/HelperFunctions";
 
 
 function ImagesInstructionsComponent(props){
@@ -8,7 +10,7 @@ function ImagesInstructionsComponent(props){
             <div id={"InstructionsDiv"}>
                 <textarea id={"InstructionsTextArea"}
                           value={props.instructions}
-                          disabled={props.selectedStepIndex < 0}
+                          disabled={props.selectedStepIndex < 0 || !Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                           onChange={(event) => props.handleChangeSelectedStepInstructions(event)}
                 ></textarea>
             </div>
