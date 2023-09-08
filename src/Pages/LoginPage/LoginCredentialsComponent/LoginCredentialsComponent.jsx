@@ -110,7 +110,7 @@ function LoginCredentialsComponent(props){
                     </div>
                 }
                 <div id={"CreateNewAccountDiv"}>
-                    <button id={"CreateNewAccountButton"} onClick={redirectToCreateAccount}>Create Account</button>
+                    <button id={"CreateNewAccountButton"} onClick={redirectToCreateAccount}>Create Admin Account</button>
                 </div>
 
             </center>
