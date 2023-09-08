@@ -1,4 +1,5 @@
 import {ParamIDs} from "../Constants";
+import secureLocalStorage from "react-secure-storage";
 
 class HelperFunctions{
     static ProcessFetchedRecipeData(fetchedData){
@@ -116,6 +117,10 @@ class HelperFunctions{
 
     static formatDateTimeFromDataBase(dateTimeFromDB){
         return new Date(dateTimeFromDB).toLocaleString('en-US',{hour12:false})
+    }
+
+    static getAccessLevelFromLocalStorage(){
+        return secureLocalStorage.getItem("UserDetails")['AccessLevel']
     }
 
 

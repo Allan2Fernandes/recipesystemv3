@@ -26,7 +26,7 @@ function CreateAccountComponent(props){
 
     function handleClickCreateButton(){
         // Set up the query to execute the stored procedure to create the user
-        var query = `EXECUTE sp_CreateAccount @Username = '${userName}', @Password = '${password}';`
+        var query = `EXECUTE sp_CreateAccount @Username = '${userName}', @Password = '${password}', @AccessLevel = '0', @OverrideUserNameCheck = 0;`
         FetchQueries.executeQueryInDatabase(query).then(result => {
             if(parseInt(result[0][0]['Created User']) ===0){
                 setDisplayErrorMessage(true)

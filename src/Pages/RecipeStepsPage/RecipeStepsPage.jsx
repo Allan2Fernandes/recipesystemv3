@@ -9,13 +9,12 @@ import FetchQueries from "../../FetchHandler/FetchQueries";
 import {ParamIDs} from "../../Constants";
 
 function RecipeStepsPage(){
-    const location = useLocation();
     const {recipeSetID, recipeName, urlSelectedStepIndex, readOnly} = useParams()
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
     const [selectedRecipeSetID, setSelectedRecipeSetID] = useState(0)
     const [selectedRecipeName, setSelectedRecipeName] = useState("")
     const [preDefinedSelectedStepIndex, setPreDefinedSelectedStepIndex] = useState(-1)
-    const [pageIsReadOnly, setPageIsReadOnly] = useState(false)
+    //const [pageIsReadOnly, setPageIsReadOnly] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -24,8 +23,8 @@ function RecipeStepsPage(){
             setSelectedRecipeSetID(recipeSetID)
             setSelectedRecipeName(recipeName)
             setPreDefinedSelectedStepIndex(parseInt(urlSelectedStepIndex))
-            setPageIsReadOnly(readOnly === "true")
-            if((secureLocalStorage.getItem("UserDetails") === null || secureLocalStorage.getItem("UserDetails") === undefined) && readOnly !=="true"){
+            //setPageIsReadOnly(readOnly === "true")
+            if((secureLocalStorage.getItem("UserDetails") === null || secureLocalStorage.getItem("UserDetails") === undefined)){
                 // DISABLED THIS FUNCTIONALITY BECAUSE THE MACHINE WILL NOT BE LOGGED IN
                 setDisplayErrorPage(true)
             }
@@ -139,7 +138,7 @@ function RecipeStepsPage(){
         pageToReturn =
             <div id={"RecipeStepsPageMainDiv"}>
                 {
-                    !pageIsReadOnly &&
+                    //!pageIsReadOnly &&
                     <TopBar IsLoggedIn={true} ParentPage={"RecipeStepsPage"}/>
                 }
                 <RecipeStepsComponent
@@ -148,7 +147,7 @@ function RecipeStepsPage(){
                     setDisplayErrorPage={setDisplayErrorPage}
                     saveRecipe={saveRecipe}
                     preDefinedSelectedStepIndex={preDefinedSelectedStepIndex}
-                    pageIsReadOnly={pageIsReadOnly}
+                    //pageIsReadOnly={pageIsReadOnly}
                 />
             </div>
     }

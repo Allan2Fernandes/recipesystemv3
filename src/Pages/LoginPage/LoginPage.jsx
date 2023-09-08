@@ -37,8 +37,6 @@ function LoginPage(){
                             setDisplayLogin={setDisplayLogin}
                         />
                 }
-
-
             </div>
         )
     }

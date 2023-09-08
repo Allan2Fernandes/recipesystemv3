@@ -8,9 +8,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[sp_CreateAccount]
+ALTER PROCEDURE [dbo].[sp_CreateAccount]
 	@Username NVARCHAR(200),
-	@Password NVARCHAR(200)
+	@Password NVARCHAR(200),
+	@AccessLevel NVARCHAR(1)
 		AS
 			BEGIN
 				-- Search for existing usernames in the database
@@ -22,7 +23,7 @@ CREATE PROCEDURE [dbo].[sp_CreateAccount]
 					BEGIN
 						SELECT '1' AS 'Created User'
 						DECLARE @DynamicString NVARCHAR(100);
-						SET @DynamicString = CONCAT('39901;', @Username, ';STRING39902;', @Password);
+						SET @DynamicString = CONCAT('39901;', @Username, ';15002;', @AccessLevel, ';STRING39902;', @Password);
 						EXECUTE sp_SaveParams 1, 'User', @DynamicString;
 					END
 

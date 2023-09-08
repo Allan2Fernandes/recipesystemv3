@@ -3,6 +3,9 @@ import "./TopBar.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRightFromBracket, faRightToBracket} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
+import {Permissions} from "../../Constants";
+import HelperFunctions from "../../HelperFunctions/HelperFunctions";
 
 function TopBar(props){
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -43,15 +46,36 @@ function TopBar(props){
             </div>
             {
                 props.IsLoggedIn &&
-                <button id={"UserManagementButton"} onClick={clickHandlerNavigateToManageUsers} className={`TopBarButton ${props.ParentPage==="UserManagementPage"?"IsAlreadySelected":"IsNotSelected"}`}>User Management</button>
+                <button
+                    id={"UserManagementButton"}
+                    disabled={!Permissions.viewUserManagementPage[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                    onClick={clickHandlerNavigateToManageUsers}
+                    className={`TopBarButton ${props.ParentPage==="UserManagementPage"?"IsAlreadySelected":"IsNotSelected"}`}
+                >
+                    User Management
+                </button>
             }
             {
                 props.IsLoggedIn &&
-                <button id={"RecipeStepsButton"} onClick={clickHandlerNavigateToRecipeSteps} className={`TopBarButton ${props.ParentPage==="ListOfRecipesPage"?"IsAlreadySelected":"IsNotSelected"}`}>Recipes</button>
+                <button
+                    id={"RecipeStepsButton"}
+                    onClick={clickHandlerNavigateToRecipeSteps}
+                    disabled={!Permissions.viewListOfRecipesPage[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                    className={`TopBarButton ${props.ParentPage==="ListOfRecipesPage"?"IsAlreadySelected":"IsNotSelected"}`}
+                >
+                    Recipes
+                </button>
             }
             {
                 props.IsLoggedIn &&
-                <button id={"ShelfSetUpButton"} onClick={clickHandlerNavigateToShelfSetUp} className={`TopBarButton ${props.ParentPage==="ShelfSetupPage"?"IsAlreadySelected":"IsNotSelected"}`}>Shelf Setup</button>
+                <button
+                    id={"ShelfSetUpButton"}
+                    onClick={clickHandlerNavigateToShelfSetUp}
+                    disabled={!Permissions.viewShelfSetUpValuesPage[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                    className={`TopBarButton ${props.ParentPage==="ShelfSetupPage"?"IsAlreadySelected":"IsNotSelected"}`}
+                >
+                    Shelf Setup
+                </button>
             }
             {
                 props.IsLoggedIn &&

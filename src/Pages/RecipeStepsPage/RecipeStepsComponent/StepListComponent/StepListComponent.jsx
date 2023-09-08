@@ -4,8 +4,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSave} from "@fortawesome/free-solid-svg-icons";
 //import stockImage from "../../../../Images/StockCadDrawing.png"
 import {useEffect, useState} from "react";
-import {ParamIDs} from "../../../../Constants";
+import {ParamIDs, Permissions} from "../../../../Constants";
 import {blank_image} from "../../../../Constants";
+import HelperFunctions from "../../../../HelperFunctions/HelperFunctions";
 
 function StepListComponent(props){
 
@@ -98,11 +99,9 @@ function StepListComponent(props){
                         <th>Action</th>
                         <th>Item</th>
                         {
-                            !props.pageIsReadOnly &&
                             <th>Order</th>
                         }
                         {
-                            !props.pageIsReadOnly &&
                             <th>Create / Delete</th>
                         }
 
@@ -127,7 +126,7 @@ function StepListComponent(props){
                                 setRecipeData={props.setRecipeData}
                                 selectStep={props.selectStep}
                                 IsSelectedStepIndex={props.selectedStepIndex===stepIndex}
-                                pageIsReadOnly={props.pageIsReadOnly}
+                                //pageIsReadOnly={props.pageIsReadOnly}
                             />
                         ))
                     }
@@ -136,12 +135,17 @@ function StepListComponent(props){
                         A row with buttons to save the recipe
                     */}
                         {
-                            !props.pageIsReadOnly &&
                             <td id={"CreateStepSaveTableButtonsRow"} colSpan={6} style={{textAlign: "center"}} className={props.recipeData.length%2===0?"IsEvenStepRow":"IsOddStepRow"}>
-                                <button onClick={clickHandlerCreateStep} disabled={props.pageIsReadOnly}>
+                                <button
+                                    onClick={clickHandlerCreateStep}
+                                    disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                                >
                                     Create step
                                 </button>
-                                <button onClick={(event) => props.saveRecipe(props.recipeData)} disabled={props.pageIsReadOnly}>
+                                <button
+                                    onClick={(event) => props.saveRecipe(props.recipeData)}
+                                    disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                                >
                                     <FontAwesomeIcon icon={faSave}/>
                                     <label>Save Recipe</label>
                                 </button>

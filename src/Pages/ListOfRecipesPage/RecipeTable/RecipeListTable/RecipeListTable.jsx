@@ -8,7 +8,8 @@ import {ParamIDs} from "../../../../Constants";
 import FetchQueries from "../../../../FetchHandler/FetchQueries";
 import {useState} from "react";
 import ErrorPage from "../../../../ErrorHandling/ErrorPage";
-import DuplicateRecipeDialogBox from "../CreateRecipeComponent/DuplicateRecipeDialogBox/DuplicateRecipeDialogBox";
+import DuplicateRecipeDialogBox from "./DuplicateRecipeDialogBox/DuplicateRecipeDialogBox";
+import {Permissions} from "../../../../Constants";
 
 function RecipeListTable(props){
     const navigate = useNavigate()
@@ -17,6 +18,10 @@ function RecipeListTable(props){
     const [selectedRecipeSetID, setSelectedRecipeSetID] = useState(-1)
 
     function navigateToRecipeStepsPage(event, recipeSetID, recipeName, readOnly){
+        if(!Permissions.viewRecipeStepsPage[HelperFunctions.getAccessLevelFromLocalStorage()]){
+            console.log("Doesn't have permission to view recipe steps")
+            return
+        }
         // Navigate to the page in not-readonly.
         navigate(`/RecipeStepsPage/RecipeSetID/${recipeSetID}/RecipeName/${recipeName}/UrlSelectedStepIndex/-1/ReadOnly/${readOnly}`)
     }
@@ -154,7 +159,7 @@ function RecipeListTable(props){
                                 </td>
                                 {/* Move this out and into helper functions */}
                                 <td id={"RecipeNameDataCell"}>
-                                    <button onClick={(event) => handleClickDuplicateRecipe(recipe['SetID'])}>
+                                    <button onClick={(event) => handleClickDuplicateRecipe(recipe['SetID'])} disabled={!Permissions.duplicateRecipe[HelperFunctions.getAccessLevelFromLocalStorage()]}>
                                         <FontAwesomeIcon icon={faClone}/>
                                     </button>
                                     <label onClick={(event) => navigateToRecipeStepsPage(event, recipe['SetID'], recipe['RecipeName'], false)}>{recipe['RecipeName']}</label>

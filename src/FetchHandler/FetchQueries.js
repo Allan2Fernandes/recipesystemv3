@@ -42,12 +42,16 @@ class FetchQueries{
 
     static loginGetUserID(userName, password){
         var query = `EXEC [dbo].[sp_UserLogin] '${userName}', '${password}'`
-        console.log(query)
         return this.executeQueryInDatabase(query)
     }
 
     static getStepsAndSubStepsOfRecipe(selectedRecipeID){
         var query = `EXEC [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID] @selectedRecipeSetID = ${selectedRecipeID}`
+        return this.executeQueryInDatabase(query)
+    }
+
+    static getListOfUsersDetails(){
+        var query = "EXEC [dbo].[sp_GetListOfUserDetails]"
         return this.executeQueryInDatabase(query)
     }
 

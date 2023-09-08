@@ -2,6 +2,8 @@ import "./DuplicateRecipeDialogBox.css"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faClose} from "@fortawesome/free-solid-svg-icons";
 import React, {useState} from "react";
+import {Permissions} from "../../../../../Constants";
+import HelperFunctions from "../../../../../HelperFunctions/HelperFunctions";
 
 function DuplicateRecipeDialogBox(props){
     const [duplicateRecipeName, setDuplicateRecipeName] = useState("")
@@ -44,7 +46,7 @@ function DuplicateRecipeDialogBox(props){
                 </div>
                 <div id={"DialogBoxBody"}>
                     <input type={"text"} value={duplicateRecipeName} onChange={(event) => changeHandlerDuplicateRecipeName(event)}/>
-                    <button onClick={handleClickConfirmButton}>
+                    <button onClick={handleClickConfirmButton} disabled={!Permissions.duplicateRecipe[HelperFunctions.getAccessLevelFromLocalStorage()]}>
                         <FontAwesomeIcon icon={faCheck}/>
                     </button>
                 </div>

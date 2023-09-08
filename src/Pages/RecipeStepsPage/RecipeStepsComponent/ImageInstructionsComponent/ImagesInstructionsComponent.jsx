@@ -8,7 +8,7 @@ function ImagesInstructionsComponent(props){
             <div id={"InstructionsDiv"}>
                 <textarea id={"InstructionsTextArea"}
                           value={props.instructions}
-                          disabled={props.selectedStepIndex < 0 || props.pageIsReadOnly}
+                          disabled={props.selectedStepIndex < 0}
                           onChange={(event) => props.handleChangeSelectedStepInstructions(event)}
                 ></textarea>
             </div>
@@ -24,7 +24,7 @@ function ImagesInstructionsComponent(props){
                 selectedStepIndex={props.selectedStepIndex}
                 stepImageIdentifier={"Image2"}
                 handleChangeSelectedStepImage={props.handleChangeSelectedStepImage}
-                pageIsReadOnly={props.pageIsReadOnly}
+                //pageIsReadOnly={props.pageIsReadOnly}
                 toggleDisplayImageSelectionPopUp={props.toggleDisplayImageSelectionPopUp}
                 setSelectedImageIdentifier={props.setSelectedImageIdentifier}
             />

@@ -176,7 +176,7 @@ function RecipeStepsComponent(props){
                 selectedStepIndex={selectedStepIndex}
                 stepImageIdentifier={"Image1"}
                 handleChangeSelectedStepImage={handleChangeSelectedStepImage}
-                pageIsReadOnly={props.pageIsReadOnly}
+                //pageIsReadOnly={props.pageIsReadOnly}
                 toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
                 setSelectedImageIdentifier={setSelectedImageIdentifier}
             />
@@ -193,7 +193,7 @@ function RecipeStepsComponent(props){
                 addSubStepToStep={addSubStepToStep}
                 selectStep={selectStep}
                 selectedStepIndex={selectedStepIndex}
-                pageIsReadOnly={props.pageIsReadOnly}
+                //pageIsReadOnly={props.pageIsReadOnly}
             />
 
             <ImagesInstructionsComponent
@@ -203,7 +203,7 @@ function RecipeStepsComponent(props){
                 instructions={selectedStepIndex>=0?recipeData[selectedStepIndex]['Instructions']['ParamValue']:"Step not selected"}
                 handleChangeSelectedStepInstructions={handleChangeSelectedStepInstructions}
                 handleChangeSelectedStepImage={handleChangeSelectedStepImage}
-                pageIsReadOnly={props.pageIsReadOnly}
+                //pageIsReadOnly={props.pageIsReadOnly}
                 toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
                 setSelectedImageIdentifier={setSelectedImageIdentifier}
             />

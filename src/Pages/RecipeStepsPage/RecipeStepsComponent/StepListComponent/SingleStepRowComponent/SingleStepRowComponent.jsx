@@ -4,7 +4,8 @@ import {faChevronDown, faChevronUp, faX} from "@fortawesome/free-solid-svg-icons
 import SubStepDivComponent from "./SubStepDivComponent/SubStepDivComponent";
 import {useEffect} from "react";
 import ReOrderStepsComponent from "./ReOrderStepsComponent/ReOrderStepsComponent";
-import {ParamIDs} from "../../../../../Constants";
+import {ParamIDs, Permissions} from "../../../../../Constants";
+import HelperFunctions from "../../../../../HelperFunctions/HelperFunctions";
 
 
 function SingleStepRowComponent(props){
@@ -84,10 +85,6 @@ function SingleStepRowComponent(props){
         <tr id={"SingleStepRowComponentMainRow"}
             className={`${props.isEvenStepRow?"IsEvenStepRow":"IsOddStepRow"} ${props.IsSelectedStepIndex?"IsSelectedStep":"IsNotSelectedStep"}`}
             onClick={(event) => {
-                if(props.pageIsReadOnly){
-                    console.log("Selection change not allowed in ReadOnly")
-                    return;
-                }
                 // Do not select this row if the click originates from the delete button
                 if(!event.target.closest('button')){
                     props.selectStep(props.stepIndex)
@@ -98,17 +95,17 @@ function SingleStepRowComponent(props){
                 <input
                     value={props.step['Name']['ParamValue']}
                     onChange={(event)=> changeHandlerStepName(props.stepIndex, event)}
-                    disabled={props.pageIsReadOnly}
                     style={{width:"100px"}}
+                    disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                 />
             </td>
-            <td colSpan={props.pageIsReadOnly?3:5}>
+            <td colSpan={5}>
                 <div id={"ToggleRevealSubStepsDiv"}>
                     <table id={"SubStepRevealDeleteStepButtonTable"}>
                         <tbody>
                         <tr>
                             <td>
-                                <button onClick={clickHandlerRevealSubStepsButton} id={"RevealSubStepsButton"} disabled={props.pageIsReadOnly}>
+                                <button onClick={clickHandlerRevealSubStepsButton} id={"RevealSubStepsButton"}>
                                     <FontAwesomeIcon icon={props.step['RevealSubSteps']?faChevronUp:faChevronDown}/>
                                 </button>
                             </td>
@@ -116,7 +113,6 @@ function SingleStepRowComponent(props){
                             <td></td>
 
                             {
-                                !props.pageIsReadOnly &&
                                 <ReOrderStepsComponent
                                     stepIndex={props.stepIndex}
                                     recipeData={props.recipeData}
@@ -124,9 +120,12 @@ function SingleStepRowComponent(props){
                                 />
                             }
                             {
-                                !props.pageIsReadOnly &&
                                 <td>
-                                    <button onClick={deleteStep} disabled={props.pageIsReadOnly} id={"DeleteStepButton"}>
+                                    <button
+                                        onClick={deleteStep}
+                                        id={"DeleteStepButton"}
+                                        disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                                    >
                                         <FontAwesomeIcon icon={faX}/>
                                     </button>
                                 </td>
@@ -137,7 +136,7 @@ function SingleStepRowComponent(props){
                     </table>
                 </div>
                 {
-                    (props.step['RevealSubSteps'] || props.pageIsReadOnly) && props.step['SubSteps'].map((subStep, subStepIndex) => (
+                    (props.step['RevealSubSteps']) && props.step['SubSteps'].map((subStep, subStepIndex) => (
                         <SubStepDivComponent
                             key={subStepIndex}
                             subStep={subStep}
@@ -149,18 +148,21 @@ function SingleStepRowComponent(props){
                             reorderSubSteps={props.reorderSubSteps}
                             recipeData={props.recipeData}
                             setRecipeData={props.setRecipeData}
-                            pageIsReadOnly={props.pageIsReadOnly}
+                            //pageIsReadOnly={props.pageIsReadOnly}
                         />
                     ))
                 }
                 {
-                    ((props.step['RevealSubSteps']) && !props.pageIsReadOnly) &&
+                    (props.step['RevealSubSteps']) &&
                     <div id={"AppendSubStepDiv"} className={props.step['SubSteps'].length%2===0?"IsEvenAddSubStepButton":"IsOddAddSubStepButton"}>
                         <table>
                             <tbody>
                             <tr>
                                 <td colSpan={5}>
-                                    <button onClick={appendSubStep} disabled={props.pageIsReadOnly}>Add Sub Step</button>
+                                    <button
+                                        onClick={appendSubStep}
+                                        disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                                    >Add Sub Step</button>
                                 </td>
                             </tr>
                             </tbody>

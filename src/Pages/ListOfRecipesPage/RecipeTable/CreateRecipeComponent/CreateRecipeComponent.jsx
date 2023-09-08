@@ -4,7 +4,8 @@ import {faAdd} from "@fortawesome/free-solid-svg-icons";
 import {useState} from "react";
 import secureLocalStorage from "react-secure-storage";
 import FetchQueries from "../../../../FetchHandler/FetchQueries";
-import {ParamIDs} from "../../../../Constants";
+import {ParamIDs, Permissions} from "../../../../Constants";
+import HelperFunctions from "../../../../HelperFunctions/HelperFunctions";
 
 function CreateRecipeComponent(props){
     const [newRecipeName, setNewRecipeName] = useState("") // The value shown in the input field
@@ -45,7 +46,7 @@ function CreateRecipeComponent(props){
 
     return (
         <div id={"CreateRecipeComponentMainDiv"}>
-            <button onClick={clickHandlerCreateRecipe}>
+            <button onClick={clickHandlerCreateRecipe} disabled={!Permissions.createRecipe[HelperFunctions.getAccessLevelFromLocalStorage()]}>
                 <FontAwesomeIcon icon={faAdd}/>
                 Create Recipe
             </button>

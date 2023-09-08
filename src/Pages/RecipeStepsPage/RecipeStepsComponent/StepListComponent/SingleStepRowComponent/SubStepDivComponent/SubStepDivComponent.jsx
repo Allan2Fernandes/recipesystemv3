@@ -3,6 +3,8 @@ import "./SubStepDivComponent.css"
 import OrderChangeButtonsComponent from "./OrderChangeButtonsComponent/OrderChangeButtonsComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
+import {Permissions} from "../../../../../../Constants";
+import HelperFunctions from "../../../../../../HelperFunctions/HelperFunctions";
 
 function SubStepDivComponent(props){
 
@@ -38,14 +40,14 @@ function SubStepDivComponent(props){
                         <input
                             value={props.subStep['Name']['ParamValue']}
                             onChange={(event) => props.changeHandlerSubStepName(event, "Name", props.stepIndex, props.subStepIndex)}
-                            disabled={props.pageIsReadOnly}
                             style={{width:"100px"}}
+                            disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                         />
                     </td>
                     <td>
                         <select value={props.subStep['Action']['ParamValue']}
                                 onChange={(event) => props.changeHandlerSubStepName(event, "Action", props.stepIndex, props.subStepIndex)}
-                                disabled={props.pageIsReadOnly}
+                                disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                         >
                             {
                                 props.itemsAndTheirActions.map((everyAction, actionIndex) => (
@@ -57,7 +59,7 @@ function SubStepDivComponent(props){
                     <td>
                         <select value={props.subStep['Item']['ParamValue']}
                                 onChange={(event) => props.changeHandlerSubStepName(event, "Item", props.stepIndex, props.subStepIndex)}
-                                disabled={props.pageIsReadOnly}
+                                disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                         >
                             {/*
                             Have to show the items which correspond to that action. Get the index which corresponds to the Action and then display those items
@@ -70,22 +72,23 @@ function SubStepDivComponent(props){
                         </select>
                     </td>
                     {
-                        !props.pageIsReadOnly &&
                         <td>
                             <div>
                                 <OrderChangeButtonsComponent
                                     reorderSubSteps={props.reorderSubSteps}
                                     stepIndex={props.stepIndex}
                                     subStepIndex={props.subStepIndex}
-                                    pageIsReadOnly={props.pageIsReadOnly}
+                                    //pageIsReadOnly={props.pageIsReadOnly}
                                 />
                             </div>
                         </td>
                     }
                     {
-                        !props.pageIsReadOnly &&
                         <td>
-                            <button onClick={deleteSubStep} disabled={props.pageIsReadOnly}>
+                            <button
+                                onClick={deleteSubStep}
+                                disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                            >
                                 <FontAwesomeIcon icon={faTrash}/>
                             </button>
                         </td>

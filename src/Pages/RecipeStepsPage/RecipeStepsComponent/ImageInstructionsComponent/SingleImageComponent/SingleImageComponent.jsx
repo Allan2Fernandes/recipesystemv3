@@ -5,7 +5,8 @@ import {baseURL} from "../../../../../Constants";
 //import stockImage from "../../../../../Images/StockCadDrawing.png"
 import {useEffect} from "react";
 import FetchQueries from "../../../../../FetchHandler/FetchQueries";
-import {blank_image} from "../../../../../Constants";
+import {blank_image, Permissions} from "../../../../../Constants";
+import HelperFunctions from "../../../../../HelperFunctions/HelperFunctions";
 
 function SingleImageComponent(props){
 
@@ -49,7 +50,7 @@ function SingleImageComponent(props){
                        id={`UploadNew${props.stepImageIdentifier}Button`}
                     // CSS here was needed because the ID is not a constant and classNames would not work
                        style={{display:"none"}}
-                       disabled={props.selectedStepIndex < 0 || props.pageIsReadOnly}
+                       disabled={props.selectedStepIndex < 0 || !Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                        onChange={(event) => GetSelectedImage(event, props.selectedStepIndex)}
                 />
                 <label id={`UploadNew${props.stepImageIdentifier}Label`}
@@ -61,7 +62,7 @@ function SingleImageComponent(props){
                 <button
                     id={"SelectImageFromDBButton"}
                     onClick={selectImageFromDatabase}
-                    disabled={props.selectedStepIndex < 0 || props.pageIsReadOnly}
+                    disabled={props.selectedStepIndex < 0 || !Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                 >
                     <FontAwesomeIcon id={"FromDBIcon"} icon={faDatabase}/>
                     Database

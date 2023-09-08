@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAdd, faSearch} from "@fortawesome/free-solid-svg-icons";
 import secureLocalStorage from "react-secure-storage";
 import HelperFunctions from "../../HelperFunctions/HelperFunctions";
-import {ParamIDs} from "../../Constants";
+import {ParamIDs, Permissions} from "../../Constants";
 
 function ShelfSetupPage(){
     const [allPossibleActions, setAllPossibleActions] = useState([])
@@ -44,7 +44,6 @@ function ShelfSetupPage(){
         fetchOrientationOptions()
         setSelectedItemRowIndex(-1)
         setItemsUpdated(false)
-        console.log(allActionsItems)
     },  [selectedAction])
 
     async function fetchItemsForAction(action){
@@ -191,7 +190,6 @@ function ShelfSetupPage(){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
             createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.OrientationActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}'`
         }
-        console.log(createItemQuery)
         FetchQueries.executeQueryInDatabase(createItemQuery).then(result => {
             fetchItemsForAction(selectedAction)
             setSearchPhrase("")
@@ -203,6 +201,9 @@ function ShelfSetupPage(){
     }
 
     function clickHandlerSelectItemRow(event, itemIndex){
+        if(!Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]){
+            return;
+        }
         setSelectedItemRowIndex(itemIndex)
     }
 
@@ -268,7 +269,6 @@ function ShelfSetupPage(){
         }else if(selectedAction === "Orientation"){
             return
         }
-        console.log(createItemsQuery)
         FetchQueries.executeQueryInDatabase(createItemsQuery).then(result => {
             fetchItemsForAction(selectedAction)
             setSearchPhrase("")
@@ -384,7 +384,7 @@ function ShelfSetupPage(){
                             <input value={searchPhrase} onChange={(event) => changeHandlerSearchPhrase(event)}/>
                         </div>
                         <div id={"SaveChangesDiv"}>
-                            <button onClick={saveItemChangesInDatabase} disabled={selectedAction==="Orientation"}>Save changes</button>
+                            <button onClick={saveItemChangesInDatabase} disabled={selectedAction==="Orientation" || !Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}>Save changes</button>
                         </div>
                     </div>
                     <div id={"ActionsItemsDisplayDiv"}>
@@ -402,10 +402,15 @@ function ShelfSetupPage(){
                             <tbody>
                                 <tr id={"CreateItemRow"} className={"EvenActionShelfSetupRow"}>
                                     <td>
-                                        <button id={"CreateItemButton"} onClick={clickHandlerCreateNewItem}>
+                                        <button id={"CreateItemButton"} onClick={clickHandlerCreateNewItem} disabled={!Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}>
                                             <FontAwesomeIcon icon={faAdd}/>
                                         </button>
-                                        <input type={"text"} onChange={(event) => changeHandlerNewItemPropertyValues(event, 0)} value={newItemPropertyValues['itemName']}/>
+                                        <input
+                                            type={"text"}
+                                            onChange={(event) => changeHandlerNewItemPropertyValues(event, 0)}
+                                            value={newItemPropertyValues['itemName']}
+                                            disabled={!Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                                        />
                                     </td>
                                     {
                                         itemProperties.map((property, propertyIndex) => (
@@ -416,6 +421,7 @@ function ShelfSetupPage(){
                                                         type={"number"}
                                                         onChange={(event) => changeHandlerNewItemPropertyValues(event, 1+ propertyIndex)}
                                                         value={newItemPropertyValues['property' + (1+propertyIndex)]}
+                                                        disabled={!Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}
                                                     />
                                                 </td>:
                                                 <td key={propertyIndex}>
@@ -424,6 +430,7 @@ function ShelfSetupPage(){
                                                         type={"number"}
                                                         onChange={(event) => changeHandlerNewItemPropertyValues(event, 1+ propertyIndex)}
                                                         value={newItemPropertyValues['property' + (1+propertyIndex)]}
+                                                        disabled={!Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}
                                                     />
                                                 </td>
 
@@ -433,7 +440,10 @@ function ShelfSetupPage(){
                                     {
                                         selectedAction === "Expander" &&
                                         <td>
-                                            <select value={newItemPropertyValues.property4} onChange={(event) => changeHandlerNewlySelectedOrientation(event)}>
+                                            <select
+                                                value={newItemPropertyValues.property4}
+                                                onChange={(event) => changeHandlerNewlySelectedOrientation(event)}
+                                                disabled={!Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}>
                                                 <option>Select Angle</option>
                                                 {
                                                     orientationOptions.map((orientation, orientationIndex) => (

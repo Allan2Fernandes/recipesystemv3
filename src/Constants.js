@@ -47,5 +47,22 @@ export const ParamIDs = {
     ExpanderOrientation: 4,
     AdminAccessLevel: 0,
     UserAccessLevel: 1,
-    DisabledAccessLevel: -1
+    DisabledAccessLevel: -1,
+    AccessLevel: 15002
 }
+
+export const Permissions = {
+    viewListOfRecipesPage: {Admin: true, User: true},
+    createRecipe: {Admin: true, User: false},
+    duplicateRecipe: {Admin: true, User: false},
+    viewRecipeStepsPage: {Admin: true, User: true},
+    editRecipeSteps: {Admin: true, User: false},
+    viewShelfSetUpValuesPage: {Admin: true, User: true},
+    createShelfSetUpValues:{Admin: true, User: false},
+    editShelfSetUpValues: {Admin: true, User: false},
+    viewUserManagementPage: {Admin: true, User: false},
+    createUser: {Admin: true, User: false},
+    editUserAccessLevel: {Admin: true, User: false},
+    UpdatePassword: {Admin: true, User: false}
+}
+

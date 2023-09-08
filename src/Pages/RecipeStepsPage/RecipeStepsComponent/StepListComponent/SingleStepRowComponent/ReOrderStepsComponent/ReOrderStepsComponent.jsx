@@ -1,8 +1,9 @@
 import "./ReOrderStepsComponent.css"
-import {Directions} from "../../../../../../Constants";
+import {Directions, Permissions} from "../../../../../../Constants";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowDown, faArrowUp} from "@fortawesome/free-solid-svg-icons";
 import React, {useEffect} from "react";
+import HelperFunctions from "../../../../../../HelperFunctions/HelperFunctions";
 
 function ReOrderStepsComponent(props){
 
@@ -48,11 +49,13 @@ function ReOrderStepsComponent(props){
             <div>
                 <button id={"StepMoveUpButton"}
                         onClick={(event) => handleClickStepOrderChangeButtons(Directions.Up)}
+                        disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                 >
                     <FontAwesomeIcon icon={faArrowUp} />
                 </button>
                 <button id={"StepMoveDownButton"}
                         onClick={(event) => handleClickStepOrderChangeButtons(Directions.Down)}
+                        disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                 >
                     <FontAwesomeIcon icon={faArrowDown} />
                 </button>

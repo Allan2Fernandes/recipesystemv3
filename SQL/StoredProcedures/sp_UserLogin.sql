@@ -1,7 +1,7 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_UserLogin]    Script Date: 07/09/2023 09.32.16 ******/
+/****** Object:  StoredProcedure [dbo].[sp_UserLogin]    Script Date: 08/09/2023 09.20.16 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -10,13 +10,22 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_UserLogin]
+ALTER PROCEDURE [dbo].[sp_UserLogin]
 	@userName NVARCHAR(250),
 	@password NVARCHAR(250)
 		AS
 			BEGIN
 				-- Username should not be case sensitive
-				IF EXISTS(SELECT 1 FROM [GO_PVG32BLOCK].[dbo].[User_STRING] WHERE ParamID = 39901 and ParamValue = @userName /*COLLATE Latin1_General_BIN*/ GROUP BY ParamValue)
+				-- Look for accounts which are not disabled
+				IF EXISTS
+				(
+					SELECT * FROM User_STRING T1 INNER JOIN User_DINT T2
+					ON T1.SetID = T2.SetID
+					WHERE T1.SetID =
+					(
+						SELECT MAX(T1.SetID) FROM user_STRING T1 WHERE T1.ParamID = 39901 and T1.ParamValue = @userName /*COLLATE Latin1_General_BIN*/ GROUP BY T1.ParamValue
+					) AND T2.ParamValue IN (0, 1) -- Ignore case for -1 because disabled users shouldn't be able to log in
+				)
 					BEGIN
 						SELECT 'Account Found' AS 'Found'
 					END
@@ -25,15 +34,24 @@ CREATE PROCEDURE [dbo].[sp_UserLogin]
 						SELECT 'Account Not Found' AS 'Found'
 					END
 
-				SELECT * FROM User_STRING WHERE
-				ParamID = 39902
+				SELECT T1.*,
+				--T2.ParamValue AS 'AccessLevel'
+				CASE
+					WHEN T2.ParamValue = 0 THEN 'Admin'
+					WHEN T2.ParamValue = 1 THEN 'User'
+					WHEN T2.ParamValue = -1 THEN 'Disabled' -- This case shouldn't ever be met, but if it is for whatever reason, we can use it to debug
+				ELSE 'UNDEFINED' END AS 'AccessLevel'
+				FROM User_STRING T1 INNER JOIN User_DINT T2
+				ON T1.SetID = T2.SetID
+				WHERE
+				T1.ParamID = 39902
 				and
-				SetID = (
-					SELECT max([SetID])
-					FROM [GO_PVG32BLOCK].[dbo].[User_STRING] WHERE ParamID = 39901 and ParamValue = @userName /*COLLATE Latin1_General_BIN*/ GROUP BY ParamValue
+				T1.SetID = (
+					SELECT max(T3.[SetID])
+					FROM User_STRING T3 WHERE T3.ParamID = 39901 and T3.ParamValue = @userName /*COLLATE Latin1_General_BIN*/ GROUP BY T3.ParamValue
 				)
 				and
-				ParamValue = N'En_crypted:' + CONVERT(VARCHAR(32),HashBytes('MD5', @password) ,2)
+				T1.ParamValue = N'En_crypted:' + CONVERT(VARCHAR(32),HashBytes('MD5', @password) ,2)
 			END
 GO
 
