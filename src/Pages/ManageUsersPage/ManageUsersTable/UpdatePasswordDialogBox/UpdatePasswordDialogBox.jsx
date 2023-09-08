@@ -24,7 +24,7 @@ function UpdatePasswordDialogBox(props){
         }
         // Create user
         var query = `EXECUTE sp_CreateAccount @Username = '${props.userDetailstToUpdate['UserName']}', @Password = '${updatedPassword}', @AccessLevel = '${accessLevelCode}', @OverrideUserNameCheck = 1;`
-
+        console.log(query)
         FetchQueries.executeQueryInDatabase(query).then(result => {
             console.log("Updated Password")
             setUpdatedPassword("")

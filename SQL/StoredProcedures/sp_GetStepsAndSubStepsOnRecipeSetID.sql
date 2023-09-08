@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]
+ALTER PROCEDURE [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]
 	@selectedRecipeSetID INT
 		AS
 			BEGIN

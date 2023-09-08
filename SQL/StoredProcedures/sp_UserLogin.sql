@@ -11,7 +11,7 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_UserLogin]
+ALTER PROCEDURE [dbo].[sp_UserLogin]
 	@userName NVARCHAR(250),
 	@password NVARCHAR(250)
 		AS

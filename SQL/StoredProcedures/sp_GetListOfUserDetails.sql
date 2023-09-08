@@ -12,7 +12,7 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_GetListOfUserDetails]
+ALTER PROCEDURE [dbo].[sp_GetListOfUserDetails]
 	AS
 		BEGIN
 

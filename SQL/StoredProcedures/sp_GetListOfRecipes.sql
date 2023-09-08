@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[sp_GetListOfRecipes]
+ALTER PROCEDURE [dbo].[sp_GetListOfRecipes]
 	AS
 		BEGIN
 			-- Getting all the recipes

@@ -24,7 +24,7 @@ Example call:	EXEC sp_GetDropDownList
 				EXEC sp_GetDropDownList 'Expander'
 -- =============================================
 */
-CREATE PROCEDURE [dbo].[sp_GetDropDownList]
+ALTER PROCEDURE [dbo].[sp_GetDropDownList]
 	@ListName VARCHAR(100)='Actions'
 AS
 BEGIN

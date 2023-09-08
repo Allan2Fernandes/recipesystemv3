@@ -10,7 +10,7 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_GetItemsShelfValues]
+ALTER PROCEDURE [dbo].[sp_GetItemsShelfValues]
 	@action NVARCHAR(100)
 		AS
 			BEGIN
