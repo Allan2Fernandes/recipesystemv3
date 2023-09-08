@@ -1,7 +1,7 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetItemsShelfValues]    Script Date: 07/09/2023 09.16.46 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetItemsShelfValues]    Script Date: 08/09/2023 14.50.44 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -48,3 +48,5 @@ CREATE PROCEDURE [dbo].[sp_GetItemsShelfValues]
 				AND ParamID = 30001 GROUP BY ParamValue)
 			END
 GO
+
+

@@ -1,7 +1,7 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetListOfUserDetails]    Script Date: 07/09/2023 14.38.20 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetListOfUserDetails]    Script Date: 08/09/2023 14.51.23 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -11,7 +11,8 @@ GO
 
 
 
-ALTER PROCEDURE [dbo].[sp_GetListOfUserDetails]
+
+CREATE PROCEDURE [dbo].[sp_GetListOfUserDetails]
 	AS
 		BEGIN
 

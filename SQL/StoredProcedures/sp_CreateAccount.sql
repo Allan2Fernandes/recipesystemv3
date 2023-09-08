@@ -1,21 +1,24 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_CreateAccount]    Script Date: 07/09/2023 09.29.53 ******/
+/****** Object:  StoredProcedure [dbo].[sp_CreateAccount]    Script Date: 08/09/2023 14.50.05 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE [dbo].[sp_CreateAccount]
+
+
+CREATE PROCEDURE [dbo].[sp_CreateAccount]
 	@Username NVARCHAR(200),
 	@Password NVARCHAR(200),
-	@AccessLevel NVARCHAR(1)
+	@AccessLevel NVARCHAR(1),
+	@OverrideUserNameCheck BIT = 0
 		AS
 			BEGIN
 				-- Search for existing usernames in the database
-				IF(EXISTS(SELECT * FROM [GO_PVG32BLOCK].[dbo].[User_STRING] WHERE ParamID = 39901 AND ParamValue = @Username))
+				IF(EXISTS(SELECT * FROM [GO_PVG32BLOCK].[dbo].[User_STRING] WHERE ParamID = 39901 AND ParamValue = @Username) AND @OverrideUserNameCheck = 0)
 					BEGIN
 						SELECT '0' AS 'Created User'
 					END

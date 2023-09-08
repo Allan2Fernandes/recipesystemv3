@@ -1,13 +1,12 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]    Script Date: 07/09/2023 09.31.25 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]    Script Date: 08/09/2023 14.51.40 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 CREATE PROCEDURE [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]
 	@selectedRecipeSetID INT

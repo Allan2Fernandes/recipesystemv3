@@ -1,7 +1,7 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_UserLogin]    Script Date: 08/09/2023 09.20.16 ******/
+/****** Object:  StoredProcedure [dbo].[sp_UserLogin]    Script Date: 08/09/2023 14.51.58 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -10,7 +10,8 @@ GO
 
 
 
-ALTER PROCEDURE [dbo].[sp_UserLogin]
+
+CREATE PROCEDURE [dbo].[sp_UserLogin]
 	@userName NVARCHAR(250),
 	@password NVARCHAR(250)
 		AS
@@ -24,7 +25,7 @@ ALTER PROCEDURE [dbo].[sp_UserLogin]
 					WHERE T1.SetID =
 					(
 						SELECT MAX(T1.SetID) FROM user_STRING T1 WHERE T1.ParamID = 39901 and T1.ParamValue = @userName /*COLLATE Latin1_General_BIN*/ GROUP BY T1.ParamValue
-					) AND T2.ParamValue IN (0, 1) -- Ignore case for -1 because disabled users shouldn't be able to log in
+					) AND T2.ParamValue IN (0, 1)
 				)
 					BEGIN
 						SELECT 'Account Found' AS 'Found'
@@ -39,7 +40,7 @@ ALTER PROCEDURE [dbo].[sp_UserLogin]
 				CASE
 					WHEN T2.ParamValue = 0 THEN 'Admin'
 					WHEN T2.ParamValue = 1 THEN 'User'
-					WHEN T2.ParamValue = -1 THEN 'Disabled' -- This case shouldn't ever be met, but if it is for whatever reason, we can use it to debug
+					WHEN T2.ParamValue = -1 THEN 'Disabled'
 				ELSE 'UNDEFINED' END AS 'AccessLevel'
 				FROM User_STRING T1 INNER JOIN User_DINT T2
 				ON T1.SetID = T2.SetID
