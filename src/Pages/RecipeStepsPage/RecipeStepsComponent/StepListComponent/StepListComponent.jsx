@@ -1,10 +1,10 @@
 import "./StepListComponent.css"
 import SingleStepRowComponent from "./SingleStepRowComponent/SingleStepRowComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSave} from "@fortawesome/free-solid-svg-icons";
+import {faHistory, faSave} from "@fortawesome/free-solid-svg-icons";
 //import stockImage from "../../../../Images/StockCadDrawing.png"
 import {useEffect, useState} from "react";
-import {ParamIDs, Permissions} from "../../../../Constants";
+import {Directions, ParamIDs, Permissions} from "../../../../Constants";
 import {blank_image} from "../../../../Constants";
 import HelperFunctions from "../../../../HelperFunctions/HelperFunctions";
 
@@ -39,7 +39,7 @@ function StepListComponent(props){
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
                 ParamID: ParamIDs.StepSubStepName,
-                ParamValue: "Insert Step Name",
+                ParamValue: "",
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,
                 StepNumberParamID: commonStepNumberParamID,
@@ -86,9 +86,12 @@ function StepListComponent(props){
     return (
         <div id={"StepListComponentMainDiv"}>
             <div id={"RecipeTableTitleDiv"}>
-                <center>
-                    <label>{props.selectedRecipeName}</label>
-                </center>
+                <label>
+                    {props.selectedRecipeName}
+                </label>
+                <button id={"DisplayHistoryPopUpButton"} onClick={(event) => props.toggleRecipeHistoryPopUp(Directions.Open)}>
+                    <FontAwesomeIcon icon={faHistory}/>
+                </button>
             </div>
             <div id={"StepListTableDiv"}>
                 <table>

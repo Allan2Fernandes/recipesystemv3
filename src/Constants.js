@@ -8,7 +8,9 @@ export const blank_image = stockImage
 
 export const Directions = {
     Up: "Up",
-    Down: "Down"
+    Down: "Down",
+    Open: "Open",
+    Close: "Close"
 }
 
 export const ParamIDs = {
@@ -48,7 +50,10 @@ export const ParamIDs = {
     AdminAccessLevel: 0,
     UserAccessLevel: 1,
     DisabledAccessLevel: -1,
-    AccessLevel: 15002
+    AccessLevel: 15002,
+    RecipeActiveStatus: 20001,
+    RecipeEnabledParamValue: 1,
+    RecipeDisabledParamValue: 0
 }
 
 export const Permissions = {

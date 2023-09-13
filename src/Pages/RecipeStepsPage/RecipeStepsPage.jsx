@@ -1,28 +1,28 @@
 import "./RecipeStepsPage.css"
 import React, {useEffect, useState} from "react";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import ErrorPage from "../../ErrorHandling/ErrorPage";
 import TopBar from "../../SharedComponents/TopBar/TopBar";
 import RecipeStepsComponent from "./RecipeStepsComponent/RecipeStepsComponent";
 import secureLocalStorage from "react-secure-storage";
 import FetchQueries from "../../FetchHandler/FetchQueries";
 import {ParamIDs} from "../../Constants";
+import HelperFunctions from "../../HelperFunctions/HelperFunctions";
 
 function RecipeStepsPage(){
-    const {recipeSetID, recipeName, urlSelectedStepIndex, readOnly} = useParams()
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
     const [selectedRecipeSetID, setSelectedRecipeSetID] = useState(0)
     const [selectedRecipeName, setSelectedRecipeName] = useState("")
     const [preDefinedSelectedStepIndex, setPreDefinedSelectedStepIndex] = useState(-1)
     //const [pageIsReadOnly, setPageIsReadOnly] = useState(false)
-    const navigate = useNavigate()
+    const location = useLocation()
+
 
     useEffect(() => {
-
         try{
-            setSelectedRecipeSetID(recipeSetID)
-            setSelectedRecipeName(recipeName)
-            setPreDefinedSelectedStepIndex(parseInt(urlSelectedStepIndex))
+            setSelectedRecipeSetID(location.state.recipeSetID)
+            setSelectedRecipeName(location.state.recipeName)
+            setPreDefinedSelectedStepIndex(parseInt(location.state.UrlSelectedStepIndex))
             //setPageIsReadOnly(readOnly === "true")
             if((secureLocalStorage.getItem("UserDetails") === null || secureLocalStorage.getItem("UserDetails") === undefined)){
                 // DISABLED THIS FUNCTIONALITY BECAUSE THE MACHINE WILL NOT BE LOGGED IN
@@ -31,7 +31,7 @@ function RecipeStepsPage(){
         }catch(error){
             setDisplayErrorPage(true)
         }
-    }, [])
+    }, [location.state])
 
     function saveRecipe(recipeData){
         // Get the user's details because it has to be saved under the logged in user's ID
@@ -42,87 +42,91 @@ function RecipeStepsPage(){
         var recipeNameParamID = ParamIDs.RecipeName
         var recipeTypeParamID = ParamIDs.CommonHierarchyType
         var recipeTypeParamValue = ParamIDs.CommonHierarchyTypeRecipeValue
-        var saveRecipeNameParams = `${recipeNameParamID};${selectedRecipeName};`
-        var saveRecipeTypeParams = `${recipeTypeParamID};${recipeTypeParamValue};`
-        var saveRecipeQuery = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${saveRecipeNameParams}${saveRecipeTypeParams}'`
-
+        var recipeStatusParamID = ParamIDs.RecipeActiveStatus
+        var recipeStatusParamValue = ParamIDs.RecipeEnabledParamValue
+        //var saveRecipeQuery = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${saveRecipeNameParams}${saveRecipeTypeParams}'`
+        var saveRecipeQuery = HelperFunctions.generateSaveRecipeQuery(loggedInUserID, recipeNameParamID, selectedRecipeName, recipeTypeParamID, recipeTypeParamValue, recipeStatusParamID, recipeStatusParamValue)
         // Execute the query to receive the new SetID for this recipe
         var newRecipeSetID = 0
         FetchQueries.executeQueryInDatabase(saveRecipeQuery).then(result => {
             newRecipeSetID = result[0][0]['ParamValue']
-
+            // DO NOT SET SELECTED RECIPE ID HERE. It will pull data from the database before the data is ready.
+            //setSelectedRecipeSetID(newRecipeSetID)
         }).then(r => {
             // Get the new SetID for the recipe
-                // For every step in the recipeData,
-                recipeData.forEach((step, newStepIndex) => {
-                    // Save the steps with the new Recipe SetID
-                    var stepTypeParamID = step['Name']['HeirarchyTypeParamID'] // Doesn't have to be the Name property here. Any would work since they all share this property
-                    var stepTypeParamValue = step['Name']['HeirarchyType']
+            // For every step in the recipeData,
+            //console.log(recipeData.length)
+            recipeData.forEach((step, newStepIndex) => {
 
-                    var stepNumberParamID = step['Name']['StepNumberParamID']
-                    var stepNumberParamValue = newStepIndex + 1 //step['Name']['StepNumber']
+                // Save the steps with the new Recipe SetID
+                var stepTypeParamID = step['Name']['HeirarchyTypeParamID'] // Doesn't have to be the Name property here. Any would work since they all share this property
+                var stepTypeParamValue = step['Name']['HeirarchyType']
 
-                    var stepNameParamID = step['Name']['ParamID']
-                    var stepNameParamValue = step['Name']['ParamValue']
+                var stepNumberParamID = step['Name']['StepNumberParamID']
+                var stepNumberParamValue = newStepIndex + 1 //step['Name']['StepNumber']
 
-                    var stepImage1ParamID = step['Image1']['ParamID']
-                    var stepImage1ParamValue = step['Image1']['ParamValue']
+                var stepNameParamID = step['Name']['ParamID']
+                var stepNameParamValue = step['Name']['ParamValue']
 
-                    var stepImage2ParamID = step['Image2']['ParamID']
-                    var stepImage2ParamValue = step['Image2']['ParamValue']
+                var stepImage1ParamID = step['Image1']['ParamID']
+                var stepImage1ParamValue = step['Image1']['ParamValue']
 
-                    var stepInstructionsParamID = step['Instructions']['ParamID']
-                    var stepInstructionsParamValue = step['Instructions']['ParamValue']
+                var stepImage2ParamID = step['Image2']['ParamID']
+                var stepImage2ParamValue = step['Image2']['ParamValue']
 
-                    var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${ParamIDs.KeyToParentRecipeStep};${newRecipeSetID};${stepTypeParamID};${stepTypeParamValue};${stepNumberParamID};${stepNumberParamValue};${stepNameParamID};${stepNameParamValue};${stepImage1ParamID};${stepImage1ParamValue};${stepImage2ParamID};${stepImage2ParamValue};${stepInstructionsParamID};${stepInstructionsParamValue};'`
-                    FetchQueries.executeQueryInDatabase(queryString).then(result => {
-                        // Get the new SetID for the step
-                        var newStepID = result[0][0]['ParamValue']
-                        //For every sub step in the step, save the
-                        var listOfSubStepSaveQueries = ""
-                        step['SubSteps'].forEach((subStep, newSubStepIndex) => {
+                var stepInstructionsParamID = step['Instructions']['ParamID']
+                var stepInstructionsParamValue = step['Instructions']['ParamValue']
 
-                            var subStepTypeParamID = subStep['Name']['HeirarchyTypeParamID']
-                            var subStepTypeParamValue = subStep['Name']['HeirarchyType'];
+                var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${ParamIDs.KeyToParentRecipeStep};${newRecipeSetID};${stepTypeParamID};${stepTypeParamValue};${stepNumberParamID};${stepNumberParamValue};${stepNameParamID};${stepNameParamValue};${stepImage1ParamID};${stepImage1ParamValue};${stepImage2ParamID};${stepImage2ParamValue};${stepInstructionsParamID};${stepInstructionsParamValue};'`
 
-                            var subStepNumberParamID = subStep['Name']['SubStepNumberParamID'];
-                            var subStepNumberParamValue = newSubStepIndex + 1 //subStep['Name']['SubStepNumber'];
+                FetchQueries.executeQueryInDatabase(queryString).then(result => {
+                    // Get the new SetID for the step
+                    var newStepID = result[0][0]['ParamValue']
+                    //For every sub step in the step, save the
+                    var listOfSubStepSaveQueries = ""
 
-                            var subStepNameParamID = subStep['Name']['ParamID'];
-                            var subStepNameParamValue = subStep['Name']['ParamValue'];
+                    step['SubSteps'].forEach((subStep, newSubStepIndex) => {
+                        var subStepTypeParamID = subStep['Name']['HeirarchyTypeParamID']
+                        var subStepTypeParamValue = subStep['Name']['HeirarchyType'];
 
-                            var subStepActionParamID = subStep['Action']['ParamID'];
-                            var subStepActionParamValue = subStep['Action']['ParamValue'];
+                        var subStepNumberParamID = subStep['Name']['SubStepNumberParamID'];
+                        var subStepNumberParamValue = newSubStepIndex + 1 //subStep['Name']['SubStepNumber'];
 
-                            var subStepItemParamID = subStep['Item']['ParamID'];
-                            var subStepItemParamValue = subStep['Item']['ParamValue'];
+                        var subStepNameParamID = subStep['Name']['ParamID'];
+                        var subStepNameParamValue = subStep['Name']['ParamValue'];
+
+                        var subStepActionParamID = subStep['Action']['ParamID'];
+                        var subStepActionParamValue = subStep['Action']['ParamValue'];
+
+                        var subStepItemParamID = subStep['Item']['ParamID'];
+                        var subStepItemParamValue = subStep['Item']['ParamValue'];
 
 
-                            var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${ParamIDs.KeyToParentRecipeStep};${newStepID};${subStepTypeParamID};${subStepTypeParamValue};${subStepNumberParamID};${subStepNumberParamValue};${subStepNameParamID};${subStepNameParamValue};${subStepActionParamID};${subStepActionParamValue};${subStepItemParamID};${subStepItemParamValue};';`
-                            listOfSubStepSaveQueries += queryString
-                        })
-                        // Execute all the sub step queries together since there is no reason to do them separately. Data doesn't need to be returned from them
-                        if(listOfSubStepSaveQueries.length!==0){
-                            FetchQueries.executeQueryInDatabase(listOfSubStepSaveQueries)
-                                .then(r => {
-                                    // The recipe set ID can only be updated here. otherwise the page will not refresh with the correct information
-                                    //setSelectedRecipeSetID(newRecipeSetID)
-
-                                    // Instead of selecting a new RecipeSetID, why not navigate to that new recipe setIDs page
-                                    navigate(`/RecipeStepsPage/RecipeSetID/${newRecipeSetID}/RecipeName/${selectedRecipeName}/UrlSelectedStepIndex/-1/ReadOnly/${false}`)
-                                })
-                                .catch(e => {
-                                    console.log(e)
-                                    setDisplayErrorPage(true)
-                                })
-                        }
+                        var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${ParamIDs.KeyToParentRecipeStep};${newStepID};${subStepTypeParamID};${subStepTypeParamValue};${subStepNumberParamID};${subStepNumberParamValue};${subStepNameParamID};${subStepNameParamValue};${subStepActionParamID};${subStepActionParamValue};${subStepItemParamID};${subStepItemParamValue};';`
+                        listOfSubStepSaveQueries += queryString
                     })
-                        .catch(e => {
-                        console.log(e)
-                        setDisplayErrorPage(true)
-                    })
+                    // Execute all the sub step queries together since there is no reason to do them separately. Data doesn't need to be returned from them
+                    if(listOfSubStepSaveQueries.length!==0){
+                        FetchQueries.executeQueryInDatabase(listOfSubStepSaveQueries)
+                            .then(r => {
+                                console.log("Saved all sub steps")
+                                // Do not navigate from out here. It is inside a foreach loop. Shouldn't navigate before everything is saved to DB
+
+                            })
+                            .catch(e => {
+                                console.log(e)
+                                setDisplayErrorPage(true)
+                            })
+                    }
+
                 })
+                    .catch(e => {
+                    console.log(e)
+                    setDisplayErrorPage(true)
+                })
+            })
         }).then(r => {
+
         })
             .catch(e => {
                 console.log(e)

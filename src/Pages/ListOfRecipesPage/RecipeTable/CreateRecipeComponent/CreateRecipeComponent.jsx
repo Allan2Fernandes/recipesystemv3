@@ -30,14 +30,14 @@ function CreateRecipeComponent(props){
 
 
         // Get the constants needed for the query
-        var paramIDs = [ParamIDs.RecipeName, ParamIDs.CommonHierarchyType]
-        var paramValues = [newRecipeName, ParamIDs.CommonHierarchyTypeRecipeValue] // 1 is the ParamValue for Recipes
+        var paramIDs = [ParamIDs.RecipeName, ParamIDs.CommonHierarchyType, ParamIDs.RecipeActiveStatus]
+        var paramValues = [newRecipeName, ParamIDs.CommonHierarchyTypeRecipeValue, ParamIDs.RecipeEnabledParamValue] // 1 is the ParamValue for Recipes
         // Get the saved user details from storage
         var userDetails = secureLocalStorage.getItem("UserDetails")
         // Extract just the setID which is the UserID in the query
         var userID = userDetails['SetID']
         // Construct the query
-        var createRecipeQuery = `EXEC sp_SaveParams ${userID}, 'Recipe', '${paramIDs[0]};${paramValues[0]};${paramIDs[1]};${paramValues[1]}'`
+        var createRecipeQuery = HelperFunctions.generateSaveRecipeQuery(userID, paramIDs[0], paramValues[0], paramIDs[1], paramValues[1], paramIDs[2], paramValues[2])
         // Execute the query in the database
         await FetchQueries.executeQueryInDatabase(createRecipeQuery)
         // Refresh the list of recipes in the table

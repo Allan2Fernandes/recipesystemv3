@@ -12,6 +12,7 @@ function ListOfRecipesPage(){
     const [tablePrefix, setTablePrefix] = useState("Recipe")
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
     const [listOfRecipes, setListOfRecipes] = useState([])
+    const [showDisabledRecipes, setShowDisabledRecipes] = useState(false)
 
     useEffect(() => {
         // The page needs to be entered using the log in page. If navigated to by bypassing the log in page, show error page.
@@ -37,6 +38,12 @@ function ListOfRecipesPage(){
         await fetchListOfRecipes()
     }
 
+    function handleChangeShowDisabledRecipes(){
+        setShowDisabledRecipes(!showDisabledRecipes)
+    }
+
+
+
     // Return the error page in case of an error
     var pageToReturn;
     if(displayErrorPage){
@@ -45,7 +52,12 @@ function ListOfRecipesPage(){
         pageToReturn =
             <div id={"ListOfRecipesPageMainDiv"}>
                 <TopBar IsLoggedIn={true} ParentPage={"ListOfRecipesPage"}/>
-                <RecipeTable listOfRecipes={listOfRecipes} refreshListOfRecipes={refreshListOfRecipes}/>
+                <RecipeTable
+                    listOfRecipes={listOfRecipes}
+                    refreshListOfRecipes={refreshListOfRecipes}
+                    showDisabledRecipes={showDisabledRecipes}
+                    handleChangeShowDisabledRecipes={handleChangeShowDisabledRecipes}
+                />
             </div>
     }
 

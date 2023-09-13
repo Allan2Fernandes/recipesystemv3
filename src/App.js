@@ -19,7 +19,7 @@ function App() {
           <Routes>
             <Route path={"/"} element={<LoginPage/>}/>
             <Route path={"/ListOfRecipesPage"} element={<ListOfRecipesPage/>}/>
-            <Route path={"/RecipeStepsPage/RecipeSetID/:recipeSetID/RecipeName/:recipeName/UrlSelectedStepIndex/:urlSelectedStepIndex/ReadOnly/:readOnly"} element={<RecipeStepsPage/>}/>
+            <Route path={"/RecipeStepsPage"} element={<RecipeStepsPage/>}/>
             <Route path={"/ShelfSetupPage"} element={<ShelfSetupPage/>}/>
             <Route path={"/ManageUsersPage"} element={<ManageUsersPage/>}/>
           </Routes>

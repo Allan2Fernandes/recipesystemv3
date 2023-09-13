@@ -13,6 +13,10 @@ function RecipeSearchComponent(props){
         <div id={"RecipeSearchComponentMainDiv"}>
             <FontAwesomeIcon icon={faSearch}/>
             <input id={"RecipeSearchInput"} value={props.searchKeyWord} onChange={(event) => handleChangeSearchPhrase(event)}/>
+            <div>
+                <label>Show disabled recipes</label>
+                <input type={"checkbox"} checked={props.showDisabledRecipes} onChange={props.handleChangeShowDisabledRecipes}/>
+            </div>
         </div>
     )
 }

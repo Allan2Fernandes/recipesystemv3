@@ -20,8 +20,18 @@ function RecipeTable(props){
 
             </div>
             <CreateRecipeComponent refreshListOfRecipes={props.refreshListOfRecipes} listOfRecipes={props.listOfRecipes}/>
-            <RecipeSearchComponent searchKeyWord={searchKeyWord} setSearchkeyWord={setSearchKeyWord}/>
-            <RecipeListTable listOfRecipes={props.listOfRecipes} searchKeyWord={searchKeyWord} refreshListOfRecipes={props.refreshListOfRecipes}/>
+            <RecipeSearchComponent
+                searchKeyWord={searchKeyWord}
+                setSearchkeyWord={setSearchKeyWord}
+                showDisabledRecipes={props.showDisabledRecipes}
+                handleChangeShowDisabledRecipes={props.handleChangeShowDisabledRecipes}
+            />
+            <RecipeListTable
+                listOfRecipes={props.listOfRecipes}
+                searchKeyWord={searchKeyWord}
+                refreshListOfRecipes={props.refreshListOfRecipes}
+                showDisabledRecipes={props.showDisabledRecipes}
+            />
         </div>
     )
 }

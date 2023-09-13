@@ -10,6 +10,7 @@ import secureLocalStorage from "react-secure-storage";
 import SingleImageComponent from "./ImageInstructionsComponent/SingleImageComponent/SingleImageComponent";
 import ImageSelectionPopUp from "./ImageSelectionPopUp/ImageSelectionPopUp";
 import {blank_image} from "../../../Constants";
+import RecipeHistoryPopUp from "./RecipeHistoryPopUp/RecipeHistoryPopUp";
 
 
 function RecipeStepsComponent(props){
@@ -19,11 +20,13 @@ function RecipeStepsComponent(props){
     const [selectedStepIndex, setSelectedStepIndex] = useState(-1)
     const [selectedImageIdentifier, setSelectedImageIdentifier] = useState("")
     const [displayImageSelectionPopUp, setDisplayImageSelectionPopUp] = useState(false)
+    const [displayRecipeHistoryPopUp, setDisplayRecipeHistoryPopUp] = useState(false)
 
     useEffect(() => {
         // Fetch the recipes
         fetchRecipeData().catch(e => props.setDisplayErrorPage(true))
         fetchActionsAndTheirItems().catch(e => props.setDisplayErrorPage(true))
+        setSelectedStepIndex(-1)
     }, [props.selectedRecipeSetID, props.preDefinedSelectedStepIndex])
 
     async function fetchRecipeData(){
@@ -36,6 +39,7 @@ function RecipeStepsComponent(props){
                     setSelectedStepIndex(stepIndex)
                 }
             })
+
             setRecipeData(processedData)
         }).catch(e => props.setDisplayErrorPage(true))
     }
@@ -157,8 +161,17 @@ function RecipeStepsComponent(props){
         newRecipeData[selectedStepIndex][selectedImageIdentifier]['ParamValue'] = imageName
         setRecipeData(newRecipeData)
         setDisplayImageSelectionPopUp(false)
-
     }
+
+    function toggleRecipeHistoryPopUp(direction){
+        if(direction === Directions.Open){
+            setDisplayRecipeHistoryPopUp(true)
+        }else if(direction === Directions.Close){
+            setDisplayRecipeHistoryPopUp(false)
+        }
+    }
+
+
 
 
     return (
@@ -194,6 +207,7 @@ function RecipeStepsComponent(props){
                 selectStep={selectStep}
                 selectedStepIndex={selectedStepIndex}
                 //pageIsReadOnly={props.pageIsReadOnly}
+                toggleRecipeHistoryPopUp={toggleRecipeHistoryPopUp}
             />
 
             <ImagesInstructionsComponent
@@ -207,6 +221,13 @@ function RecipeStepsComponent(props){
                 toggleDisplayImageSelectionPopUp={toggleDisplayImageSelectionPopUp}
                 setSelectedImageIdentifier={setSelectedImageIdentifier}
             />
+            {
+                displayRecipeHistoryPopUp &&
+                <RecipeHistoryPopUp
+                    toggleRecipeHistoryPopUp={toggleRecipeHistoryPopUp}
+                    selectedRecipeName={props.selectedRecipeName}
+                />
+            }
         </div>
     )
 }

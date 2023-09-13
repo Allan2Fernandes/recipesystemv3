@@ -18,7 +18,7 @@ function DuplicateRecipeDialogBox(props){
             console.log("Invalid recipe name")
             return;
         }
-        props.saveDuplicatedRecipe(duplicateRecipeName, props.selectedRecipeSetID)
+        props.saveDuplicatedRecipe(duplicateRecipeName, props.selectedRecipeSetID, false, props.selectedRecipeActiveStatus)
         props.setSelectedRecipeSetID(-1)
         props.setDisplayDuplicateRecipeDialog(false)
     }

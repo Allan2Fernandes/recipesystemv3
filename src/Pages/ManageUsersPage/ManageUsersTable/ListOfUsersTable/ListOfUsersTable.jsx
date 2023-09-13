@@ -49,7 +49,7 @@ function ListOfUsersTable(props){
                 <input
                     type={"checkbox"}
                     onChange={(event) => handleChangeHideDisabledInput(event)}
-                    value={props.hideDisabledUsers}
+                    checked={props.hideDisabledUsers}
                 />
             </div>
             <div id={"ListOfUsersTableDiv"}>

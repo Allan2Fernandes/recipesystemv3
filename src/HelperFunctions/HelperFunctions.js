@@ -123,6 +123,10 @@ class HelperFunctions{
         return secureLocalStorage.getItem("UserDetails")['AccessLevel']
     }
 
+    static generateSaveRecipeQuery(userSetID, recipeNameParamID, recipeNameParamValue, hierarchyTypeParamID, hierarchyTypeParamValue, activeStatusParamID, activeStatusParamValue){
+        return `EXEC sp_SaveParams ${userSetID}, 'Recipe', '${recipeNameParamID};${recipeNameParamValue};${hierarchyTypeParamID};${hierarchyTypeParamValue};${activeStatusParamID};${activeStatusParamValue}'`
+    }
+
 
 }
 
