@@ -19,3 +19,5 @@ delete from File_DINT
 delete from File_INT
 delete from File_REAL
 delete from File_STRING
+
+--ALTER TABLE Recipe_STRING ALTER COLUMN ParamValue NVARCHAR(MAX)

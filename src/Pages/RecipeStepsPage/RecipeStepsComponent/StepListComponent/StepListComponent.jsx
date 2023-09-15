@@ -2,8 +2,6 @@ import "./StepListComponent.css"
 import SingleStepRowComponent from "./SingleStepRowComponent/SingleStepRowComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHistory, faSave} from "@fortawesome/free-solid-svg-icons";
-//import stockImage from "../../../../Images/StockCadDrawing.png"
-import {useEffect, useState} from "react";
 import {Directions, ParamIDs, Permissions} from "../../../../Constants";
 import {blank_image} from "../../../../Constants";
 import HelperFunctions from "../../../../HelperFunctions/HelperFunctions";
@@ -49,7 +47,7 @@ function StepListComponent(props){
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
                 ParamID: ParamIDs.StepImage1,
-                ParamValue: blank_image,
+                ParamValue: "blank_white_image.png", //blank_image,
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,
                 StepNumberParamID:commonStepNumberParamID,
@@ -59,7 +57,7 @@ function StepListComponent(props){
                 HeirarchyType: commonHeirarchyType,
                 HeirarchyTypeParamID: commonHeirarchyTypeParamID,
                 ParamID: ParamIDs.StepImage2,
-                ParamValue: blank_image,
+                ParamValue: "blank_white_image.png", //blank_image,
                 RecipeSetID: commonRecipeSetID,
                 StepNumber: newStepNumber,
                 StepNumberParamID:commonStepNumberParamID,

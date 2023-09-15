@@ -75,9 +75,8 @@ function RecipeStepsPage(){
                 var stepImage2ParamValue = step['Image2']['ParamValue']
 
                 var stepInstructionsParamID = step['Instructions']['ParamID']
-                var stepInstructionsParamValue = step['Instructions']['ParamValue']
-
-                var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${ParamIDs.KeyToParentRecipeStep};${newRecipeSetID};${stepTypeParamID};${stepTypeParamValue};${stepNumberParamID};${stepNumberParamValue};${stepNameParamID};${stepNameParamValue};${stepImage1ParamID};${stepImage1ParamValue};${stepImage2ParamID};${stepImage2ParamValue};${stepInstructionsParamID};${stepInstructionsParamValue};'`
+                var instructionsProcessed = step['Instructions']['ParamValue'].replace(/[';]/g, '');
+                var queryString = `EXEC sp_SaveParams ${loggedInUserID}, 'Recipe', '${ParamIDs.KeyToParentRecipeStep};${newRecipeSetID};${stepTypeParamID};${stepTypeParamValue};${stepNumberParamID};${stepNumberParamValue};${stepNameParamID};${stepNameParamValue};${stepImage1ParamID};${stepImage1ParamValue};${stepImage2ParamID};${stepImage2ParamValue};${stepInstructionsParamID};${instructionsProcessed};'`
 
                 FetchQueries.executeQueryInDatabase(queryString).then(result => {
                     // Get the new SetID for the step
