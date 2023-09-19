@@ -47,7 +47,6 @@ function CreateRecipeComponent(props){
     return (
         <div id={"CreateRecipeComponentMainDiv"}>
             <button onClick={clickHandlerCreateRecipe} disabled={!Permissions.createRecipe[HelperFunctions.getAccessLevelFromLocalStorage()]}>
-                <FontAwesomeIcon icon={faAdd}/>
                 Create Recipe
             </button>
             <input id={"NewRecipeNameInputField"} value={newRecipeName} onChange={(event) => changeHandlerNewRecipeName(event)}/>

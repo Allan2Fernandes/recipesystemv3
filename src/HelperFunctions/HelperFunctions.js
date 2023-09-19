@@ -88,13 +88,15 @@ class HelperFunctions{
                 const orientation = eachItemData.filter(row => row['ParamID'] === ParamIDs.ExpanderOrientation)[0]
                 const modificationDate = eachItemData.filter(row => row['ParamID'] === ParamIDs.ModificationDate)[0]
                 const itemName = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemName)[0]
+                const itemEnabledStatus = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemActiveStatus)[0]
                 const setOfData = {
                     Name: itemName,
                     XCoord: xCoord,
                     YCoord: yCoord,
                     ZCoord: zCoord,
                     orientation: orientation,
-                    modificationDate: modificationDate
+                    modificationDate: modificationDate,
+                    Status: itemEnabledStatus['ParamValue']==='1'
                 }
                 processedData.push(setOfData)
             })
@@ -104,10 +106,12 @@ class HelperFunctions{
                 const ShelfValue = eachItemData.filter(row => row['ParamID'] ===ParamIDs.ShelfNumber)[0]
                 const modificationDate = eachItemData.filter(row => row['ParamID'] === ParamIDs.ModificationDate)[0]
                 const itemName = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemName)[0]
+                const itemEnabledStatus = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemActiveStatus)[0]
                 const setOfData = {
                     Name: itemName,
                     ShelfValue: ShelfValue,
-                    ModificationDate: modificationDate
+                    ModificationDate: modificationDate,
+                    Status: itemEnabledStatus['ParamValue']==='1'
                 }
                 processedData.push(setOfData)
             })

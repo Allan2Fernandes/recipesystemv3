@@ -1,5 +1,6 @@
 #SubStepDivComponentMainDiv{
     width: 100%;
+
 }
 
 #SubStepTableRow td{
@@ -16,3 +17,6 @@
     background-color: #DCDCDC;
 }
 
+.ItemIsDisabled{
+    background-color: red;
+}

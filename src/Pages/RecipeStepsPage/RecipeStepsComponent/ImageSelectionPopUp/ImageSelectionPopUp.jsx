@@ -75,7 +75,6 @@ function ImageSelectionPopUp(props){
             b64Image = b64Image.replace(b64Prefix, "")
             // Construct a query to save the image in the database
             var query = `EXECUTE sp_SaveParams ${userID}, 'File', '${ParamIDs.FileName};${image_file['name']};${ParamIDs.HighResImageEncoding};${b64Image};${ParamIDs.LowResImageEncoding};${reducedImageData}'`
-            console.log(query)
             FetchQueries.executeQueryInDatabase(query).then(result => fetchAllImageNames()).catch(error => props.setDisplayErrorPage(true))
         };
         reader.readAsDataURL(image_file);

@@ -1,9 +1,28 @@
 
 #RecipeSearchComponentMainDiv{
-    margin: 10px;
     width: calc(100% - 10px);
 }
 
+#SearchDiv{
+    margin: 10px;
+    border-bottom: 1px solid black;
+    width: 200px;
+}
+
+#SearchIcon{
+    margin: 2px;
+}
+
 #RecipeSearchInput{
+    outline: none;
+    border: 0;
+    margin: 2px;
+}
+
+#DisabledDiv{
+    margin: 10px;
+}
+
+#DisabledLabel{
     margin-left: 10px;
 }

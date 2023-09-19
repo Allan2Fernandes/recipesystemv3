@@ -42,6 +42,7 @@ export const ParamIDs = {
     AtlasActionTypeParamValue: 7,
     PressActionTypeParamValue: 8,
     OrientationActionTypeParamValue: 9,
+    AcknowledgeActionTypeParamValue:10,
     ItemName: 30001,
     ExpanderXCoord: 1,
     ExpanderYCoord: 2,
@@ -53,7 +54,10 @@ export const ParamIDs = {
     AccessLevel: 15002,
     RecipeActiveStatus: 20001,
     RecipeEnabledParamValue: 1,
-    RecipeDisabledParamValue: 0
+    RecipeDisabledParamValue: 0,
+    ItemActiveStatus: 20002,
+    ItemEnabledParamValue: 1,
+    ItemDisabledParamValue: 0
 }
 
 export const Permissions = {

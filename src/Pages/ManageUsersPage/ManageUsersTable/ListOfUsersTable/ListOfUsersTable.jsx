@@ -31,7 +31,7 @@ function ListOfUsersTable(props){
     }
 
     function handleChangeHideDisabledInput(event){
-        props.setHideDisabledUsers(!props.hideDisabledUsers)
+        props.setShowDisabledUsers(!props.showDisabledUsers)
     }
 
     function clickHandlerUpdatePassword(event, userIndex){
@@ -45,11 +45,11 @@ function ListOfUsersTable(props){
     return (
         <div id={"ListOfUsersTableMainDiv"}>
             <div id={"HideUsersDiv"}>
-                <label>Hide Disabled Users</label>
+                <label>Show Disabled Users</label>
                 <input
                     type={"checkbox"}
                     onChange={(event) => handleChangeHideDisabledInput(event)}
-                    checked={props.hideDisabledUsers}
+                    checked={props.showDisabledUsers}
                 />
             </div>
             <div id={"ListOfUsersTableDiv"}>

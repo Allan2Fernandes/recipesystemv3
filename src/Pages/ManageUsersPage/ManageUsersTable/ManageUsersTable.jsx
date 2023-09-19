@@ -7,7 +7,7 @@ import UpdatePasswordDialogBox from "./UpdatePasswordDialogBox/UpdatePasswordDia
 
 function ManageUsersTable(props){
     const [userDetailsData, setUserDetailsData] = useState([])
-    const [hideDisabledUsers, setHideDisabledUsers] = useState(false)
+    const [showDisabledUsers, setShowDisabledUsers] = useState(false)
     const [displayDialogBox, setDisplayDialogBox] = useState(false)
     const [userDetailsToUpdate, setUserDetailsToUpdate] = useState({
         UserName: "",
@@ -30,7 +30,7 @@ function ManageUsersTable(props){
     }
 
     function getFilteredListOfUsers(){
-        if(hideDisabledUsers){
+        if(!showDisabledUsers){
             return userDetailsData.filter(user => user['AccessLevel'] !== "Disabled")
         }else{
             return userDetailsData
@@ -51,8 +51,8 @@ function ManageUsersTable(props){
             <ListOfUsersTable
                 userDetailsData={getFilteredListOfUsers()}
                 refreshUserDetailsTable={refreshUserDetailsTable}
-                setHideDisabledUsers={setHideDisabledUsers}
-                hideDisabledUsers={hideDisabledUsers}
+                setShowDisabledUsers={setShowDisabledUsers}
+                showDisabledUsers={showDisabledUsers}
                 setDisplayDialogBox={setDisplayDialogBox}
                 setUserDetailsToUpdate={setUserDetailsToUpdate}
             />

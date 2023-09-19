@@ -12,6 +12,10 @@ function UpdatePasswordDialogBox(props){
     }
 
     function handleClickConfirmButton(){
+        if(updatedPassword === ""){
+            console.log("Empty password string")
+            return;
+        }
         var accessLevel = props.userDetailstToUpdate['AccessLevel']
 
         var accessLevelCode = -1;

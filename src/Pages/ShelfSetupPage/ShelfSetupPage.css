@@ -10,7 +10,7 @@
 #ActionsItemsSetUpDiv{
     position: relative;
     /*height: 800px;*/
-    width: 800px;
+    width: 1000px;
     top: Max(0px, calc(37.5px));
     left: Max(0px, calc(50% - 400px));
     box-shadow: 0 5px 5px rgb(0 0 0 / 0.2);
@@ -86,7 +86,6 @@
 
 #SaveChangesDiv{
     margin-top: 10px;
-
 }
 
 #ItemSearchDiv input{
@@ -117,4 +116,12 @@ input[type="number"] {
 
 .EditInputField{
     width: 100px;
+}
+
+#ShowDisabledItemsDiv{
+    margin-top: 10px;
+}
+
+#ShowDisabledItemsDiv input{
+    margin-right: 10px;
 }

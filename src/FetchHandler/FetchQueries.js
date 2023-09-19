@@ -78,6 +78,16 @@ class FetchQueries{
         return itemsAndActions
     }
 
+    static async executeFetchItemShelfDataForAction(action){
+        var query = `EXECUTE [dbo].[sp_GetItemsShelfValues] '${action}'`
+        return await this.executeQueryInDatabase(query)
+    }
+
+    static async executeGetItemStatus(actionName, itemName){
+        var query = `EXECUTE [dbo].[sp_GetItemActiveStatusOnName] @action = '${actionName}', @itemName = '${itemName}'`
+        return await this.executeQueryInDatabase(query)
+    }
+
 
 }
 

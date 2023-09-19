@@ -108,7 +108,7 @@ function RecipeStepsPage(){
                     if(listOfSubStepSaveQueries.length!==0){
                         FetchQueries.executeQueryInDatabase(listOfSubStepSaveQueries)
                             .then(r => {
-                                console.log("Saved all sub steps")
+                                //console.log("Saved all sub steps")
                                 // Do not navigate from out here. It is inside a foreach loop. Shouldn't navigate before everything is saved to DB
 
                             })

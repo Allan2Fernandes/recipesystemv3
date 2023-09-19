@@ -1,22 +1,34 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import "./SubStepDivComponent.css"
 import OrderChangeButtonsComponent from "./OrderChangeButtonsComponent/OrderChangeButtonsComponent";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {Permissions} from "../../../../../../Constants";
 import HelperFunctions from "../../../../../../HelperFunctions/HelperFunctions";
+import FetchQueries from "../../../../../../FetchHandler/FetchQueries";
 
 function SubStepDivComponent(props){
+    const [itemIsEnabled, setItemIsEnabled] = useState(true)
 
     useEffect(()=> {
-        //console.log(props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue']))
-    }, [])
+        // Query the database to check if the item is disabled
+        getActiveStatusOfItem()
+    }, [props.subStep])
 
     function deleteSubStep(){
         var newRecipeData = structuredClone(props.recipeData)
         // Use the step and sub step indices to remove the data from recipeData
         newRecipeData[props.stepIndex]['SubSteps'].splice(props.subStepIndex, 1)
         props.setRecipeData(newRecipeData)
+    }
+
+    async function getActiveStatusOfItem(){
+        var actionName = props.subStep['Action']['ParamValue']
+        var itemName = props.subStep['Item']['ParamValue']
+        await FetchQueries.executeGetItemStatus(actionName, itemName)
+            .then(result => {
+                setItemIsEnabled(result[0][0]['ParamValue'])
+            }).catch(error => console.log(error))
     }
 
     function filterItemsForAction(){
@@ -60,6 +72,7 @@ function SubStepDivComponent(props){
                         <select value={props.subStep['Item']['ParamValue']}
                                 onChange={(event) => props.changeHandlerSubStepName(event, "Item", props.stepIndex, props.subStepIndex)}
                                 disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
+                                className={itemIsEnabled?"ItemIsEnabled":"ItemIsDisabled"}
                         >
                             {/*
                             Have to show the items which correspond to that action. Get the index which corresponds to the Action and then display those items

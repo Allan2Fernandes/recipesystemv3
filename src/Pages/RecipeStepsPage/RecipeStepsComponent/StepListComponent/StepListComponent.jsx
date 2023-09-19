@@ -148,7 +148,7 @@ function StepListComponent(props){
                                     disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
                                 >
                                     <FontAwesomeIcon icon={faSave}/>
-                                    <label>Save Recipe</label>
+                                    <label id={"SaveRecipeLabel"}>Save Recipe</label>
                                 </button>
                             </td>
                         }
