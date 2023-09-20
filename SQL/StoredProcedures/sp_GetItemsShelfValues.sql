@@ -1,7 +1,7 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetItemsShelfValues]    Script Date: 08/09/2023 14.50.44 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetItemsShelfValues]    Script Date: 20/09/2023 10.57.40 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -10,11 +10,12 @@ GO
 
 
 
-ALTER PROCEDURE [dbo].[sp_GetItemsShelfValues]
+
+CREATE PROCEDURE [dbo].[sp_GetItemsShelfValues]
 	@action NVARCHAR(100)
 		AS
 			BEGIN
-				declare @itemParamValue nvarchar(1)
+				declare @itemParamValue nvarchar(10)
 				IF @action ='Pick'
 					BEGIN
 						SET @itemParamValue = '4'
@@ -36,9 +37,13 @@ ALTER PROCEDURE [dbo].[sp_GetItemsShelfValues]
 						SET @itemParamValue = '8'
 					END
 				IF @action ='Orientation'
-				BEGIN
-					SET @itemParamValue = '9'
-				END
+					BEGIN
+						SET @itemParamValue = '9'
+					END
+				IF @action ='Acknowledge'
+					BEGIN
+						SET @itemParamValue = '10'
+					END
 
 				SELECT * FROM MergeTestParm WHERE SetID
 				IN
@@ -46,6 +51,7 @@ ALTER PROCEDURE [dbo].[sp_GetItemsShelfValues]
 				IN
 				(SELECT SetID FROM MergeTestParm WHERE ParamValue = @itemParamValue and ParamID = 30004)
 				AND ParamID = 30001 GROUP BY ParamValue)
+
 			END
 GO
 

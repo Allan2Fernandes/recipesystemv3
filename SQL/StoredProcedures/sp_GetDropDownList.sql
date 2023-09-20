@@ -1,12 +1,13 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetDropDownList]    Script Date: 08/09/2023 14.50.28 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetDropDownList]    Script Date: 20/09/2023 10.58.07 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -24,7 +25,7 @@ Example call:	EXEC sp_GetDropDownList
 				EXEC sp_GetDropDownList 'Expander'
 -- =============================================
 */
-ALTER PROCEDURE [dbo].[sp_GetDropDownList]
+CREATE PROCEDURE [dbo].[sp_GetDropDownList]
 	@ListName VARCHAR(100)='Actions'
 AS
 BEGIN
@@ -40,6 +41,7 @@ BEGIN
 		UNION SELECT 'Atlas'
 		UNION SELECT 'Press'
 		UNION SELECT 'Orientation'
+		UNION SELECT 'Acknowledge'
 	END
 
 	IF @ListName='Pick'
@@ -74,6 +76,12 @@ BEGIN
 		SELECT DISTINCT ParamValue FROM MergeTestParm WHERE ParamID=30001 AND SetID IN
 		(SELECT SetID FROM MergeTestParm WHERE ParamID=30004 AND ParamValue='9')
 	END
+	IF @ListName='Acknowledge'
+	BEGIN
+		SELECT DISTINCT ParamValue FROM MergeTestParm WHERE ParamID=30001 AND SetID IN
+		(SELECT SetID FROM MergeTestParm WHERE ParamID=30004 AND ParamValue='10')
+	END
+
 END
 GO
 
