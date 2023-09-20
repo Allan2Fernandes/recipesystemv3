@@ -13,8 +13,11 @@ import {Permissions} from "../../../../Constants";
 
 function RecipeListTable(props){
     const navigate = useNavigate()
+    // Boolean state flag to display the error page or not
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
+    // When creating a duplicate recipe, there is a dialog box which opens and allows the user to enter a name for the duplicate recipe.
     const [displayDuplicateRecipeDialog, setDisplayDuplicateRecipeDialog] = useState(false)
+    // Clicking a recipe allows the user to open it. The recipeID needs to be saved to then open the recipe.
     const [selectedRecipeSetID, setSelectedRecipeSetID] = useState(-1)
     const [selectedRecipeActiveStatus, setSelectedRecipeActiveStatus] = useState(true)
 
@@ -143,12 +146,12 @@ function RecipeListTable(props){
     }
 
     function handleClickDuplicateRecipe(recipeSetID, recipeStatus){
+        // When creating a duplicate recipe, information about the duplicating recipe is needed.
+        // So set the states and then open the dialog box.
         setDisplayDuplicateRecipeDialog(true)
         setSelectedRecipeSetID(recipeSetID)
         setSelectedRecipeActiveStatus(recipeStatus)
     }
-
-
 
     if(displayErrorPage){
         return <ErrorPage/>

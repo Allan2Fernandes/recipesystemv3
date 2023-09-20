@@ -7,13 +7,17 @@ import {ParamIDs} from "../../../Constants";
 
 
 function CreateAccountComponent(props){
+    // States for the username, password and repeat password fields
     const [userName, setuserName] = useState("")
     const [password, setPassword] = useState("")
     const [repeatedPassword, setRepeatedPassword] = useState("")
+    // In case the username was already found in the database.
     const [errorMessage, setErrorMessage] = useState("Pick Another Username")
+    // Boolean state flag to show error message.
     const [displayErrorMessage, setDisplayErrorMessage] = useState(false)
 
     function handleChangeInputField(event, fieldName){
+        // Single function to handle onChanges for all 3 fields
         if(fieldName === "Username"){
             setuserName(event.target.value)
         }else if(fieldName === "Password"){
@@ -23,12 +27,14 @@ function CreateAccountComponent(props){
         }
     }
 
-
-    function handleClickCreateButton(){
+    async function handleClickCreateButton(){
         // Set up the query to execute the stored procedure to create the user
+        // Access level = 0 means admin. This component only creates admin accounts.
         var query = `EXECUTE sp_CreateAccount @Username = '${userName}', @Password = '${password}', @AccessLevel = '0', @OverrideUserNameCheck = 0;`
-        FetchQueries.executeQueryInDatabase(query).then(result => {
+        await FetchQueries.executeQueryInDatabase(query).then(result => {
             if(parseInt(result[0][0]['Created User']) ===0){
+                // If the user could not have been created because the username already exists in the database.
+                // Look up the codes 0 and 1 in the stored procedure, sp_CreateAccount
                 setDisplayErrorMessage(true)
             }else if(parseInt(result[0][0]['Created User']) ===1){
                 setDisplayErrorMessage(false)
@@ -40,6 +46,7 @@ function CreateAccountComponent(props){
     }
 
     function handleClickBackButton(){
+        // navigate back to the log-in page.
         props.setDisplayLogin(true)
     }
 

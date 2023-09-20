@@ -6,7 +6,10 @@ import ErrorPage from "../../ErrorHandling/ErrorPage";
 import CreateAccountComponent from "./CreateAccountComponent/CreateAccountComponent";
 
 function LoginPage(){
+    // Boolean state flag to show the error page in place of the components
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
+    // This page was originally designed to also have a create account component.
+    // A flag was needed to either show the login component or the create account component
     const [displayLogin, setDisplayLogin] = useState(true)
 
     useEffect(() => {
@@ -27,7 +30,7 @@ function LoginPage(){
             <div id={"LoginPageMainDiv"}>
                 <TopBar IsLoggedIn={false} ParentPage={"LoginPage"}/>
                 {
-                    displayLogin?
+                    displayLogin? // Display either login or create account component
                         <LoginCredentialsComponent
                             setDisplayErrorPage={setDisplayErrorPage}
                             setDisplayLogin={setDisplayLogin}

@@ -7,21 +7,27 @@ import {useNavigate} from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 
 function LoginCredentialsComponent(props){
+    // State for the user name field
     const [userName, setUserName] = useState("")
+    // State for the password field
     const [password, setPassword] = useState("")
+    // Once logged in, the log in details which have been fetched from the database has to be saved and put into local storage.
     const [loggedInUserDetails, setLoggedInUserDetails] = useState({
         SetID: 0,
         ParamID: 0,
         ParamValue: ""
     })
+    // Boolean state flag which will either displays a text message saying incorrect details were entered or not.
     const [invalidLoginDetailsEntered, setInvalidLoginDetailsEntered] = useState(false)
+    // In order to navigate away after logging in, this hook is used.
     const navigate = useNavigate()
 
     useEffect(() => {
         secureLocalStorage.clear()
-    })
+    }, [])
 
     function changeHandler(event, field){
+        // On Change handler for both, username and password fields
         var newValue = event.target.value
         if(field === "userName"){
             setUserName(newValue)
@@ -36,7 +42,7 @@ function LoginCredentialsComponent(props){
             if(newUserDetails[0][0]['Found'] === 'Account Found'){
                 // Account found
                 if(newUserDetails[1][0] === undefined){
-                    // Account found, but the password/Username doesn't match
+                    // Account found, but the password/Username doesn't match. Display the error message.
                     setInvalidLoginDetailsEntered(true)
                 }else{
                     //Handle log in. Account found and password/Username match

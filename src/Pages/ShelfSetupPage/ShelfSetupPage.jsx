@@ -10,12 +10,19 @@ import HelperFunctions from "../../HelperFunctions/HelperFunctions";
 import {ParamIDs, Permissions} from "../../Constants";
 
 function ShelfSetupPage(){
+    // List of all Actions
     const [allPossibleActions, setAllPossibleActions] = useState([])
+    // List of all items for the selected action
     const [allActionsItems, setAllActionsItems] = useState([])
+    // Unmodified items. This was set up for the requirement to allow the user to change item names. But changing item names has been disabled.
     const [originalAllActionsItems, setOriginalAllActionsItems] = useState([])
+    // Boolean state flag, deciding whether to show the actual shelf set up page or the error page in place of it.
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
+    // The selected action is selected from the drop down box. The selected action needs to be saved to then show items for that action
     const [selectedAction, setSelectedAction] = useState("")
+    // The list of properties is different for every action. The item properties are therefore set, depending on the selected action
     const [itemProperties, setItemProperties] = useState([])
+    // Different actions have a different number of properties or property values. This arrangement can be improved to just a list of properties.
     const [newItemPropertyValues, setNewItemPropertyValues] = useState({
         itemName: "",
         property1: "",
@@ -23,11 +30,17 @@ function ShelfSetupPage(){
         property3: "",
         property4: ""
     })
+    // State flag for loading
     const [dataIsLoading, setDataIsLoading] = useState(false)
+    // The items in the list are filtered, depending on the search phrase.
     const [searchPhrase, setSearchPhrase] = useState("")
+    // One of the actions, Expander, is dependent on another set of action's items. Hence, the orientation options (expander depends on it) is fetched and saved by default
     const [orientationOptions, setOrientationOptions] = useState([])
+    // When a row is clicked, if properties of the item are editable, the labels will turn to inputs and checkboxes will become enabled
     const [selectedItemRowIndex, setSelectedItemRowIndex] = useState(-1)
+    // TODO Remove Unused state
     const [itemsUpdated, setItemsUpdated] = useState(false)
+    // Boolean state flag, either to filter out disabled items or not.
     const [showDisabledItems, setShowDisabledItems] = useState(false)
 
     // Use effect to fetch actions
@@ -41,15 +54,20 @@ function ShelfSetupPage(){
     }, [])
 
     // Use effect to fetch items for selected action
-    useEffect(() => {
+    useEffect( () => {
         fetchItemsForAction(selectedAction)
-        fetchOrientationOptions()
-        setSelectedItemRowIndex(-1)
-        setItemsUpdated(false)
+            .then(_ => { // The result does not matter here.
+                fetchOrientationOptions()
+                    .then(_ => {
+                        setSelectedItemRowIndex(-1)
+                        setItemsUpdated(false)
+                    }).catch(e => setDisplayErrorPage(true))
+            }).catch(e => setDisplayErrorPage(true))
     },  [selectedAction])
 
     async function fetchItemsForAction(action){
         setDataIsLoading(true)
+        // Given the action, execute a stored procedure to get all the items for that action and set the state
         await FetchQueries.executeFetchItemShelfDataForAction(action)
             .then(result => {
                     // Pre-process the result
@@ -75,6 +93,7 @@ function ShelfSetupPage(){
     }
 
     function setItemPropertiesOnAction(action){
+        // Property names are dependent on the action
         if(action === "Expander"){
             setItemProperties(["X", "Y", "Z", "Orientation", "Status"])
         }else if(action === "Pick"){
@@ -89,15 +108,18 @@ function ShelfSetupPage(){
     }
 
     async function fetchActions(){
+        // Get all the actions
         var actionsData = await FetchQueries.executeGetActionOptions().catch(e => setDisplayErrorPage(true))
         setAllPossibleActions(actionsData[0])
         var selectedDefaultAction = actionsData[0][0]['Action']
         setSelectedAction(selectedDefaultAction)
         setItemPropertiesOnAction(selectedDefaultAction)
+        // Get all the items for the action
         await fetchItemsForAction(selectedDefaultAction)
     }
 
     function changeHandlerActionSelection(event){
+        // Triggered when the selected action from the drop down box changes
         var newlySelectedAction = event.target.value
         setSelectedAction(newlySelectedAction)
         setItemPropertiesOnAction(newlySelectedAction)
@@ -113,6 +135,7 @@ function ShelfSetupPage(){
     }
 
     function changeHandlerNewItemPropertyValues(event, itemIndex){
+        // The first row in the table is for entering values to create a new item. When the value in any of those inputs changes, this function is called.
         var currentNewItemPropertyValues = structuredClone(newItemPropertyValues)
         if(itemIndex===0){
             currentNewItemPropertyValues['itemName'] = event.target.value
@@ -123,16 +146,20 @@ function ShelfSetupPage(){
     }
 
     function changeHandlerSearchPhrase(event){
+        // Triggered when the value in the input field to search for items is changed.
         setSearchPhrase(event.target.value)
     }
 
     function changeHandlerNewlySelectedOrientation(event){
+        // When the expander action is selected, new expander items can be created. To create the item, an orientation has to be selected.
+        // This function is triggered when the orientation of the new expander item is selected.
         var newItemPropertyValuesClone = structuredClone(newItemPropertyValues)
         newItemPropertyValuesClone.property4 = event.target.value
         setNewItemPropertyValues(newItemPropertyValuesClone)
     }
 
     async function clickHandlerCreateNewItem(){
+        // Checks in case the property values of the new item have not been entered.
         if(selectedAction ==="Expander"){
             if(newItemPropertyValues.property4==="" || newItemPropertyValues.property4 ==="Select Angle"){
                 console.log("No Angle selected")
@@ -173,12 +200,16 @@ function ShelfSetupPage(){
             const yParamID = ParamIDs.ExpanderYCoord
             const zParamID = ParamIDs.ExpanderZCoord
             const orientationParamID = ParamIDs.ExpanderOrientation
+            // Create strings to save every property.
             var xString = `${xParamID};${newItemPropertyValues.property1};`
             var yString = `${yParamID};${newItemPropertyValues.property2};`
             var zString = `${zParamID};${newItemPropertyValues.property3};`
+            // Put all those strings together
             var orientationString = `${orientationParamID};${orientationOptions.filter(row => row['Name']['ParamValue'] === newItemPropertyValues.property4)[0]['ShelfValue']['ParamValue']};`
+            // Finally use that string in the string in the query.
             createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${xString}${yString}${zString}${orientationString}${enabledStatusString}'`
         }else if(selectedAction === "Pick"){
+            // For the rest of the actions, it is a single property that has to be put into the query string. The ParamValue for the different actions is different.
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
             createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PickActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}'`
         }else if(selectedAction === "Kolver"){
@@ -197,8 +228,10 @@ function ShelfSetupPage(){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
             createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AcknowledgeActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}'`
         }
+        // Execute the query after it has been constructed.
         FetchQueries.executeQueryInDatabase(createItemQuery).then(result => {
             fetchItemsForAction(selectedAction)
+            // Reset states after the save.
             setSearchPhrase("")
             setItemsUpdated(false)
             setSelectedItemRowIndex(-1)
@@ -208,6 +241,7 @@ function ShelfSetupPage(){
     }
 
     function clickHandlerSelectItemRow(event, itemIndex){
+        // When a row is clicked, set the selectedItemRowIndex corresponding to the index of that row.
         if(!Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]){
             return;
         }
@@ -215,6 +249,7 @@ function ShelfSetupPage(){
     }
 
     function fieldEditChangeHandler(event, itemIdentifier, propertyName){
+        // This single function handles the onChange events for all properties of items of all actions.
         setItemsUpdated(true)
         var newAllActionsItems = structuredClone(allActionsItems)
         var rowToUpdate = newAllActionsItems.filter(row => row['Name']['SetID'] === itemIdentifier)[0]
@@ -258,6 +293,7 @@ function ShelfSetupPage(){
                 var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${xString}${yString}${zString}${orientationString}${StatusString}'`
                 // Update the original item and disable it
                 var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${xString}${yString}${zString}${orientationString}${disableItemString}'`
+                // It is important to disable first and then create the new item.
                 createItemsQuery += disableOriginalItemQuery
                 createItemsQuery += createItemQuery
 
@@ -318,6 +354,7 @@ function ShelfSetupPage(){
                 createItemsQuery += createItemQuery
             })
         }
+        // Execute the query in the database.
         FetchQueries.executeQueryInDatabase(createItemsQuery).then(result => {
             fetchItemsForAction(selectedAction)
             setSearchPhrase("")
@@ -331,9 +368,10 @@ function ShelfSetupPage(){
 
 
     function getTableRowsOfItems(){
-        var row
+        var rows
+        // The structure of the row/table is different depending on the action. Mostly it is expander different compared to the rest.
         if(selectedAction === 'Expander'){
-            row = allActionsItems.filter(row => row['Name']['ParamValue'].includes(searchPhrase) && (showDisabledItems || row['Status'])).map((item, itemIndex) => (
+            rows = allActionsItems.filter(row => row['Name']['ParamValue'].includes(searchPhrase) && (showDisabledItems || row['Status'])).map((item, itemIndex) => (
                 <tr key={itemIndex} className={`ActionShelfSetupRow ${itemIndex%2===1?"EvenActionShelfSetupRow":"OddActionShelfSetupRow"} ItemRow`} onClick={(event) => clickHandlerSelectItemRow(event, itemIndex)}>
                     <td>
                         {
@@ -389,7 +427,7 @@ function ShelfSetupPage(){
                 </tr>
             ))
         }else if(selectedAction === "Pick" || selectedAction === "Kolver" || selectedAction === "Atlas" || selectedAction === "Press" || selectedAction === "Orientation" || selectedAction === "Acknowledge"){
-            row = allActionsItems.filter(row => row['Name']['ParamValue'].includes(searchPhrase) && (showDisabledItems || row['Status'])).map((item, itemIndex) => (
+            rows = allActionsItems.filter(row => row['Name']['ParamValue'].includes(searchPhrase) && (showDisabledItems || row['Status'])).map((item, itemIndex) => (
                 <tr key={itemIndex} className={`ActionShelfSetupRow ${itemIndex%2===1?"EvenActionShelfSetupRow":"OddActionShelfSetupRow"} ItemRow`} onClick={(event) => clickHandlerSelectItemRow(event, itemIndex)}>
                     <td>
                         {
@@ -419,7 +457,7 @@ function ShelfSetupPage(){
                 </tr>
             ))
         }
-        return row
+        return rows
     }
 
     if(displayErrorPage){
@@ -478,6 +516,9 @@ function ShelfSetupPage(){
                                 </tr>
                             </thead>
                             <tbody>
+                                {/*
+                                This entire row is just about creating new items
+                                */}
                                 <tr id={"CreateItemRow"} className={"EvenActionShelfSetupRow"}>
                                     <td>
                                         <button id={"CreateItemButton"} onClick={clickHandlerCreateNewItem} disabled={!Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}>
@@ -535,12 +576,16 @@ function ShelfSetupPage(){
                                         </td>
                                     }
                                     {/*TODO Implement the onChange property*/}
+                                    {/* Might leave it as true by default because the user shouldn't be able to create a disabled item */}
                                     <td>
-                                        <input type={"checkbox"} checked={true} onChange={() => {}}/>
+                                        <input type={"checkbox"} disabled={true} checked={true} onChange={() => {}}/>
                                     </td>
 
 
                                 </tr>
+                                {/*
+                                The following function gets all the items of the action.
+                                */}
                                 {getTableRowsOfItems()}
                             </tbody>
                         </table>
