@@ -14,18 +14,25 @@ import RecipeHistoryPopUp from "./RecipeHistoryPopUp/RecipeHistoryPopUp";
 
 
 function RecipeStepsComponent(props){
+    // The processed recipe data needs to be displayed. When the recipe data changes, the page needs to be re-rendered. So it is stored in a useState.
     const [recipeData, setRecipeData] = useState([])
+    // TODO REMOVE
     const [allPossibleActions, setAllPossibleActions] = useState([])
+    // Actions and items, processed after getting fetched
     const [itemsAndTheirActions, setItemsAndTheirActions] = useState([])
     const [selectedStepIndex, setSelectedStepIndex] = useState(-1)
+    // To differentiate because image 1 and image 2.
     const [selectedImageIdentifier, setSelectedImageIdentifier] = useState("")
+    // When trying to upload an image or select an image from the database, there is a pop up. To either display or not display the pop up, the boolean state flag is used.
     const [displayImageSelectionPopUp, setDisplayImageSelectionPopUp] = useState(false)
+    // Boolean state flag to display the pop up showing the history of the recipe setIDs and the dates of last modifications.
     const [displayRecipeHistoryPopUp, setDisplayRecipeHistoryPopUp] = useState(false)
 
     useEffect(() => {
-        // Fetch the recipes
+        // Fetch the recipes and actions/items
         fetchRecipeData().catch(e => props.setDisplayErrorPage(true))
         fetchActionsAndTheirItems().catch(e => props.setDisplayErrorPage(true))
+        // Initialise the selected step index to one that doesn't point to any recipe.
         setSelectedStepIndex(-1)
     }, [props.selectedRecipeSetID, props.preDefinedSelectedStepIndex])
 
@@ -33,7 +40,6 @@ function RecipeStepsComponent(props){
         await FetchQueries.getStepsAndSubStepsOfRecipe(props.selectedRecipeSetID).then(result => {
             // Process the data into a usable format
             var processedData = HelperFunctions.ProcessFetchedRecipeData(result)
-
             processedData.forEach((step, stepIndex) => {
                 if(step['Name']['StepNumber']===props.preDefinedSelectedStepIndex){
                     setSelectedStepIndex(stepIndex)
@@ -44,6 +50,7 @@ function RecipeStepsComponent(props){
     }
 
     async function fetchActionsAndTheirItems(){
+        // First fetch the actions, and then fetch the items for each of those actions.
         var actionsData = await FetchQueries.executeGetActionOptions().catch(e => props.setDisplayErrorPage(true))
         setAllPossibleActions(actionsData[0])
         var itemsData = await FetchQueries.executeGetItemsForEachAction(actionsData[0]).catch(e => props.setDisplayErrorPage(true))
@@ -51,6 +58,7 @@ function RecipeStepsComponent(props){
     }
 
     function changeHandlerSubStepProperty(event, fieldName, stepIndex, subStepIndex){
+        // Change handler to handle changes for a number of properties.
         try{
             var newRecipeData = structuredClone(recipeData)
             newRecipeData[stepIndex]['SubSteps'][subStepIndex][fieldName]['ParamValue'] = event.target.value
@@ -82,7 +90,6 @@ function RecipeStepsComponent(props){
 
             // Swap them
             // Copy every property from the previous step to the new step
-
             listOfPropertiesToSwap.forEach((property) => {
                 newRecipeData[stepIndex]['SubSteps'][subStepIndex-1][property]['ParamValue'] = recipeData[stepIndex]['SubSteps'][subStepIndex][property]['ParamValue']
                 newRecipeData[stepIndex]['SubSteps'][subStepIndex][property]['ParamValue'] = recipeData[stepIndex]['SubSteps'][subStepIndex-1][property]['ParamValue']
@@ -127,7 +134,7 @@ function RecipeStepsComponent(props){
         var b64DeterminationCharacter = b64Image.split(',')[1][0]
 
         var b64Prefix = ""
-
+        // Currently only png and jpg is supported. all other formats will be rejected
         if(b64DeterminationCharacter === '/'){
             b64Prefix = "data:image/jpeg;base64,"
         }else if(b64DeterminationCharacter === 'i'){
@@ -152,6 +159,7 @@ function RecipeStepsComponent(props){
     }
 
     function toggleDisplayImageSelectionPopUp(){
+        // Flip the state
         setDisplayImageSelectionPopUp(!displayImageSelectionPopUp)
     }
 

@@ -7,12 +7,15 @@ import FetchQueries from "../../../../FetchHandler/FetchQueries";
 import HelperFunctions from "../../../../HelperFunctions/HelperFunctions";
 
 function UserCreationElement(props){
+    // States for the input fields.
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
     const [accessLevel, setAccessLevel] = useState("Access Level")
+    // Error handling flag. In case of caught error, set to true to display the error page instead of the component
     const [displayErrorMessage, setDisplayErrorMessage] = useState(false)
 
     function handleChange(event, fieldName){
+        // Single function to handle state changes for all the fields
         if(fieldName === "Username"){
             setUserName(event.target.value)
         }else if(fieldName === "Password"){
@@ -27,13 +30,15 @@ function UserCreationElement(props){
         if(userName === "" || password === "" || accessLevel === "Access Level"){
             return
         }else{
+            // Iniitialize to disabled user.
             var accessLevelCode = -1;
+            // Do not check for disabled, because that's the default initialization accessLevelCode
             if(accessLevel === "Admin"){
                 accessLevelCode = 0
             }else if(accessLevel === "User"){
                 accessLevelCode = 1
             }
-            // Create user
+            // Create user using the username, password and acdessLevelCode. Do not over ride the username check. Do check for already created users with this username
             var query = `EXECUTE sp_CreateAccount @Username = '${userName}', @Password = '${password}', @AccessLevel = '${accessLevelCode}', @OverrideUserNameCheck = 0;`
 
             FetchQueries.executeQueryInDatabase(query).then(result => {
@@ -45,7 +50,9 @@ function UserCreationElement(props){
                     setDisplayErrorMessage(false)
                 }
             }).then(result => {
+                // Refresh the list so the newly created user will be fetched and shown in the table
                 props.refreshUserDetailsTable()
+                // Reset states because another account that needs to be created will have to be with different details
                 setUserName("")
                 setPassword("")
                 setAccessLevel("Access Level")

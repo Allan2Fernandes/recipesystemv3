@@ -23,9 +23,11 @@ function ListOfUsersTable(props){
             accessLevelCode = -1
         }
         var loggedInUserID = secureLocalStorage.getItem("UserDetails")['SetID']
+        // To update a user, simply create a new user with the updated details.
         var updateUserQuery = `EXEC sp_SaveParams ${loggedInUserID}, 'User', '${ParamIDs.UserName};${userName};${ParamIDs.Password};${password};${ParamIDs.AccessLevel};${accessLevelCode}'`
 
         await FetchQueries.executeQueryInDatabase(updateUserQuery).then(result => {
+            // Fetch the data again from the database and setstate to refresh the list to reflect the most recent changes.
             props.refreshUserDetailsTable()
         })
     }
@@ -35,6 +37,8 @@ function ListOfUsersTable(props){
     }
 
     function clickHandlerUpdatePassword(event, userIndex){
+        // To change the password of a user, first open the dialog box. The username and accesslevel needs to be passed to the dialog box
+        // This is done using the state, setUserDetailsToUpdate. The state is passed as a props to the dialog box.
         props.setDisplayDialogBox(true)
         props.setUserDetailsToUpdate({
             UserName: props.userDetailsData[userIndex]['UserName'],

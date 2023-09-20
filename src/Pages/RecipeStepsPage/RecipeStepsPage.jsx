@@ -10,7 +10,9 @@ import {ParamIDs} from "../../Constants";
 import HelperFunctions from "../../HelperFunctions/HelperFunctions";
 
 function RecipeStepsPage(){
+    // Boolean state flag to display the error page instead of this page in case of a caught error
     const [displayErrorPage, setDisplayErrorPage] = useState(false)
+    // The recipe is selected on the recipe list page. It is then passed to this page using useNavigate state. The same goes for recipe name
     const [selectedRecipeSetID, setSelectedRecipeSetID] = useState(0)
     const [selectedRecipeName, setSelectedRecipeName] = useState("")
     const [preDefinedSelectedStepIndex, setPreDefinedSelectedStepIndex] = useState(-1)

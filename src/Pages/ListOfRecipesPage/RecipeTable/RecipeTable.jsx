@@ -8,7 +8,7 @@ function RecipeTable(props){
     const [searchKeyWord, setSearchKeyWord] = useState("")
 
     /*
-    * This component is basically made up of 3 parts - the search component, create new recipe component and a table to display recipes.
+    * This component is made up of 3 parts - the search component, create new recipe component and a table to display recipes.
     * */
 
     return (
