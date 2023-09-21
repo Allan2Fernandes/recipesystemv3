@@ -8,13 +8,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-
-
-
-
-
-
+/* =============================================
+Author:			AF
+Create date:	2023-09-21
+Description:    Returns the large image, small image and instructions of the specified recipe step. The purpose of this SP is to return data for the read-only webpage which is used by the operator.
+Example call:	EXEC [dbo].[sp_GetStepImage] @selectedRecipeSetID = 501, @stepNo = 2
+-- =============================================
+*/
 
 CREATE PROCEDURE [dbo].[sp_GetStepImage]
 	@selectedRecipeSetID INT

@@ -31,7 +31,7 @@ function SingleImageComponent(props){
     async function selectImageFromDatabase(){
         props.setSelectedImageIdentifier(props.stepImageIdentifier)
 
-        //TODO Can this code be remove
+        //TODO Can this code be removed
 
         // Construct a query to get all the distinct file names from the Database
         //var query = `SELECT DISTINCT(ParamValue) FROM File_STRING WHERE ParamID = 35008`

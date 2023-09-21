@@ -8,11 +8,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-
-
-
-/****** Script for SelectTopNRows command from SSMS  ******/
+/* =============================================
+Author:			AF
+Create date:	2023-09-21
+Description:	This stored procedure returns 0 or 1, depending on if the item is enabled (1) or disabled (0)
+Example call:	EXEC [dbo].[sp_GetItemActiveStatusOnName] @action = 'Expander', @itemName = 'EXP_1'
+-- =============================================
+*/
 
 CREATE PROCEDURE [dbo].[sp_GetItemActiveStatusOnName]
 	@action nvarchar(50),
@@ -54,7 +56,7 @@ CREATE PROCEDURE [dbo].[sp_GetItemActiveStatusOnName]
 					(
 					SELECT MAX(SetID) FROM Recipe_STRING WHERE SetID IN
 					(SELECT SetID FROM Recipe_STRING WHERE ParamID = 30004 AND ParamValue = @itemParamValue)
-					AND ParamValue = @itemName
+					AND ParamValue = @itemName -- Search the max setID for the chosen item name. Then using that SetID, get the status from another table, Recipe_BOOL
 					)
 
 			END

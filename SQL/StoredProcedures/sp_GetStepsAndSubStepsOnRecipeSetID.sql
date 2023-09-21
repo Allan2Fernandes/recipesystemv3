@@ -8,6 +8,14 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+/* =============================================
+Author:			AF
+Create date:	2023-09-21
+Description:    This SP returns 2 result sets. The first one resultset contains step data, including the step images and instructions. The second result set contains the sub step data for every step in the first result set.
+Example call:	EXEC [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID] @selectedRecipeSetID = 18435
+-- =============================================
+*/
+
 ALTER PROCEDURE [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]
 	@selectedRecipeSetID INT
 		AS

@@ -8,7 +8,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
+/* =============================================
+Author:			AF
+Create date:	2023-09-21
+Description:    Returns the setID and the datetime that it was modified at, for every version of the specified recipe.
+Example call:	EXEC [dbo].[sp_GetRecipeHistory] @RecipeName = 'Recipe1'
+-- =============================================
+*/
 
 ALTER PROCEDURE [dbo].[sp_GetRecipeHistory]
 	@RecipeName NVARCHAR(50)

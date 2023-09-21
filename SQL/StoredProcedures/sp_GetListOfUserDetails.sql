@@ -8,7 +8,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
+/* =============================================
+Author:			AF
+Create date:	2023-09-21
+Description:	Returns all users including the username, encrypted password and access level
+Example call:	EXEC [dbo].[sp_GetListOfUserDetails]
+-- =============================================
+*/
 
 
 

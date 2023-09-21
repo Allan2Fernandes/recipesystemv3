@@ -8,7 +8,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
+/* =============================================
+Author:			AF
+Create date:	2023-09-21
+Description:	This stored procedure returns all the items and their values (program numbers, coordinates, angles, etc) for the specified action.
+Example call:	EXEC [dbo].[sp_GetItemsShelfValues] @action = 'Expander'
+-- =============================================
+*/
 
 
 CREATE PROCEDURE [dbo].[sp_GetItemsShelfValues]
@@ -50,7 +56,7 @@ CREATE PROCEDURE [dbo].[sp_GetItemsShelfValues]
 				(SELECT MAX(SetID) FROM MergeTestParm WHERE SetID
 				IN
 				(SELECT SetID FROM MergeTestParm WHERE ParamValue = @itemParamValue and ParamID = 30004)
-				AND ParamID = 30001 GROUP BY ParamValue)
+				AND ParamID = 30001 GROUP BY ParamValue) -- Grouping by item name, which is the identifier.
 
 			END
 GO

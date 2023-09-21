@@ -8,6 +8,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+/* =============================================
+Author:			AF
+Create date:	2023-09-21
+Description:	Returns all the recipes and their creation times, active status and SetIDs
+Example call:	EXEC [dbo].[sp_GetListOfRecipes]
+-- =============================================
+*/
 
 
 ALTER PROCEDURE [dbo].[sp_GetListOfRecipes]
