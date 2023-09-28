@@ -24,7 +24,8 @@ function ImageSelectionPopUp(props){
     }, [searchKeyWord])
 
     async function fetchAllImageNames(){
-        var query = `SELECT DISTINCT(ParamValue) FROM File_STRING WHERE ParamID = ${ParamIDs.FileName}`
+        // TODO Turn this into a stored procedure
+        var query = `select T1.ParamValue from File_STRING T1 inner join File_BOOL T2 on T1.SetID = T2.SetID where T1.SetID in (select MAX(SetID) from File_STRING where ParamID = ${ParamIDs.FileName} group by ParamValue) and T2.ParamValue = ${ParamIDs.ImageEnabledParamValue} and T1.ParamID = ${ParamIDs.FileName}`
         await FetchQueries.executeQueryInDatabase(query).then(result => {
             setListOfImageNames(result[0])
             setFilteredListOfImages(result[0])
@@ -63,6 +64,7 @@ function ImageSelectionPopUp(props){
 
             var b64Prefix = ""
             var reducedImageData = ""
+            var statusString = `${ParamIDs.ImageActiveStatus};${ParamIDs.ImageEnabledParamValue};`
 
             if(b64DeterminationCharacter === '/'){
                 b64Prefix = "data:image/jpeg;base64,"
@@ -74,7 +76,8 @@ function ImageSelectionPopUp(props){
             }
             b64Image = b64Image.replace(b64Prefix, "")
             // Construct a query to save the image in the database
-            var query = `EXECUTE sp_SaveParams ${userID}, 'File', '${ParamIDs.FileName};${image_file['name']};${ParamIDs.HighResImageEncoding};${b64Image};${ParamIDs.LowResImageEncoding};${reducedImageData}'`
+            var query = `EXECUTE sp_SaveParams ${userID}, 'File', '${ParamIDs.FileName};${image_file['name']};${ParamIDs.HighResImageEncoding};${b64Image};${ParamIDs.LowResImageEncoding};${reducedImageData};${statusString}'`
+
             FetchQueries.executeQueryInDatabase(query).then(result => fetchAllImageNames()).catch(error => props.setDisplayErrorPage(true))
         };
         reader.readAsDataURL(image_file);
@@ -85,7 +88,7 @@ function ImageSelectionPopUp(props){
     }
 
     function filterListOfImagesByKeyWord(){
-        var filteredList = listOfImageNames.filter(image => image['ParamValue'].includes(searchKeyWord))
+        var filteredList = listOfImageNames.filter(image => image['ParamValue'].toString().toLowerCase().includes(searchKeyWord.toLowerCase()))
         setFilteredListOfImages(filteredList)
     }
 
@@ -101,6 +104,7 @@ function ImageSelectionPopUp(props){
                 <ImagesGridComponent
                     listOfImageNames={filteredListOfImages}
                     handleChangeSelectedStepImageFromDatabase={props.handleChangeSelectedStepImageFromDatabase}
+                    fetchAllImageNames={fetchAllImageNames}
                 />
                 <div>
                     <div id={"ImageSearchDiv"}>

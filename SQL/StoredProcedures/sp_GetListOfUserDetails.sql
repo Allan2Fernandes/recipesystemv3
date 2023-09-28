@@ -1,24 +1,18 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetListOfUserDetails]    Script Date: 08/09/2023 14.51.23 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetListOfUserDetails]    Script Date: 28/09/2023 11.58.56 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-/* =============================================
-Author:			AF
-Create date:	2023-09-21
-Description:	Returns all users including the username, encrypted password and access level
-Example call:	EXEC [dbo].[sp_GetListOfUserDetails]
--- =============================================
-*/
 
 
 
-ALTER PROCEDURE [dbo].[sp_GetListOfUserDetails]
+
+CREATE PROCEDURE [dbo].[sp_GetListOfUserDetails]
 	AS
 		BEGIN
 

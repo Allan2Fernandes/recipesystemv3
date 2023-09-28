@@ -1,7 +1,7 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetDropDownList]    Script Date: 20/09/2023 10.58.07 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetDropDownList]    Script Date: 28/09/2023 11.57.05 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -35,13 +35,13 @@ BEGIN
 
 	IF @ListName = 'Actions' --If no Listname is given, return list of possible actions
 	BEGIN
-		SELECT 'Pick' AS Action     -- ParamValue =  4
-		UNION SELECT 'Expander'     -- ParamValue =  5
-		UNION SELECT 'Kolver'       -- ParamValue =  6
-		UNION SELECT 'Atlas'        -- ParamValue =  7
-		UNION SELECT 'Press'        -- ParamValue =  8
-		UNION SELECT 'Orientation'  -- ParamValue =  9
-		UNION SELECT 'Acknowledge'  -- ParamValue = 10
+		SELECT 'Pick' AS Action
+		UNION SELECT 'Expander'
+		UNION SELECT 'Kolver'
+		UNION SELECT 'Atlas'
+		UNION SELECT 'Press'
+		UNION SELECT 'Orientation'
+		UNION SELECT 'Acknowledge'
 	END
 
 	IF @ListName='Pick'

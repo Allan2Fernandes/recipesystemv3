@@ -1,23 +1,17 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetListOfRecipes]    Script Date: 11/09/2023 11.15.17 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetListOfRecipes]    Script Date: 28/09/2023 11.58.45 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-/* =============================================
-Author:			AF
-Create date:	2023-09-21
-Description:	Returns all the recipes and their creation times, active status and SetIDs
-Example call:	EXEC [dbo].[sp_GetListOfRecipes]
--- =============================================
-*/
 
 
-ALTER PROCEDURE [dbo].[sp_GetListOfRecipes]
+
+CREATE PROCEDURE [dbo].[sp_GetListOfRecipes]
 	AS
 		BEGIN
 			-- Getting all the recipes
@@ -36,7 +30,7 @@ ALTER PROCEDURE [dbo].[sp_GetListOfRecipes]
 			where T1.ParamID = 10002 -- 10002 AND 1 means search for recipes only
 			and T1.ParamValue = 1
 			and T1.SetID in (SELECT MAX(SetID) from Recipe_STRING where ParamID = 35006 group by Recipe_STRING.ParamValue COLLATE Latin1_General_BIN)
-			ORDER BY T2.ParamValue -- Order by recipe name
+			ORDER BY T2.ParamValue
 		END
 GO
 

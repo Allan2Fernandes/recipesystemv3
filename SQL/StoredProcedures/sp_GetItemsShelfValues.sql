@@ -1,20 +1,15 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetItemsShelfValues]    Script Date: 20/09/2023 10.57.40 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetItemsShelfValues]    Script Date: 28/09/2023 11.57.50 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-/* =============================================
-Author:			AF
-Create date:	2023-09-21
-Description:	This stored procedure returns all the items and their values (program numbers, coordinates, angles, etc) for the specified action.
-Example call:	EXEC [dbo].[sp_GetItemsShelfValues] @action = 'Expander'
--- =============================================
-*/
+
+
 
 
 CREATE PROCEDURE [dbo].[sp_GetItemsShelfValues]
@@ -56,7 +51,7 @@ CREATE PROCEDURE [dbo].[sp_GetItemsShelfValues]
 				(SELECT MAX(SetID) FROM MergeTestParm WHERE SetID
 				IN
 				(SELECT SetID FROM MergeTestParm WHERE ParamValue = @itemParamValue and ParamID = 30004)
-				AND ParamID = 30001 GROUP BY ParamValue) -- Grouping by item name, which is the identifier.
+				AND ParamID = 10006 GROUP BY ParamValue)
 
 			END
 GO

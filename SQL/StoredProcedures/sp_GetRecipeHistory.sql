@@ -1,22 +1,17 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetRecipeHistory]    Script Date: 12/09/2023 08.47.13 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetRecipeHistory]    Script Date: 28/09/2023 11.59.14 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-/* =============================================
-Author:			AF
-Create date:	2023-09-21
-Description:    Returns the setID and the datetime that it was modified at, for every version of the specified recipe.
-Example call:	EXEC [dbo].[sp_GetRecipeHistory] @RecipeName = 'Recipe1'
--- =============================================
-*/
 
-ALTER PROCEDURE [dbo].[sp_GetRecipeHistory]
+
+
+CREATE PROCEDURE [dbo].[sp_GetRecipeHistory]
 	@RecipeName NVARCHAR(50)
 		AS
 			BEGIN

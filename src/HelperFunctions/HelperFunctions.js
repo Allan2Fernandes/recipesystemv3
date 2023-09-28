@@ -1,5 +1,6 @@
 import {ParamIDs} from "../Constants";
 import secureLocalStorage from "react-secure-storage";
+import {logDOM} from "@testing-library/react";
 
 class HelperFunctions{
     static ProcessFetchedRecipeData(fetchedData){
@@ -89,6 +90,7 @@ class HelperFunctions{
                 const modificationDate = eachItemData.filter(row => row['ParamID'] === ParamIDs.ModificationDate)[0]
                 const itemName = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemName)[0]
                 const itemEnabledStatus = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemActiveStatus)[0]
+                const uniqueItemIdentifier = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemIdentifier)[0]
                 const setOfData = {
                     Name: itemName,
                     XCoord: xCoord,
@@ -96,7 +98,8 @@ class HelperFunctions{
                     ZCoord: zCoord,
                     orientation: orientation,
                     modificationDate: modificationDate,
-                    Status: itemEnabledStatus['ParamValue']==='1'
+                    Status: itemEnabledStatus['ParamValue']==='1',
+                    uniqueItemIdentifier: uniqueItemIdentifier
                 }
                 processedData.push(setOfData)
             })
@@ -107,16 +110,84 @@ class HelperFunctions{
                 const modificationDate = eachItemData.filter(row => row['ParamID'] === ParamIDs.ModificationDate)[0]
                 const itemName = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemName)[0]
                 const itemEnabledStatus = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemActiveStatus)[0]
+                const uniqueItemIdentifier = eachItemData.filter(row => row['ParamID'] === ParamIDs.ItemIdentifier)[0]
                 const setOfData = {
                     Name: itemName,
                     ShelfValue: ShelfValue,
                     ModificationDate: modificationDate,
-                    Status: itemEnabledStatus['ParamValue']==='1'
+                    Status: itemEnabledStatus['ParamValue']==='1',
+                    uniqueItemIdentifier: uniqueItemIdentifier
                 }
                 processedData.push(setOfData)
             })
         }
         return processedData
+    }
+
+    static processItemsData(itemsData){
+        // For every action
+        itemsData.forEach(action => {
+            // Get the unique SetIDs
+            var listOfUniqueSetIDs = new Set()
+            // Looping through the rows of the item list of every action
+            action['Items'].forEach(row => {
+                listOfUniqueSetIDs.add(row['SetID'])
+            })
+            // Using the unique SetIDs, Create a single row for every item.
+            // The Properties are: ShelfNumber, ItemIdentifier, Active status, Modification date, ItemName, ActionType
+            if(action['Action'] === "Expander"){
+                // The structure of expander items is different to all the others
+                // Properties for exapander are: xCoord, yCoord, zCoord, ExpanderOrientation, ItemIdentifier, Active status, modification date, itemName, action type
+                var listOfItemsData = []
+                listOfUniqueSetIDs.forEach(ID => {
+                    var itemSet = action['Items'].filter(row => row['SetID'] === ID)
+                    var xCoord = itemSet.filter(row => row['ParamID'] === ParamIDs.ExpanderXCoord)[0]['ParamValue']
+                    var yCoord = itemSet.filter(row => row['ParamID'] === ParamIDs.ExpanderYCoord)[0]['ParamValue']
+                    var zCoord = itemSet.filter(row => row['ParamID'] === ParamIDs.ExpanderZCoord)[0]['ParamValue']
+                    var expanderOrientation = itemSet.filter(row => row['ParamID'] === ParamIDs.ExpanderOrientation)[0]['ParamValue']
+                    var itemIdentifier = itemSet.filter(row => row['ParamID'] === ParamIDs.ItemIdentifier)[0]['ParamValue']
+                    var status = itemSet.filter(row => row['ParamID'] === ParamIDs.ItemActiveStatus)[0]['ParamValue']
+                    var modificationDate = itemSet.filter(row => row['ParamID'] === ParamIDs.ModificationDate)[0]['ParamValue']
+                    var itemName = itemSet.filter(row => row['ParamID'] === ParamIDs.ItemName)[0]['ParamValue']
+                    var actionType = itemSet.filter(row => row['ParamID'] === ParamIDs.ActionType)[0]['ParamValue']
+                    var itemData = {
+                        XCoord: xCoord,
+                        YCoord: yCoord,
+                        ZCoord: zCoord,
+                        ExpanderOrientation: expanderOrientation,
+                        ItemIdentifier: itemIdentifier,
+                        Status: status,
+                        ModificationDate: modificationDate,
+                        ItemName: itemName,
+                        ActionType: actionType
+                    }
+                    listOfItemsData.push(itemData)
+                })
+                action['Items'] = listOfItemsData
+            }else{
+                var listOfItemsData = []
+                listOfUniqueSetIDs.forEach(ID => {
+                    var itemSet = action['Items'].filter(row => row['SetID'] === ID)
+                    var shelfNumber = itemSet.filter(row => row['ParamID'] ===ParamIDs.ShelfNumber)[0]['ParamValue']
+                    var itemIdentifier = itemSet.filter(row => row['ParamID'] === ParamIDs.ItemIdentifier)[0]['ParamValue']
+                    var status = itemSet.filter(row => row['ParamID'] === ParamIDs.ItemActiveStatus)[0]['ParamValue']
+                    var modificationDate = itemSet.filter(row => row['ParamID'] === ParamIDs.ModificationDate)[0]['ParamValue']
+                    var itemName = itemSet.filter(row => row['ParamID'] === ParamIDs.ItemName)[0]['ParamValue']
+                    var actionType = itemSet.filter(row => row['ParamID'] === ParamIDs.ActionType)[0]['ParamValue']
+                    var itemData = {
+                        ShelfNumber: shelfNumber,
+                        ItemIdentifier: itemIdentifier,
+                        Status: status,
+                        ModificationDate: modificationDate,
+                        ItemName: itemName,
+                        ActionType: actionType
+                    }
+                    listOfItemsData.push(itemData)
+                })
+                action['Items'] = listOfItemsData
+            }
+        })
+
     }
 
     static formatDateTimeFromDataBase(dateTimeFromDB){

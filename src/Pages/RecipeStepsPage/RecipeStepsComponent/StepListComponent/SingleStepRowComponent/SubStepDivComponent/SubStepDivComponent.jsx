@@ -8,11 +8,13 @@ import HelperFunctions from "../../../../../../HelperFunctions/HelperFunctions";
 import FetchQueries from "../../../../../../FetchHandler/FetchQueries";
 
 function SubStepDivComponent(props){
-    const [itemIsEnabled, setItemIsEnabled] = useState(true)
+    //const [itemIsEnabled, setItemIsEnabled] = useState(true)
 
     useEffect(()=> {
         // Query the database to check if the item is disabled
-        getActiveStatusOfItem()
+        //getActiveStatusOfItem()
+        // console.log(props.subStep)
+        // console.log(props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items'])
     }, [props.subStep])
 
     function deleteSubStep(){
@@ -22,19 +24,20 @@ function SubStepDivComponent(props){
         props.setRecipeData(newRecipeData)
     }
 
-    async function getActiveStatusOfItem(){
-        var actionName = props.subStep['Action']['ParamValue']
-        var itemName = props.subStep['Item']['ParamValue']
-        await FetchQueries.executeGetItemStatus(actionName, itemName)
-            .then(result => {
-                setItemIsEnabled(result[0][0]['ParamValue'])
-            }).catch(error => console.log(error))
-    }
+    // async function getActiveStatusOfItem(){
+    //     var actionName = props.subStep['Action']['ParamValue']
+    //     var itemName = props.subStep['Item']['ParamValue']
+    //     await FetchQueries.executeGetItemStatus(actionName, itemName)
+    //         .then(result => {
+    //             setItemIsEnabled(result[0][0]['ParamValue'])
+    //         }).catch(error => console.log(error))
+    // }
 
     function filterItemsForAction(){
         // This is a poor solution. Fix it
         try{
-            return props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items']
+            var filteredList = props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items']
+            return filteredList
         }catch(error){
             console.log("Error in filter items for actions")
             return []
@@ -69,17 +72,28 @@ function SubStepDivComponent(props){
                         </select>
                     </td>
                     <td>
-                        <select value={props.subStep['Item']['ParamValue']}
-                                onChange={(event) => props.changeHandlerSubStepName(event, "Item", props.stepIndex, props.subStepIndex)}
+                        <select value={
+                            props.itemsAndTheirActions
+                                .filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items']
+                                .filter(itemRow => itemRow['ItemIdentifier'] === props.subStep['Item']['ParamValue'])[0]['ItemName']
+                        }
+                                onChange={(event) => props.changeHandlerSubStepItem(
+                                    event,
+                                    props.stepIndex,
+                                    props.subStepIndex,
+                                    props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items']
+                                )}
                                 disabled={!Permissions.editRecipeSteps[HelperFunctions.getAccessLevelFromLocalStorage()]}
-                                className={itemIsEnabled?"ItemIsEnabled":"ItemIsDisabled"}
+                                className={props.itemsAndTheirActions
+                                    .filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items']
+                                    .filter(itemRow => itemRow['ItemIdentifier'] === props.subStep['Item']['ParamValue'])[0]['Status']==="1"?"ItemIsEnabled":"ItemIsDisabled"}
                         >
                             {/*
                             Have to show the items which correspond to that action. Get the index which corresponds to the Action and then display those items
                              */}
                             {
                                 filterItemsForAction().map((item, itemIndex) => (
-                                    <option key={itemIndex}>{item['ParamValue']}</option>
+                                    <option key={itemIndex}>{item['ItemName']}</option>
                                 ))
                             }
                         </select>

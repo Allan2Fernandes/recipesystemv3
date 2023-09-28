@@ -1,22 +1,22 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]    Script Date: 08/09/2023 14.51.40 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]    Script Date: 28/09/2023 11.59.38 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-/* =============================================
-Author:			AF
-Create date:	2023-09-21
-Description:    This SP returns 2 result sets. The first one resultset contains step data, including the step images and instructions. The second result set contains the sub step data for every step in the first result set.
-Example call:	EXEC [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID] @selectedRecipeSetID = 18435
--- =============================================
-*/
 
-ALTER PROCEDURE [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]
+
+
+
+
+
+
+
+CREATE PROCEDURE [dbo].[sp_GetStepsAndSubStepsOnRecipeSetID]
 	@selectedRecipeSetID INT
 		AS
 			BEGIN

@@ -56,7 +56,7 @@ class FetchQueries{
     }
 
     static executeGetActionOptions(){
-        var query = "EXEC [dbo].[sp_GetDropDownList]"
+        var query = "EXEC [dbo].[sp_GetDropDownListV2]"
         return this.executeQueryInDatabase(query)
     }
 
@@ -64,7 +64,7 @@ class FetchQueries{
         var itemsAndActions = []
         var actionsClone = structuredClone(actions)
         // Base stored procedure name. Add paramters to the stored procedure later
-        var baseStoredProcedureString =  "EXECUTE [dbo].[sp_GetDropDownList]"
+        var baseStoredProcedureString =  "EXECUTE [dbo].[sp_GetDropDownListV2]"
         for (let i = 0; i < actionsClone.length; i++) {
             var action = actionsClone[i]
             var storedProcedure = `${baseStoredProcedureString} ${action['Action']}`

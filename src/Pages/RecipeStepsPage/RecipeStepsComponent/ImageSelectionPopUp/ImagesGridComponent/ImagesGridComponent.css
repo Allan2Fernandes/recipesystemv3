@@ -23,3 +23,14 @@
 #ImageNameLabel{
     color: white;
 }
+
+#DisableImageButton{
+    margin-right: 5px;
+}
+
+#UploadIcon{
+    color: white;
+}
+
+#OverrideImageButton{
+}

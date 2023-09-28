@@ -35,6 +35,7 @@ export const ParamIDs = {
     LowResImageEncoding: 35010,
     ModificationDate: 30000,
     ShelfNumber: 10005,
+    ItemIdentifier: 10006,
     ActionType: 30004,
     PickActionTypeParamValue: 4,
     ExpanderActionTypeParamValue: 5,
@@ -57,7 +58,10 @@ export const ParamIDs = {
     RecipeDisabledParamValue: 0,
     ItemActiveStatus: 20002,
     ItemEnabledParamValue: 1,
-    ItemDisabledParamValue: 0
+    ItemDisabledParamValue: 0,
+    ImageActiveStatus: 20003,
+    ImageEnabledParamValue: 1,
+    ImageDisabledParamValue: 0
 }
 
 export const Permissions = {

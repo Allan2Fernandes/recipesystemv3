@@ -43,7 +43,7 @@ function SingleImageComponent(props){
 
     return (
         <div id={props.stepImageIdentifier==="Image1"?"SingleImage1MainDiv":"SingleImageMainDiv"}>
-            <img id={props.stepImageIdentifier==="Image1"?"Image1Element":"ImageElement"} src={props.image===blank_image?props.image:`${baseURL}api/Image/getImageOnFileName/${props.image}`} alt={"Stock"}/>
+            <img id={props.stepImageIdentifier==="Image1"?"Image1Element":"ImageElement"} src={props.image===blank_image?props.image:`${baseURL}api/Image/getImageOnFileName/${props.image}/${new Date().getTime().toString()}`} alt={"Stock"}/>
             <div id={"UploadNewImageDiv"}>
                 <input type={"file"}
                     // The image index and step index are necessary otherwise images will be uploaded to the wrong step or index

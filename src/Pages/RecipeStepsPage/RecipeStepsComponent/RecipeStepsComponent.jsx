@@ -40,6 +40,7 @@ function RecipeStepsComponent(props){
         await FetchQueries.getStepsAndSubStepsOfRecipe(props.selectedRecipeSetID).then(result => {
             // Process the data into a usable format
             var processedData = HelperFunctions.ProcessFetchedRecipeData(result)
+            console.log(processedData)
             processedData.forEach((step, stepIndex) => {
                 if(step['Name']['StepNumber']===props.preDefinedSelectedStepIndex){
                     setSelectedStepIndex(stepIndex)
@@ -54,6 +55,8 @@ function RecipeStepsComponent(props){
         var actionsData = await FetchQueries.executeGetActionOptions().catch(e => props.setDisplayErrorPage(true))
         setAllPossibleActions(actionsData[0])
         var itemsData = await FetchQueries.executeGetItemsForEachAction(actionsData[0]).catch(e => props.setDisplayErrorPage(true))
+        // Process the itemsData
+        HelperFunctions.processItemsData(itemsData)
         setItemsAndTheirActions(itemsData)
     }
 
@@ -66,14 +69,22 @@ function RecipeStepsComponent(props){
             if(fieldName==="Action"){
                 // Change the action for this sub step too. It has to be the default value for this action
                 var selectedAction = itemsAndTheirActions.filter(row => row['Action'] === event.target.value)[0]
-                var defaultItem = selectedAction['Items'][0]['ParamValue']
+                var defaultItem = selectedAction['Items'][0]['ItemIdentifier']
                 newRecipeData[stepIndex]['SubSteps'][subStepIndex]['Item']['ParamValue'] = defaultItem
             }
+
             setRecipeData(newRecipeData)
         }catch(error){
             console.log(error)
             props.setDisplayErrorPage(true)
         }
+    }
+
+    function changeHandlerSubStepItem(event, stepIndex, subStepIndex, itemList){
+        // Find the itemIdentifier corresponding to the selected itemName and then set the itemIdentifier in the recipe data
+        var newRecipeData = structuredClone(recipeData)
+        newRecipeData[stepIndex]['SubSteps'][subStepIndex]['Item']['ParamValue'] = itemList.filter(row => row['ItemName'] === event.target.value)[0]['ItemIdentifier']
+        setRecipeData(newRecipeData)
     }
 
     function reorderSubSteps(event, stepIndex, subStepIndex, direction){
@@ -207,6 +218,7 @@ function RecipeStepsComponent(props){
                 setRecipeData={setRecipeData}
                 itemsAndTheirActions={itemsAndTheirActions}
                 changeHandlerSubStepName={changeHandlerSubStepProperty}
+                changeHandlerSubStepItem={changeHandlerSubStepItem}
                 reorderSubSteps={reorderSubSteps}
                 setDisplayErrorPage={props.setDisplayErrorPage}
                 saveRecipe={props.saveRecipe}

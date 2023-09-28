@@ -1,20 +1,18 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_GetItemActiveStatusOnName]    Script Date: 20/09/2023 11.05.50 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetItemActiveStatusOnName]    Script Date: 28/09/2023 11.57.35 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-/* =============================================
-Author:			AF
-Create date:	2023-09-21
-Description:	This stored procedure returns 0 or 1, depending on if the item is enabled (1) or disabled (0)
-Example call:	EXEC [dbo].[sp_GetItemActiveStatusOnName] @action = 'Expander', @itemName = 'EXP_1'
--- =============================================
-*/
+
+
+
+
+/****** Script for SelectTopNRows command from SSMS  ******/
 
 CREATE PROCEDURE [dbo].[sp_GetItemActiveStatusOnName]
 	@action nvarchar(50),
@@ -56,7 +54,7 @@ CREATE PROCEDURE [dbo].[sp_GetItemActiveStatusOnName]
 					(
 					SELECT MAX(SetID) FROM Recipe_STRING WHERE SetID IN
 					(SELECT SetID FROM Recipe_STRING WHERE ParamID = 30004 AND ParamValue = @itemParamValue)
-					AND ParamValue = @itemName -- Search the max setID for the chosen item name. Then using that SetID, get the status from another table, Recipe_BOOL
+					AND ParamValue = @itemName
 					)
 
 			END

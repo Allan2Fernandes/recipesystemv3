@@ -118,6 +118,12 @@ function ShelfSetupPage(){
         await fetchItemsForAction(selectedDefaultAction)
     }
 
+    async function fetchMaxItemIdentifier(){
+        var query = ` select MAX(ParamValue) AS 'MaxID' from [dbo].[Recipe_INT] where ParamID = ${ParamIDs.ItemIdentifier}`
+        var fetchedData = await FetchQueries.executeQueryInDatabase(query).catch(e => setDisplayErrorPage(true))
+        return fetchedData[0]
+    }
+
     function changeHandlerActionSelection(event){
         // Triggered when the selected action from the drop down box changes
         var newlySelectedAction = event.target.value
@@ -183,6 +189,8 @@ function ShelfSetupPage(){
                 return
             }
         }
+        // Get the next item identifier by getting the current max and incrementing it by 1.
+        var maxCurrentItemIdentifier = await fetchMaxItemIdentifier()
         // Get the UserID
         var userDetails = secureLocalStorage.getItem("UserDetails")
         // Extract just the setID which is the UserID in the query
@@ -193,6 +201,7 @@ function ShelfSetupPage(){
         const shelfNumberParamID = ParamIDs.ShelfNumber
         // Set up the creation query
         var createItemQuery = ""
+        const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(maxCurrentItemIdentifier===''?0:(maxCurrentItemIdentifier[0]['MaxID']) + 1)};`
         var enabledStatusString = `${ParamIDs.ItemActiveStatus};${ParamIDs.ItemEnabledParamValue};`
         if(selectedAction === "Expander"){
             // Add on the item property values
@@ -205,30 +214,30 @@ function ShelfSetupPage(){
             var yString = `${yParamID};${newItemPropertyValues.property2};`
             var zString = `${zParamID};${newItemPropertyValues.property3};`
             // Put all those strings together
-            var orientationString = `${orientationParamID};${orientationOptions.filter(row => row['Name']['ParamValue'] === newItemPropertyValues.property4)[0]['ShelfValue']['ParamValue']};`
+            var orientationString = `${orientationParamID};${orientationOptions.filter(row => row['Name']['ParamValue'] === newItemPropertyValues.property4)[0]['uniqueItemIdentifier']['ParamValue']};`
             // Finally use that string in the string in the query.
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${xString}${yString}${zString}${orientationString}${enabledStatusString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${xString}${yString}${zString}${orientationString}${enabledStatusString}${itemIdentiferString}'`
         }else if(selectedAction === "Pick"){
             // For the rest of the actions, it is a single property that has to be put into the query string. The ParamValue for the different actions is different.
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PickActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PickActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}${itemIdentiferString}'`
         }else if(selectedAction === "Kolver"){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.KolverActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.KolverActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}${itemIdentiferString}'`
         }else if(selectedAction === "Atlas"){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AtlasActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AtlasActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}${itemIdentiferString}'`
         }else if(selectedAction === "Press"){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PressActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PressActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}${itemIdentiferString}'`
         }else if(selectedAction === "Orientation"){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.OrientationActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.OrientationActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}${itemIdentiferString}'`
         }else if(selectedAction === "Acknowledge"){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
-            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AcknowledgeActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}'`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AcknowledgeActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}${itemIdentiferString}'`
         }
-        // Execute the query after it has been constructed.
+        //Execute the query after it has been constructed.
         FetchQueries.executeQueryInDatabase(createItemQuery).then(result => {
             fetchItemsForAction(selectedAction)
             // Reset states after the save.
@@ -280,7 +289,8 @@ function ShelfSetupPage(){
         if(selectedAction==="Expander"){
             // Add on the item property values
             allActionsItems.forEach((item, index) => {
-
+                const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
+                const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(uniqueIdentifier)};`
                 const xParamID = ParamIDs.ExpanderXCoord
                 const yParamID = ParamIDs.ExpanderYCoord
                 const zParamID = ParamIDs.ExpanderZCoord
@@ -290,71 +300,88 @@ function ShelfSetupPage(){
                 var zString = `${zParamID};${item['ZCoord']['ParamValue']};`
                 var orientationString = `${orientationParamID};${item['orientation']['ParamValue']};`
                 var StatusString = `${ParamIDs.ItemActiveStatus};${item['Status']?ParamIDs.ItemEnabledParamValue:ParamIDs.ItemDisabledParamValue};`
-                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${xString}${yString}${zString}${orientationString}${StatusString}'`
+                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${xString}${yString}${zString}${orientationString}${StatusString}${itemIdentiferString}'`
                 // Update the original item and disable it
-                var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${xString}${yString}${zString}${orientationString}${disableItemString}'`
-                // It is important to disable first and then create the new item.
-                createItemsQuery += disableOriginalItemQuery
+                // var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ExpanderActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${xString}${yString}${zString}${orientationString}${disableItemString}'`
+                // // It is important to disable first and then create the new item.
+                // createItemsQuery += disableOriginalItemQuery
                 createItemsQuery += createItemQuery
 
             })
         }else if(selectedAction ==="Kolver"){
             allActionsItems.forEach((item, index) => {
+                const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
+                const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(uniqueIdentifier)};`
                 var shelfString = `${shelfNumberParamID};${item['ShelfValue']['ParamValue']};`
                 var StatusString = `${ParamIDs.ItemActiveStatus};${item['Status']?ParamIDs.ItemEnabledParamValue:ParamIDs.ItemDisabledParamValue};`
-                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.KolverActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}'`
+                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.KolverActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}${itemIdentiferString}'`
                 // Update the original item and disable it
-                var disableOriginalItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.KolverActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
-                createItemsQuery += disableOriginalItemQuery
+                // var disableOriginalItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.KolverActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
+                // createItemsQuery += disableOriginalItemQuery
                 createItemsQuery += createItemQuery
             })
         }else if(selectedAction ==="Atlas"){
             allActionsItems.forEach((item, index) => {
+                const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
+                const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(uniqueIdentifier)};`
                 var shelfString = `${shelfNumberParamID};${item['ShelfValue']['ParamValue']};`
                 var StatusString = `${ParamIDs.ItemActiveStatus};${item['Status']?ParamIDs.ItemEnabledParamValue:ParamIDs.ItemDisabledParamValue};`
                 // Create a new Item by using saveParams with the updated details
-                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AtlasActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}'`
+                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AtlasActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}${itemIdentiferString}'`
                 // Update the original item and disable it
-                var disableOriginalItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AtlasActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
-                createItemsQuery += disableOriginalItemQuery
+                // var disableOriginalItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AtlasActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
+                // createItemsQuery += disableOriginalItemQuery
                 createItemsQuery += createItemQuery
             })
         }else if(selectedAction ==="Press"){
             allActionsItems.forEach((item, index) => {
+                const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
+                const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(uniqueIdentifier)};`
                 var shelfString = `${shelfNumberParamID};${item['ShelfValue']['ParamValue']};`
                 var StatusString = `${ParamIDs.ItemActiveStatus};${item['Status']?ParamIDs.ItemEnabledParamValue:ParamIDs.ItemDisabledParamValue};`
-                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PressActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}'`
+                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PressActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}${itemIdentiferString}'`
                 // Update the original item and disable it
-                var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PressActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
-                createItemsQuery += disableOriginalItemQuery
+                // var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PressActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
+                // createItemsQuery += disableOriginalItemQuery
                 createItemsQuery += createItemQuery
 
             })
         }else if(selectedAction ==="Pick"){
             allActionsItems.forEach((item, index) => {
+                const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
+                const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(uniqueIdentifier)};`
                 var shelfString = `${shelfNumberParamID};${item['ShelfValue']['ParamValue']};`
                 var StatusString = `${ParamIDs.ItemActiveStatus};${item['Status']?ParamIDs.ItemEnabledParamValue:ParamIDs.ItemDisabledParamValue};`
-                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PickActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}'`
+                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PickActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}${itemIdentiferString}'`
                 // Update the original item and disable it
-                var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PickActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
-                createItemsQuery += disableOriginalItemQuery
+                // var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PickActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
+                // createItemsQuery += disableOriginalItemQuery
                 createItemsQuery += createItemQuery
             })
         }else if(selectedAction === "Orientation"){
             // No updates can be made to orientations
-            return
-        }else if(selectedAction === "Acknowledge"){
             allActionsItems.forEach((item, index) => {
+                const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
+                const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(uniqueIdentifier)};`
                 var shelfString = `${shelfNumberParamID};${item['ShelfValue']['ParamValue']};`
                 var StatusString = `${ParamIDs.ItemActiveStatus};${item['Status']?ParamIDs.ItemEnabledParamValue:ParamIDs.ItemDisabledParamValue};`
-                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AcknowledgeActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}'`
+                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.OrientationActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}${itemIdentiferString}'`
+                createItemsQuery += createItemQuery
+            })
+        }else if(selectedAction === "Acknowledge"){
+            allActionsItems.forEach((item, index) => {
+                const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
+                const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(uniqueIdentifier)};`
+                var shelfString = `${shelfNumberParamID};${item['ShelfValue']['ParamValue']};`
+                var StatusString = `${ParamIDs.ItemActiveStatus};${item['Status']?ParamIDs.ItemEnabledParamValue:ParamIDs.ItemDisabledParamValue};`
+                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AcknowledgeActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}${itemIdentiferString}'`
                 // Update the original item and disable it
-                var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AcknowledgeActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
-                createItemsQuery += disableOriginalItemQuery
+                //var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AcknowledgeActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}${itemIdentiferString}'`
+                //createItemsQuery += disableOriginalItemQuery
                 createItemsQuery += createItemQuery
             })
         }
-        // Execute the query in the database.
+        //Execute the query in the database.
         FetchQueries.executeQueryInDatabase(createItemsQuery).then(result => {
             fetchItemsForAction(selectedAction)
             setSearchPhrase("")
@@ -375,9 +402,9 @@ function ShelfSetupPage(){
                 <tr key={itemIndex} className={`ActionShelfSetupRow ${itemIndex%2===1?"EvenActionShelfSetupRow":"OddActionShelfSetupRow"} ItemRow`} onClick={(event) => clickHandlerSelectItemRow(event, itemIndex)}>
                     <td>
                         {
-                            // itemIndex===selectedItemRowIndex?
-                            //     <input type={"text"} value={item['Name']['ParamValue']} className={"EditInputField"} onChange={(event) => fieldEditChangeHandler(event, item['Name']['SetID'], "Name")}/>
-                            //     :
+                            itemIndex===selectedItemRowIndex?
+                                <input type={"text"} value={item['Name']['ParamValue']} className={"EditInputField"} onChange={(event) => fieldEditChangeHandler(event, item['Name']['SetID'], "Name")}/>
+                                :
                                 <label>{item['Name']['ParamValue']}</label>
                         }
                     </td>
@@ -415,7 +442,8 @@ function ShelfSetupPage(){
                         {
                             item['orientation'] &&
                             (
-                                <label>{item['orientation']['ParamValue']}</label>
+                                // <label>{item['orientation']['ParamValue']}</label>
+                                <label>{orientationOptions.filter(row => row['uniqueItemIdentifier']['ParamValue'] === item['orientation']['ParamValue'])[0]['ShelfValue']['ParamValue']}</label>
                             )
                         }
                     </td>
@@ -431,9 +459,12 @@ function ShelfSetupPage(){
                 <tr key={itemIndex} className={`ActionShelfSetupRow ${itemIndex%2===1?"EvenActionShelfSetupRow":"OddActionShelfSetupRow"} ItemRow`} onClick={(event) => clickHandlerSelectItemRow(event, itemIndex)}>
                     <td>
                         {
-                            // itemIndex===selectedItemRowIndex&&selectedAction!=="Orientation"?
-                            //     <input type={"text"} value={item['Name']['ParamValue']} className={"EditInputField"} onChange={(event) => fieldEditChangeHandler(event, item['Name']['SetID'], "Name")}/>
-                            //     :
+                            itemIndex===selectedItemRowIndex
+                            // &&
+                            // selectedAction!=="Orientation"
+                                ?
+                                <input type={"text"} value={item['Name']['ParamValue']} className={"EditInputField"} onChange={(event) => fieldEditChangeHandler(event, item['Name']['SetID'], "Name")}/>
+                                :
                                 <label>{item['Name']['ParamValue']}</label>
                         }
                     </td>
@@ -441,7 +472,10 @@ function ShelfSetupPage(){
                         {
                             item['ShelfValue'] &&
                             (
-                                itemIndex===selectedItemRowIndex&&selectedAction!=="Orientation"?
+                                itemIndex===selectedItemRowIndex
+                                // &&
+                                // selectedAction!=="Orientation"
+                                    ?
                                     <input type={"number"} value={item['ShelfValue']['ParamValue']} className={"EditInputField"} onChange={(event) => fieldEditChangeHandler(event, item['Name']['SetID'], "ShelfValue")}/>
                                     :
                                     <label>{item['ShelfValue']['ParamValue']}</label>
@@ -491,7 +525,9 @@ function ShelfSetupPage(){
                         <div id={"SaveChangesDiv"}>
                             <button
                                 onClick={saveItemChangesInDatabase}
-                                disabled={selectedAction==="Orientation" || !Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}>
+                                disabled={
+                                // selectedAction==="Orientation" ||
+                                    !Permissions.editShelfSetUpValues[HelperFunctions.getAccessLevelFromLocalStorage()]}>
                                 Save changes
                             </button>
                         </div>

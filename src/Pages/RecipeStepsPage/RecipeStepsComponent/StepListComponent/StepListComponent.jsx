@@ -119,6 +119,7 @@ function StepListComponent(props){
                                 stepIndex={stepIndex}
                                 itemsAndTheirActions={props.itemsAndTheirActions}
                                 changeHandlerSubStepName={props.changeHandlerSubStepName}
+                                changeHandlerSubStepItem={props.changeHandlerSubStepItem}
                                 reorderSubSteps={props.reorderSubSteps}
                                 setDisplayErrorPage={props.setDisplayErrorPage}
                                 addSubStepToStep={props.addSubStepToStep}
