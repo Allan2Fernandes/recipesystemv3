@@ -244,6 +244,13 @@ function ShelfSetupPage(){
             setSearchPhrase("")
             setItemsUpdated(false)
             setSelectedItemRowIndex(-1)
+            setNewItemPropertyValues({
+                itemName: "",
+                property1: "",
+                property2: "",
+                property3: "",
+                property4: ""
+            })
         }).catch(error => {
             setDisplayErrorPage(true)
         })

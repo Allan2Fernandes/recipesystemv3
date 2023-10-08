@@ -42,6 +42,7 @@ function CreateRecipeComponent(props){
         await FetchQueries.executeQueryInDatabase(createRecipeQuery)
         // Refresh the list of recipes in the table
         await props.refreshListOfRecipes()
+        setNewRecipeName("")
     }
 
     return (
