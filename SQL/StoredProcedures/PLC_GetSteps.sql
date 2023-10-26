@@ -1,12 +1,13 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[PLC_GetSteps]    Script Date: 20-09-2023 08:29:16 ******/
+/****** Object:  StoredProcedure [dbo].[PLC_GetSteps]    Script Date: 26-10-2023 08:13:22 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 /* =============================================
@@ -25,7 +26,7 @@ Example:        EXEC PLC_GetSteps @tstring,@debug
 CREATE PROCEDURE [dbo].[PLC_GetSteps]
 	@tstring VARCHAR(250)
 	,@debug INT=0 --Set to true to show additional data
-AS
+	AS
 BEGIN
 SET NOCOUNT ON
 
@@ -33,7 +34,7 @@ DECLARE @ParamID NVARCHAR(MAX)
 DECLARE @ParamValue NVARCHAR(MAX)
 DECLARE @selectedRecipeSetID INT
 
---WHILE LEN( @tstring ) > 0 BEGIN
+--WHILE LEN( @tstring ) > 0 BEGIN 
 	--Find ParamID in first part of Where Pair
 	SELECT @ParamID = ExtractedValue, @tstring = RestString FROM dbo.ufn_StringEater(@tstring)
 
@@ -167,7 +168,7 @@ SELECT @selectedRecipeSetID=MAX(SetID) FROM Recipe_STRING WHERE ParamValue = @Pa
 		--IF @debug=1 select * from @ConcatenatedResults T1 WHERE ParamID=35004 ORDER BY StepSetID, SubStepNumber
 		IF @debug=1 select * from @ConcatenatedResults T1 ORDER BY StepSetID, SubStepNumber
 		--IF @debug=1 select ParamValue,SubStepNumber from @ConcatenatedResults T1 ORDER BY StepSetID, SubStepNumber
-
+		
 		--------------------PLC DATA BELOW:----------------------------------------------------------------------------------------------------
 		IF @debug=1 SELECT 'list3',* FROM @list3
 		IF @debug=1 SELECT '@ConcatenatedResults',* FROM @ConcatenatedResults ORDER BY MainStepNumber, SubStepNumber
@@ -178,12 +179,12 @@ SELECT @selectedRecipeSetID=MAX(SetID) FROM Recipe_STRING WHERE ParamValue = @Pa
 		DECLARE @PLC_INT TABLE (ParamID INT, ParamValue smallint)
 		DECLARE @PLC_DINT TABLE (ParamID INT, ParamValue INT)
 		DECLARE @PLC_STRING TABLE (ParamID INT, ParamValue VARCHAR(254))
-
+		
 		DECLARE @MainStepNr INT=1
 		DECLARE @SubStepNr INT=1
 		DECLARE @TotalStepNr INT=0
 		DECLARE @oldStepSetID INT
-
+				
 		--Loop through each step
 		DECLARE stepCursor CURSOR FOR
 		SELECT StepSetID, MainStepNumber,SubStepNumber, ParamValue FROM @ConcatenatedResults WHERE ParamID=35004 ORDER BY MainStepNumber, SubStepNumber
@@ -195,22 +196,57 @@ SELECT @selectedRecipeSetID=MAX(SetID) FROM Recipe_STRING WHERE ParamValue = @Pa
 		 --SELECT @SetID,@ParamValue,ufn_GetSetupValue(@ParamValue)
 		 IF @debug=1 SELECT dbo.ufn_GetSetupValue(@ParamValue) Action,@ParamValue
 		 --IF @debug=1 SELECT @MainStepNr MainStepNr, @SubStepNr SubStep, @TotalStepNr TotalStep
-
+		 
 		 SET @ParamID=10001+(@TotalStepNr*10)
 		 INSERT INTO @PLC_INT (ParamID,ParamValue) VALUES (@ParamID, dbo.ufn_GetSetupValue(@ParamValue)) --Action, ParamID 10001
-
-		 --Lookup action detail (pick lamp number, tool number etc): (10002)
-		 SET @ParamID=@ParamID+1
-		 INSERT INTO @PLC_INT  (ParamID,ParamValue) VALUES (@ParamID,(
-		 SELECT ParamValue FROM MergeTestParm WHERE ParamID=10005 AND  SetID --10005 is lamp number
-				IN
-				(SELECT MAX(SetID) FROM MergeTestParm WHERE SetID --Select newest
-				IN
-				(SELECT SetID FROM MergeTestParm WHERE ParamValue =  dbo.ufn_GetSetupValue(@ParamValue) and ParamID = 30004)
-				AND ParamID = 30001 AND ParamValue=
-				(SELECT ParamValue FROM @ConcatenatedResults WHERE StepSetID=@SetID AND SubStepNumber=@SubStepNr AND ParamID=35005) --Action type
+		 
+			--Lookup action detail (pick lamp number, tool number etc): (10002)
+			SET @ParamID=@ParamID+1
+			INSERT INTO @PLC_INT  (ParamID,ParamValue) VALUES 
+			(@ParamID,
+				(
+					SELECT ParamValue FROM MergeTestParm WHERE ParamID=10005 AND  SetID --10005 is lamp number
+					IN
+					(SELECT MAX(SetID) FROM MergeTestParm WHERE SetID --Select newest
+						IN
+						(SELECT SetID FROM MergeTestParm WHERE ParamValue =  dbo.ufn_GetSetupValue(@ParamValue) and ParamID = 30004)
+						AND ParamID = 30001 AND ParamValue=
+						(
+							SELECT ParamValue FROM Recipe_STRING WHERE ParamID=30001 AND SetID =
+								(
+									SELECT MAX(SetID) FROM Recipe_INT WHERE ParamID=10006 AND ParamValue=(SELECT ParamValue FROM @ConcatenatedResults WHERE StepSetID=@SetID AND SubStepNumber=@SubStepNr AND ParamID=35005)
+								)
+						) --Action type			
+					)
 				)
-		 ))
+			)
+
+		  --SELECT ParamValue FROM MergeTestParm WHERE ParamID=10005 
+		  --AND  SetID --10005 is lamp number
+				--IN
+				--(
+				--	SELECT MAX(SetID) FROM MergeTestParm WHERE SetID --Select newest
+				--	IN
+				--		(SELECT SetID FROM MergeTestParm WHERE ParamValue =  dbo.ufn_GetSetupValue(@ParamValue) and ParamID = 30004)
+				--		AND ParamID = 30001 AND ParamValue=
+				--			(
+				--				SELECT ParamValue FROM Recipe_STRING WHERE ParamID=30001 AND SetID =
+				--					(
+				--						SELECT MAX(SetID) FROM Recipe_INT WHERE ParamID=10006 AND ParamValue=(SELECT ParamValue FROM @ConcatenatedResults WHERE StepSetID=@SetID AND SubStepNumber=@SubStepNr AND ParamID=35005)
+				--					)
+				--			) --Action type				
+				--)
+
+				--SELECT * FROM MergeTestParm WHERE SetID --Select newest
+				--IN
+				--(SELECT SetID FROM MergeTestParm WHERE ParamValue =  dbo.ufn_GetSetupValue(@ParamValue) and ParamID = 30004)
+				--AND ParamID = 30001
+				----SELECT ParamValue FROM @ConcatenatedResults WHERE StepSetID=@SetID AND SubStepNumber=@SubStepNr AND ParamID=35005
+				--SELECT ParamValue FROM Recipe_STRING WHERE ParamID=30001 AND SetID =
+				--(
+				--SELECT MAX(SetID) FROM Recipe_INT WHERE ParamID=10006 AND ParamValue=(SELECT ParamValue FROM @ConcatenatedResults WHERE StepSetID=@SetID AND SubStepNumber=@SubStepNr AND ParamID=35005)
+				--)
+	
 		 --MainStepNr 10003
 		 SET @ParamID=@ParamID+1
 		 INSERT INTO @PLC_INT  (ParamID,ParamValue) VALUES (@ParamID,@MainStepNr)
@@ -218,7 +254,7 @@ SELECT @selectedRecipeSetID=MAX(SetID) FROM Recipe_STRING WHERE ParamValue = @Pa
 		 --Substepnr 10004
 		 SET @ParamID=@ParamID+1
 		 INSERT INTO @PLC_INT  (ParamID,ParamValue) VALUES (@ParamID,@SubStepNr-1)
-
+		 
 		 --Totalstepnr 10005
 		 SET @ParamID=@ParamID+1
 		 INSERT INTO @PLC_INT  (ParamID,ParamValue) VALUES (@ParamID,@TotalStepNr)
@@ -227,28 +263,63 @@ SELECT @selectedRecipeSetID=MAX(SetID) FROM Recipe_STRING WHERE ParamValue = @Pa
 		 IF @debug=1 SELECT @ParamValue ParamValue,@ParamID ParamID,dbo.ufn_GetSetupValue(@ParamValue) ParamValueNr
 		 SET @ParamID=10*@TotalStepNr
 		 INSERT INTO @PLC_REAL  (ParamID,ParamValue) (
-		 SELECT @ParamID+ParamID,ParamValue FROM MergeTestParm WHERE ParamID<1000 AND SetID
+		  SELECT @ParamID+ParamID, 
+			 case 
+				when T1.ParamID = 4 
+				then CAST ((select ParamValue from Recipe_INT where SetID = (select max(SetID) from Recipe_INT where ParamValue = T1.ParamValue  and ParamID = 10006) and ParamID = 10005 AND T1.ParamID = 4)   AS FLOAT)
+				else T1.ParamValue
+				end
+			 FROM MergeTestParm T1 WHERE ParamID<1000 AND SetID
 				IN
 				(SELECT MAX(SetID) FROM MergeTestParm WHERE SetID --Find only newest setup entry
 				IN
 				(SELECT SetID FROM MergeTestParm WHERE ParamValue = dbo.ufn_GetSetupValue(@ParamValue) and ParamID = 30004) --Look up in setup table where action type number is equal to current step
 				AND ParamID = 30001 AND ParamValue=
 				(
-					SELECT ParamValue FROM @ConcatenatedResults WHERE StepSetID=@SetID AND SubStepNumber=@SubStepNr AND ParamID=35005 --Action type
+					(
+							SELECT ParamValue FROM Recipe_STRING WHERE ParamID=30001 AND SetID =
+								(
+									SELECT MAX(SetID) FROM Recipe_INT WHERE ParamID=10006 AND ParamValue=(SELECT ParamValue FROM @ConcatenatedResults WHERE StepSetID=@SetID AND SubStepNumber=@SubStepNr AND ParamID=35005)
+								)
+						) --Action type		
 				))
 				--ORDER BY ParamID
 			)
 
+			 --SELECT @ParamID+ParamID, 
+			 --case 
+				--when T1.ParamID = 4 
+				--then CAST ((select ParamValue from Recipe_INT where SetID = (select max(SetID) from Recipe_INT where ParamValue = T1.ParamValue  and ParamID = 10006) and ParamID = 10005 AND T1.ParamID = 4)   AS FLOAT)
+				--else T1.ParamValue
+				--end
+			 --FROM MergeTestParm T1 WHERE ParamID<1000 AND SetID
+				--IN
+				--(SELECT MAX(SetID) FROM MergeTestParm WHERE SetID --Find only newest setup entry
+				--IN
+				--(SELECT SetID FROM MergeTestParm WHERE ParamValue = dbo.ufn_GetSetupValue(@ParamValue) and ParamID = 30004) --Look up in setup table where action type number is equal to current step
+				--AND ParamID = 30001 AND ParamValue=
+				--(
+				--	(
+				--			SELECT ParamValue FROM Recipe_STRING WHERE ParamID=30001 AND SetID =
+				--				(
+				--					SELECT MAX(SetID) FROM Recipe_INT WHERE ParamID=10006 AND ParamValue=(SELECT ParamValue FROM @ConcatenatedResults WHERE StepSetID=@SetID AND SubStepNumber=@SubStepNr AND ParamID=35005)
+				--				)
+				--		) --Action type		
+				--))
+				----ORDER BY ParamID
+
+			
+			
 		 SET @oldStepSetID=@SetID
 		 FETCH NEXT FROM stepCursor INTO @SetID, @MainStepNr, @SubStepNr, @ParamValue
 		 SET @TotalStepNr=@TotalStepNr+1
 		END
 		CLOSE stepCursor
 		DEALLOCATE stepCursor
-
+		
 
 		--DINT header data
-		SET @ParamID=15001 --Recipesetid
+		SET @ParamID=15001 --Recipesetid 
 		INSERT INTO @PLC_DINT (ParamID,ParamValue) VALUES (@ParamID,@selectedRecipeSetID)
 
 		--String header data
