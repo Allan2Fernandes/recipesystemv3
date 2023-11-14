@@ -76,7 +76,15 @@ function StepListComponent(props){
             RevealSubSteps: false,
             SubSteps: []
         }
-        newRecipeData.push(newStep)
+        // push to the top of the list when a step isn't selected. 
+        // If a step is selected, put it in the list at that index and push the rest of thems down 1 index.
+        console.log(props.selectedStepIndex)
+        if(props.selectedStepIndex === -1){
+            newRecipeData.push(newStep)
+        }else{
+            newRecipeData.splice(props.selectedStepIndex+1, 0, newStep)
+        }
+  
         props.setRecipeData(newRecipeData)
     }
 

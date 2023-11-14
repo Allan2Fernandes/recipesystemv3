@@ -1,7 +1,7 @@
 import stockImage from "./Images/blank_white_image.png"
 
 //export const baseURL = "http://10.0.109.150:5052/"
-export const baseURL = "https://localhost:5001/"
+export const baseURL = "https://localhost:7000/"
 
 // If the size of the image is under 10k, it will get imported as a base64 which will cause problems
 export const blank_image = stockImage
@@ -44,6 +44,7 @@ export const ParamIDs = {
     PressActionTypeParamValue: 8,
     OrientationActionTypeParamValue: 9,
     AcknowledgeActionTypeParamValue:10,
+    ProductTypeActionActionTypeParamValue: 11,
     ItemName: 30001,
     ExpanderXCoord: 1,
     ExpanderYCoord: 2,

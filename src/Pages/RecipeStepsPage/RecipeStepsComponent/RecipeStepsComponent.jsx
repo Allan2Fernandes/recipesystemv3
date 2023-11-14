@@ -55,6 +55,8 @@ function RecipeStepsComponent(props){
         var actionsData = await FetchQueries.executeGetActionOptions().catch(e => props.setDisplayErrorPage(true))
         setAllPossibleActions(actionsData[0])
         var itemsData = await FetchQueries.executeGetItemsForEachAction(actionsData[0]).catch(e => props.setDisplayErrorPage(true))
+        
+        console.log(itemsData)
         // Process the itemsData
         HelperFunctions.processItemsData(itemsData)
         setItemsAndTheirActions(itemsData)

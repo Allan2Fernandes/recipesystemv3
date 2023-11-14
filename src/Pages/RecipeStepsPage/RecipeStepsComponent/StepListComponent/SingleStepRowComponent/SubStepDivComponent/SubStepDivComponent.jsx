@@ -13,7 +13,7 @@ function SubStepDivComponent(props){
     useEffect(()=> {
         // Query the database to check if the item is disabled
         //getActiveStatusOfItem()
-        // console.log(props.subStep)
+        console.log(props.subStep)
         // console.log(props.itemsAndTheirActions.filter(row => row['Action'] === props.subStep['Action']['ParamValue'])[0]['Items'])
     }, [props.subStep])
 

@@ -98,7 +98,7 @@ function ShelfSetupPage(){
             setItemProperties(["X", "Y", "Z", "Orientation", "Status"])
         }else if(action === "Pick"){
             setItemProperties(["Shelf Number", "Status"])
-        }else if(action === "Kolver" || action === "Atlas" || action === "Press"){
+        }else if(action === "Kolver" || action === "Atlas" || action === "Press" || action === "ProductType"){
             setItemProperties(["Program Number", "Status"])
         }else if(action === "Orientation"){
             setItemProperties(["Value", "Status"])
@@ -179,7 +179,7 @@ function ShelfSetupPage(){
                 console.log("Expander coordinates not specified")
                 return
             }
-        }else if(selectedAction==="Orientation" || selectedAction ==="Pick" || selectedAction ==="Kolver" || selectedAction ==="Atlas" || selectedAction ==="Press" || selectedAction === "Acknowledge"){
+        }else if(selectedAction==="Orientation" || selectedAction ==="Pick" || selectedAction ==="Kolver" || selectedAction ==="Atlas" || selectedAction ==="Press" || selectedAction === "Acknowledge" || selectedAction === "ProductType"){
             if(newItemPropertyValues.itemName ===""){
                 console.log("Item name not specified")
                 return
@@ -236,6 +236,9 @@ function ShelfSetupPage(){
         }else if(selectedAction === "Acknowledge"){
             var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
             createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.AcknowledgeActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}${itemIdentiferString}'`
+        }else if(selectedAction === "ProductType"){
+            var shelfString = `${shelfNumberParamID};${newItemPropertyValues.property1};`
+            createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ProductTypeActionActionTypeParamValue};${itemParamID};${newItemPropertyValues.itemName};${shelfString}${enabledStatusString}${itemIdentiferString}'`
         }
         //Execute the query after it has been constructed.
         FetchQueries.executeQueryInDatabase(createItemQuery).then(result => {
@@ -353,6 +356,20 @@ function ShelfSetupPage(){
                 createItemsQuery += createItemQuery
 
             })
+        }else if(selectedAction === "ProductType"){
+            console.log(allActionsItems)
+            allActionsItems.forEach((item, index) => {
+                const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
+                const itemIdentiferString = `${ParamIDs.ItemIdentifier};${parseInt(uniqueIdentifier)};`
+                var shelfString = `${shelfNumberParamID};${item['ShelfValue']['ParamValue']};`
+                var StatusString = `${ParamIDs.ItemActiveStatus};${item['Status']?ParamIDs.ItemEnabledParamValue:ParamIDs.ItemDisabledParamValue};`
+                var createItemQuery = `EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.ProductTypeActionActionTypeParamValue};${itemParamID};${item['Name']['ParamValue']};${shelfString}${StatusString}${itemIdentiferString}'`
+                // Update the original item and disable it
+                // var disableOriginalItemQuery =`EXECUTE sp_SaveParams ${userID}, 'Recipe', '${actionParamID};${ParamIDs.PressActionTypeParamValue};${itemParamID};${originalAllActionsItems[index]['Name']['ParamValue']};${shelfString}${disableItemString}'`
+                // createItemsQuery += disableOriginalItemQuery
+                createItemsQuery += createItemQuery
+
+            })
         }else if(selectedAction ==="Pick"){
             allActionsItems.forEach((item, index) => {
                 const uniqueIdentifier = item['uniqueItemIdentifier']['ParamValue']
@@ -388,6 +405,7 @@ function ShelfSetupPage(){
                 createItemsQuery += createItemQuery
             })
         }
+        
         //Execute the query in the database.
         FetchQueries.executeQueryInDatabase(createItemsQuery).then(result => {
             fetchItemsForAction(selectedAction)
@@ -397,6 +415,9 @@ function ShelfSetupPage(){
         }).catch(error => {
             setDisplayErrorPage(true)
         })
+        
+        
+        
 
     }
 
@@ -461,7 +482,7 @@ function ShelfSetupPage(){
                     </td>
                 </tr>
             ))
-        }else if(selectedAction === "Pick" || selectedAction === "Kolver" || selectedAction === "Atlas" || selectedAction === "Press" || selectedAction === "Orientation" || selectedAction === "Acknowledge"){
+        }else if(selectedAction === "Pick" || selectedAction === "Kolver" || selectedAction === "Atlas" || selectedAction === "Press" || selectedAction === "Orientation" || selectedAction === "Acknowledge" || selectedAction === "ProductType"){
             rows = allActionsItems.filter(row => row['Name']['ParamValue'].includes(searchPhrase) && (showDisabledItems || row['Status'])).map((item, itemIndex) => (
                 <tr key={itemIndex} className={`ActionShelfSetupRow ${itemIndex%2===1?"EvenActionShelfSetupRow":"OddActionShelfSetupRow"} ItemRow`} onClick={(event) => clickHandlerSelectItemRow(event, itemIndex)}>
                     <td>
