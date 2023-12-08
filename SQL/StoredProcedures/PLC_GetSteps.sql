@@ -1,7 +1,7 @@
 USE [GO_PVG32BLOCK]
 GO
 
-/****** Object:  StoredProcedure [dbo].[PLC_GetSteps]    Script Date: 26-10-2023 08:13:22 ******/
+/****** Object:  StoredProcedure [dbo].[PLC_GetSteps]    Script Date: 08/12/2023 08.30.33 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -340,4 +340,5 @@ SELECT @selectedRecipeSetID=MAX(SetID) FROM Recipe_STRING WHERE ParamValue = @Pa
 		SELECT ParamID,ParamValue FROM @PLC_STRING ORDER BY ParamID  --Output STRING to PLC
 	END
 GO
+
 
